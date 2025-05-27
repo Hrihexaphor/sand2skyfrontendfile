@@ -8,7 +8,7 @@ export default function RealEstateTabs() {
   return (
     <div className="flex flex-col items-center py-6 w-[100%]">
       {/* Tabs */}
-      <div className="flex flex-col md:flex-row items-center space-x-6 mb-6">
+      <div className="flex flex-row items-center space-x-6 mb-6">
         {["buy", "new", "project"].map((tab) => (
           <button
             key={tab}
