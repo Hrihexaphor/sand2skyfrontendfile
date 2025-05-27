@@ -141,7 +141,7 @@ const NewNav = () => {
                   </Link>
                 </div>
                 <div className="w-full p-2 bg-gray-800 text-white rounded mb-2 font-geometric-regular">
-                  <Link to="/listing" className="text-white no-underline">
+                  <Link to="/projects" className="text-white no-underline">
                     Projects
                   </Link>
                 </div>{" "}
