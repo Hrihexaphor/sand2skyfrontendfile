@@ -228,7 +228,7 @@ function SearchBox({ activeTab }) {
     >
       <div className="flex flex-col md:flex-row items-center gap-2">
         {/* Input Field */}
-        <div className="flex items-center gap-2 relative w-full">
+        <div className="flex items-center border-b border-gray-300 md:border-0 gap-2 relative w-full">
           <FaMapMarkerAlt className="text-[#FFD700]" />
           <div
             onClick={() => setDropdownVisible(true)}
@@ -334,10 +334,10 @@ function SearchBox({ activeTab }) {
         </div>
 
         {/* Property Type Dropdown */}
-        <div className="flex items-center gap-2 mt-[13px] md:mt-[0]">
+        <div className="flex items-center gap-2 border-b border-gray-300 md:border-0 w-[100%] mt-[0px] md:mt-[0]">
           <FaHome className="text-[#FFD700] text-[1.4rem]" />
           <select
-            className="py-2 rounded-lg outline-none text-gray-700 cursor-pointer w-[130px]"
+            className="py-2 rounded-lg outline-none text-gray-700 cursor-pointer w-[100%] md:w-[130px]"
             value={propertyType}
             onChange={(e) => setPropertyType(e.target.value)}
           >
@@ -352,10 +352,10 @@ function SearchBox({ activeTab }) {
         </div>
 
         {/* Price Dropdown */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 border-b border-gray-300 md:border-0 w-[100%] mt-[0px]">
           <FaRupeeSign className="text-[#FFD700] text-[1.4rem]" />
           <select
-            className="py-2 rounded-lg outline-none text-gray-700 cursor-pointer lg:w-[130px]"
+            className="py-2 rounded-lg outline-none text-gray-700 cursor-pointer w-[100%] lg:w-[130px]"
             value={priceRange}
             onChange={(e) => setPriceRange(e.target.value)}
           >
@@ -370,7 +370,7 @@ function SearchBox({ activeTab }) {
         </div>
 
         {/* Search Button */}
-        <div className="mt-[-8px] md:mt-[0]">
+        <div className="mt-[7px] w-[100%] md:mt-[0]">
           <button
             type="submit"
             className="ml-auto bg-[#FFD700] hover:bg-yellow-500 text-white px-3 lg:px-6 py-2 rounded-full flex items-center space-x-2 w-full"
