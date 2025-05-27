@@ -91,14 +91,17 @@ const BudgetRange = () => {
           responsive: [
             {
               breakpoint: 1024,
+              centerPadding: filtered.length === 1 ? '30%' : '0px',
               settings: { slidesToShow: 3 },
             },
             {
               breakpoint: 768,
+              centerPadding: filtered.length === 1 ? '50%' : '0px',
               settings: { slidesToShow: 2 },
             },
             {
               breakpoint: 480,
+              centerPadding: filtered.length === 1 ? '100%' : '0px',
               settings: { slidesToShow: 1 },
             },
           ],
