@@ -48,7 +48,7 @@ const SearchBar = () => {
       name: "Resale Property",
       image:
         "https://cdn.staticmb.com/magicservicestatic/images/mb-home-web/collection/buy/webp/budget-homes.webp",
-      url: `${process.env.REACT_APP_BASE_URL}/getminimumproperty`,
+      url: `${process.env.REACT_APP_BASE_URL}/getresaleproperty`,
     },
   ];
 
