@@ -6,7 +6,7 @@ export default function RealEstateTabs() {
   const [activeTab, setActiveTab] = useState("buy");
 
   return (
-    <div className="flex flex-col items-center py-6">
+    <div className="flex flex-col items-center py-6 w-[100%]">
       {/* Tabs */}
       <div className="flex flex-col md:flex-row items-center space-x-6 mb-6">
         {["buy", "new", "project"].map((tab) => (
@@ -234,7 +234,7 @@ function SearchBox({ activeTab }) {
             onClick={() => setDropdownVisible(true)}
             onBlur={() => setTimeout(() => setDropdownVisible(false), 200)}
             tabIndex={0}
-            className="py-2 px-2 outline-0 rounded-full w-[200px] min-h-[42px] bg-white cursor-pointer flex items-center gap-2 flex-wrap"
+            className="py-2 px-2 outline-0 rounded-full md:w-[153px] w-[200px] min-h-[42px] bg-white cursor-pointer flex items-center gap-2 flex-wrap"
           >
             {selectedLocation ? (
               <div className="bg-gray-200 text-gray-800 px-3 py-1 rounded-full flex items-center text-sm">
