@@ -91,18 +91,24 @@ const BudgetRange = () => {
           responsive: [
             {
               breakpoint: 1024,
-              centerPadding: filtered.length === 1 ? '30%' : '0px',
-              settings: { slidesToShow: 3 },
+              settings: { 
+                slidesToShow: 3,
+                centerPadding: filtered.length === 1 ? '30%' : '0px', 
+              },
             },
             {
               breakpoint: 768,
-              centerPadding: filtered.length === 1 ? '50%' : '0px',
-              settings: { slidesToShow: 2 },
+              settings: { 
+                slidesToShow: 2, 
+                centerPadding: filtered.length === 1 ? '50%' : '0px',
+              },
             },
             {
               breakpoint: 480,
-              centerPadding: filtered.length === 1 ? '100%' : '0px',
-              settings: { slidesToShow: 1 },
+              settings: { 
+                slidesToShow: 1,
+                centerPadding: filtered.length === 1 ? '100%' : '0px', 
+              },
             },
           ],
         };
