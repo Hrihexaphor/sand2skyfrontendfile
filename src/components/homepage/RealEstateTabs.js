@@ -224,7 +224,7 @@ function SearchBox({ activeTab }) {
   return (
     <form
       onSubmit={getSubmitHandler()}
-      className="search-box bg-white rounded-full shadow-sm px-4 py-2 mx-2 w-full max-w-[802px] relative"
+      className="search-box bg-white rounded-lg md:rounded-full shadow-sm px-4 py-2 mx-2 w-full max-w-[802px] relative"
     >
       <div className="flex flex-col md:flex-row items-center gap-2">
         {/* Input Field */}
