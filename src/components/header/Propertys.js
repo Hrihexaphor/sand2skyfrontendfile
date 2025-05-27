@@ -109,7 +109,7 @@ const SearchBar = () => {
       {/* Property Cards Inside Carousel */}
       {/* Container for the section */}
       <div className="z-[1] container mx-auto  absolute top-[70%] mt-16 left-1/2 transform -translate-x-1/2 w-full">
-        <h2 className="font-bold text-white text-3xl font-geometric-regular">
+        <h2 className="font-bold text-white text-2xl font-geometric-regular">
           We've got properties for everyone
         </h2>
         <div className="w-16 border-b-4 border-yellow-500 my-2 "></div>

@@ -87,7 +87,7 @@ const BudgetRange = () => {
   slidesToShow: filtered.length === 1 ? 1 : 3,
   slidesToScroll: 1,
   centerMode: filtered.length === 1,
-  centerPadding: filtered.length === 1 ? '35%' : '0px',
+  centerPadding: filtered.length === 1 ? '37%' : '0px',
           responsive: [
             {
               breakpoint: 1024,
