@@ -87,7 +87,7 @@ const BudgetRange = () => {
   slidesToShow: filtered.length === 1 ? 1 : 3,
   slidesToScroll: 1,
   centerMode: filtered.length === 1,
-  centerPadding: filtered.length === 1 ? '37%' : '0px',
+  centerPadding: filtered.length === 1 ? '38%' : '0px',
           responsive: [
             {
               breakpoint: 1024,
@@ -142,7 +142,7 @@ const BudgetRange = () => {
                               Price
                             </p>
                             <p className="text-[13px] text-gray-600 mt-0 mb-0">
-                              {formatPrice(property.price)}
+                              {formatPrice(property.expected_price)}
                             </p>
                           </div>
                         </div>
