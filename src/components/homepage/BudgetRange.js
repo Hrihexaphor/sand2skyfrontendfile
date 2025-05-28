@@ -78,35 +78,37 @@ const BudgetRange = () => {
 
         if (filtered.length === 0) return null;
 
-        const isSingleCard = filtered.length === 1;
+        const isSingle = filtered.length === 1;
         const settings = {
-          dots: false,
-          infinite: !isSingleCard, // Disable loop for 1 card
-          speed: 500,
-          slidesToShow: isSingleCard ? 1 : Math.min(filtered.length, 4),
-          autoplay: true,
-          autoplaySpeed: 3000,
-          responsive: [
-            {
-              breakpoint: 1024, // For smaller screens
-              settings: {
-                slidesToShow: isSingleCard ? 1 : Math.min(filtered.length, 3),
-              },
-            },
-            {
-              breakpoint: 768, // For smaller screens
-              settings: {
-                slidesToShow: isSingleCard ? 1 : Math.min(filtered.length, 3),
-              },
-            },
-            {
-              breakpoint: 425, // For smaller screens
-              settings: {
-                slidesToShow: 1, // Show 1 card
-              },
-            },
-          ],
-        };
+  dots: false,
+  infinite: false,
+  speed: 500,
+  slidesToShow: isSingle ? 1 : Math.min(filtered.length, 4),
+  slidesToScroll: 1,
+  autoplay: !isSingle,
+  autoplaySpeed: 3000,
+  centerMode: false, // don't center it
+  responsive: [
+    {
+      breakpoint: 1024,
+      settings: {
+        slidesToShow: isSingle ? 1 : Math.min(filtered.length, 3),
+      },
+    },
+    {
+      breakpoint: 768,
+      settings: {
+        slidesToShow: isSingle ? 1 : Math.min(filtered.length, 2),
+      },
+    },
+    {
+      breakpoint: 425,
+      settings: {
+        slidesToShow: 1,
+      },
+    },
+  ],
+};
 
         return (
           <div key={index} className="mb-0 pb-1">
@@ -116,6 +118,7 @@ const BudgetRange = () => {
             <p className="text-gray-500 mt-2 mb-8 max-w-xl mx-auto font-sans text-center">
               Browse premium apartments, villas, and independent homes that suit your dream lifestyle.
             </p>
+            <div className="mx-auto" style={{ maxWidth: '1200px' }}>
             <Slider {...settings}>
               {filtered.map((property) => (
                 <div key={property.id} className="p-2">
@@ -216,6 +219,7 @@ const BudgetRange = () => {
                 </div>
               ))}
             </Slider>
+            </div>
           </div>
         );
       })}
