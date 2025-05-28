@@ -91,7 +91,7 @@ const BudgetRange = () => {
             filtered.length === 1
               ? window.innerWidth < 768
                 ? '0px' // Full width on mobile
-                : '30%' // Center on larger screens
+                : '40%' // Center on larger screens
               : '0px',
           responsive: [
             {
@@ -107,7 +107,7 @@ const BudgetRange = () => {
             {
               breakpoint: 768,
               settings: {
-                slidesToShow: 1,
+                slidesToShow: 2,
                 centerMode: false,
                 centerPadding: '0px',
               },
