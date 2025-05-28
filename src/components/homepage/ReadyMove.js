@@ -8,7 +8,7 @@ import axios from 'axios';
 
 
 
-const ReadyToMove = ({adCard}) => {
+const ReadyToMove = () => {
 
   const [search, setSearch] = useState("");
   const [properties, setProperties] = useState([]);
@@ -73,12 +73,6 @@ const ReadyToMove = ({adCard}) => {
   const filteredProperties = properties.filter((property) =>
     property.project_name.toLowerCase().includes(search.toLowerCase())
   );
-
-  const [visibleAds, setVisibleAds] = useState(adCard);
-
-  const handleClose = (id) => {
-    setVisibleAds((prev) => prev.filter((ad) => ad.id !== id));
-  };
 
   return (
     <>
