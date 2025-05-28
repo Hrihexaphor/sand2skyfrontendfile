@@ -79,6 +79,7 @@ const BudgetRange = () => {
         if (filtered.length === 0) return null;
 
   const isSingleCard = filtered.length === 1;
+   const isdoubleCard = filtered.length === 2;
         const settings = {
           dots: false,
           infinite: !isSingleCard, // Disable loop for 1 card
@@ -118,7 +119,7 @@ const BudgetRange = () => {
             </p>
             <Slider {...settings}>
               {filtered.map((property) => (
-                <div key={property.id} className={`p-2 ${isSingleCard ? 'custom-width' : ''}`}>
+                <div key={property.id} className={`p-2 ${isSingleCard ? 'custom-width' : ''} ${isdoubleCard ? 'custom-double-width' : ''}`}>
                   <div className="w-full bg-white rounded-lg cursor-pointer tranding-card">
                     <div className="h-[200px] w-full img-box relative">
                       <img

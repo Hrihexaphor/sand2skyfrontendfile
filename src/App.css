@@ -564,6 +564,18 @@ body{
     overflow-y: auto;
   }
 }
+
 .custom-width{
   width: 25% !important;
+}
+.custom-double-width{
+  width: 50% !important;
+}
+@media screen and (width: 425px){
+  .custom-width{
+    width: 100% !important;
+  }
+  .custom-double-width{
+   width: 100% !important;
+  }
 }
