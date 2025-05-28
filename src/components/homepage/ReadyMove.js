@@ -204,9 +204,9 @@ const ReadyToMove = () => {
             </div>
           </div>
           {/* Right - Ads & Promotions */}
-          <div className="block lg:flex flex-col gap-4">
+          <div className="block lg:flex flex-col gap-4 p-4">
             {adCard.map((ad) => (
-              <div key={ad.id}>
+              <a href={ad.link} key={ad.id} className="cursor-pointer">
                 <img
                   src={ad.image_url}
                   alt="Ad"
@@ -216,17 +216,17 @@ const ReadyToMove = () => {
                   <p className="text-sm text-semibold font-sans mb-0">₹90.0 L - 2.13 Cr</p>
                   <p className="text-sm text-gray-600 font-sans mb-0">JBMR Green Vista, Alwar</p>
                 </div> */}
-              </div>
+              </a>
             ))}
 
-            {/* <div className="bg-white shadow-lg p-4 rounded-lg">
+            <div className="bg-white shadow-lg p-4 rounded-lg">
               <p className="text-sm font-bold font-sans">
                 Are you a property owner looking to rent/sell?
               </p>
               <button className="bg-purple-500 text-white px-4 py-2 rounded mt-2 w-full font-sans">
                 Post your property for FREE
               </button>
-            </div> */}
+            </div>
           </div>
         </div>
 
