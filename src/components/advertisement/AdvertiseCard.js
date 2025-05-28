@@ -31,6 +31,7 @@ const AdCards = () => {
           className="relative block cursor-pointer mb-2"
         >
           {/* Mobile-only close button */}
+          <p className="test-sm text-white absolute top-1 right-1">AD.</p>
           <button
             onClick={(e) => handleClose(ad.id, e)}
             className="absolute top-2 right-2 text-gray-600 bg-white bg-opacity-75 rounded-full p-1 z-10 lg:hidden"

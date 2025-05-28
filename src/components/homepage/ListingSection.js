@@ -8,6 +8,7 @@ import { ChevronRightIcon, ChevronLeftIcon } from 'lucide-react';
 import NewNav from "../header/NewNav";
 import Footer from "../footer/Footer";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import AdCards from "../advertisement/AdvertiseCard";
 import axios from 'axios';
 
 const AdComponent = () => (
@@ -731,74 +732,8 @@ const ListingSection = () => {
                     )} */}
 
                     {/* ------- right box ------- */}
-                    <div className="hidden lg:block bg-white rounded-lg shadow-md p-4 sticky top-20">
-                        <div>
-                            <h2 className="text-lg font-roboto-bold ">If want to list your property   <Link to={`/postreq`}> contact us</Link></h2>
-
-                        </div>
-                        {/* Advertise Section */}
-                        <div className="hidden md:block bg-white rounded-lg shadow-md p-4  ">
-                            <div className="bg-yellow-100 text-center p-4 rounded-lg">
-                                <img
-                                    src="https://img.staticmb.com/mbphoto/property/cropped_images/2025/Feb/28/Photo_h180_w240/77495663_3_1740730784979-294_180_240.jpg"
-                                    alt="Advertise"
-                                    className="mx-auto mb-3"
-                                />
-                                <h3 className="text-xl font-semibold">Advertise With Us</h3>
-                                <p className="text-gray-600">
-                                    Reach millions of potential customers
-                                </p>
-                            </div>
-                            <button className="mt-3 px-4 py-2 bg-yellow-500 text-white rounded-md w-full hover:bg-yellow-600">
-                                Post Property
-                            </button>
-                            <div className="mt-6">
-                                <h4 className="text-lg font-semibold">
-                                    Why Advertise With Us?
-                                </h4>
-                                <ul className="list-disc pl-4 text-gray-600">
-                                    <li>Millions of Active Users</li>
-                                    <li>Targeted Audience</li>
-                                    <li>High Conversion Rates</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div className="bg-white rounded-lg shadow-md p-4 mt-5">
-                            <img
-                                src="https://img.staticmb.com/mbphoto/property/cropped_images/2025/Feb/28/Photo_h180_w240/77495663_3_1740730784979-294_180_240.jpg"
-                                alt="3 BHK Flat"
-                                className="w-full h-48 object-cover rounded-md"
-                            />
-                            <h3 className="text-xl font-semibold mt-3">3 BHK Flat</h3>
-                            <p className="text-gray-600">Electronic City, Bangalore</p>
-                            <p className="mt-2 text-gray-700">Ready to Move</p>
-                            <p className="text-lg font-semibold text-black mt-1">₹2.1 Cr</p>
-                            <p className="text-gray-500 mt-1">Owner Arun</p>
-                        </div>{" "}
-                        <div className="bg-white rounded-lg shadow-md p-4 mt-5">
-                            <img
-                                src="https://img.staticmb.com/mbphoto/property/cropped_images/2025/Feb/28/Photo_h180_w240/77495663_3_1740730784979-294_180_240.jpg"
-                                alt="3 BHK Flat"
-                                className="w-full h-48 object-cover rounded-md"
-                            />
-                            <h3 className="text-xl font-semibold mt-3">3 BHK Flat</h3>
-                            <p className="text-gray-600">Electronic City, Bangalore</p>
-                            <p className="mt-2 text-gray-700">Ready to Move</p>
-                            <p className="text-lg font-semibold text-black mt-1">₹2.1 Cr</p>
-                            <p className="text-gray-500 mt-1">Owner Arun</p>
-                        </div>{" "}
-                        <div className="bg-white rounded-lg shadow-md p-4 mt-5">
-                            <img
-                                src="https://img.staticmb.com/mbphoto/property/cropped_images/2025/Feb/28/Photo_h180_w240/77495663_3_1740730784979-294_180_240.jpg"
-                                alt="3 BHK Flat"
-                                className="w-full h-48 object-cover rounded-md"
-                            />
-                            <h3 className="text-xl font-semibold mt-3">3 BHK Flat</h3>
-                            <p className="text-gray-600">Electronic City, Bangalore</p>
-                            <p className="mt-2 text-gray-700">Ready to Move</p>
-                            <p className="text-lg font-semibold text-black mt-1">₹2.1 Cr</p>
-                            <p className="text-gray-500 mt-1">Owner Arun</p>
-                        </div>
+                    <div className="block lg:flex flex-col gap-4 p-4 top-20">
+                        <AdCards/>
                     </div>
                 </div>
             </div>
