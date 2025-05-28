@@ -7,6 +7,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { FaBuildingUser } from "react-icons/fa6";
 import { IoBedOutline } from "react-icons/io5";
 import { ChevronDown } from "lucide-react";
+import AdCards from "../advertisement/AdvertiseCard";
 import {
   FaDumbbell,
 } from "react-icons/fa";
@@ -260,14 +261,6 @@ const PropertyDetails = () => {
     },
   ];
 
-
-  const services = [
-    {
-      img: "https://img.staticmb.com/mbphoto/property/cropped_images/2025/Feb/28/Photo_h180_w240/77495663_3_1740730784979-294_180_240.jpg",
-      title: "Home Loans",
-      description: "View & compare your best offers and apply online",
-    },
-  ];
 
   const tools = [
     {
@@ -1326,31 +1319,8 @@ const PropertyDetails = () => {
             </div>
             {/* Neighbourhood Section - Takes 1/3 Width */}
             <div className="md:col-span-4  dtl-neibourhood">
-               <h2 className="text-2xl font-semibold text-gray-900 mb-6">
-                Property Services
-              </h2>
+              <AdCards />
 
-              {/* Grid Layout for Services (2 per row) */}
-              <div className="flex flex-col gap-6">
-                {services.map((service, index) => (
-                  <div
-                    key={index}
-                    className="bg-white rounded-lg shadow-md overflow-hidden"
-                  >
-                    <img
-                      src={service.img}
-                      alt={service.title}
-                      className="w-full h-48 object-cover"
-                    />
-                    <div className="p-2">
-                      <h3 className="text-lg font-semibold text-gray-900">
-                        {service.title}
-                      </h3>
-                      <p className="text-gray-600">{service.description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
               <h2 className="text-lg text-[#3C4142] font-semibold mt-5 mb-4">
                 Explore Neighbourhood - {property?.details?.project_name}
               </h2>

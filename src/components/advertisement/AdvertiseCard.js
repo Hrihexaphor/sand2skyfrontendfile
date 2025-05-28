@@ -28,6 +28,7 @@ const AdCards = () => {
         <a
           href={ad.link}
           key={ad.id}
+          target="_blank"
           className="relative block cursor-pointer mb-2"
         >
           {/* Mobile-only close button */}
