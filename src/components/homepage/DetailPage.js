@@ -1401,6 +1401,8 @@ const PropertyDetails = () => {
                   </div>
                 ))} */}
               </div>
+
+               <Review/>
             </div>
           </section>
 
@@ -1481,10 +1483,6 @@ const PropertyDetails = () => {
                 </div>
               ))}
             </Slider>
-          </div>
-          {/* -------- Review ----- */}
-          <div className="mt-5">
-            <Review/>
           </div>
           {/* ------- Faq------ */}
           <div className="bg-[#F4EFE5]">
