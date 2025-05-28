@@ -7,6 +7,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { FaBuildingUser } from "react-icons/fa6";
 import { IoBedOutline } from "react-icons/io5";
 import { ChevronDown } from "lucide-react";
+import Review from "../review/Review";
 import AdCards from "../advertisement/AdvertiseCard";
 import {
   FaDumbbell,
@@ -1480,6 +1481,10 @@ const PropertyDetails = () => {
                 </div>
               ))}
             </Slider>
+          </div>
+          {/* -------- Review ----- */}
+          <div className="mt-5">
+            <Review/>
           </div>
           {/* ------- Faq------ */}
           <div className="bg-[#F4EFE5]">
