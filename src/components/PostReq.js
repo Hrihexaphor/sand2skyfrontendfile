@@ -89,7 +89,7 @@ const PostReq = () => {
         toast.success('Inquiry submitted successfully! Our team Contact you soon.');
         setFormData(initialForm);
       } catch (error) {
-        alert("Submission failed. Please try again.");
+        // alert("Submission failed. Please try again.");
         toast.error('Submission failed. Please try again!');
         console.error(error);
       }

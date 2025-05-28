@@ -18,9 +18,9 @@ const SearchBar = () => {
     // "http://hompark.themezinho.net/wp-content/uploads/2020/03/slide03.jpg",
     // "http://hompark.themezinho.net/wp-content/uploads/2020/03/slide01.jpg",
     // "http://hompark.themezinho.net/wp-content/uploads/2020/03/slide02.jpg",
-    "https://res-console.cloudinary.com/djqpz99jb/thumbnails/v1/image/upload/v1748352248/aGVybzFfeXpmcjZy/drilldown",
-    "https://res-console.cloudinary.com/djqpz99jb/thumbnails/v1/image/upload/v1748352248/aGVybzNfZmRrd3Rs/drilldown",
-    "https://res-console.cloudinary.com/djqpz99jb/thumbnails/v1/image/upload/v1748352248/aGVybzJfYmV2b2t5/drilldown"
+     "https://res.cloudinary.com/djqpz99jb/image/upload/v1748412331/hero1_tgfln0.jpg",
+     "https://res.cloudinary.com/djqpz99jb/image/upload/v1748412426/hero2_ffm5us.jpg",
+    "https://res.cloudinary.com/djqpz99jb/image/upload/v1748412459/hero3_t9zruj.jpg"
   ];
 
 
