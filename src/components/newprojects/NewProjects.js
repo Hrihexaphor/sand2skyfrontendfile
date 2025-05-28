@@ -508,7 +508,7 @@ const NewProjects = () => {
             </div>
 
             {/* ------- right box ------- */}
-            <div className="block lg:flex flex-col gap-4 p-4 top-20">
+            <div className="block lg:flex flex-col gap-4 p-4">
               <AdCards />
             </div>
           </div>

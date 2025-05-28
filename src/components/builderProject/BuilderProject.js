@@ -6,6 +6,7 @@ import { RiMoneyRupeeCircleLine } from "react-icons/ri";
 import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
 import NewNav from "../header/NewNav";
 import Footer from "../footer/Footer";
+import AdCards from "../advertisement/AdvertiseCard";
 import axios from "axios";
 
 const BuilderProject = () => {
@@ -16,7 +17,7 @@ const BuilderProject = () => {
 
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
-  
+
   // <------------ API INTEGRATION START -------------->
   // Fetch blog data
   useEffect(() => {
@@ -30,7 +31,7 @@ const BuilderProject = () => {
         );
         setProjects(filtered);
         // setProjects(res.data.blogs);
-         setLoading(false);
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -40,67 +41,67 @@ const BuilderProject = () => {
   // <------------ API INTEGRATION END -------------->
 
   // ======================== main filter ===================>
-    const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-    const [filter, setFilter] = useState({
-      // purpose: "",  
-      bhk: "",
-      minBudget: "",
-      maxBudget: "",
-      locality: "",
-      propertyType: "",
-      houseType: "",
-      possession: ""
-    });
-    const [page, setPage] = useState(1);
-    const listRef = useRef();
-    useEffect(() => {
-      listRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [page]);
-    const [searchQuery, setSearchQuery] = useState("");
-  
-    const parseCr = (value) => {
-      if (!value) return null;
-      return parseFloat(value.replace(/[^\d.]/g, '')) * 10000000;
-    };
-  
-    const parseBudget = (val) => {
-      if (!val) return null;
-      const num = parseFloat(val.replace(/[^0-9.]/g, ''));
-      return val.includes('CR') ? num * 10000000 : num;
-    };
-  
-    const minBudget = parseBudget(filter.minBudget);
-    const maxBudget = parseBudget(filter.maxBudget);
-  
-    const filteredProperties = projects.filter((p) => {
-      const propertyPrice = parseBudget(p.expected_price);
-  
-      const matchesBudget =
-        (!minBudget && !maxBudget) || // no filter set
-        (propertyPrice != null &&
-          (!minBudget || propertyPrice >= minBudget) &&
-          (!maxBudget || propertyPrice <= maxBudget));
-  
-      // Other filters (same as before)
-      const matchesSearch = !searchQuery || p.project_name?.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesPurpose = !filter.purpose || p.purpose?.toLowerCase() === filter.purpose.toLowerCase();
-      const matchesBHK = !filter.bhk || String(p.bedrooms) === filter.bhk;
-      const matchesPropertyType = !filter.propertyType || p.property_type?.toLowerCase() === filter.propertyType.toLowerCase();
-      const matchesHouseType = !filter.houseType || p.apartment_type?.toLowerCase() === filter.houseType.toLowerCase();
-      const matchesPossession = !filter.possession || p.possession_status?.toLowerCase() === filter.possession.toLowerCase();
-      const matchesLocality = !filter.locality || (p.locality?.toLowerCase() || '').includes(filter.locality.toLowerCase());
-  
-      return (
-        matchesSearch &&
-        matchesPurpose &&
-        matchesBHK &&
-        matchesPropertyType &&
-        matchesHouseType &&
-        matchesPossession &&
-        matchesLocality &&
-        matchesBudget
-      );
-    });
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [filter, setFilter] = useState({
+    // purpose: "",  
+    bhk: "",
+    minBudget: "",
+    maxBudget: "",
+    locality: "",
+    propertyType: "",
+    houseType: "",
+    possession: ""
+  });
+  const [page, setPage] = useState(1);
+  const listRef = useRef();
+  useEffect(() => {
+    listRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [page]);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const parseCr = (value) => {
+    if (!value) return null;
+    return parseFloat(value.replace(/[^\d.]/g, '')) * 10000000;
+  };
+
+  const parseBudget = (val) => {
+    if (!val) return null;
+    const num = parseFloat(val.replace(/[^0-9.]/g, ''));
+    return val.includes('CR') ? num * 10000000 : num;
+  };
+
+  const minBudget = parseBudget(filter.minBudget);
+  const maxBudget = parseBudget(filter.maxBudget);
+
+  const filteredProperties = projects.filter((p) => {
+    const propertyPrice = parseBudget(p.expected_price);
+
+    const matchesBudget =
+      (!minBudget && !maxBudget) || // no filter set
+      (propertyPrice != null &&
+        (!minBudget || propertyPrice >= minBudget) &&
+        (!maxBudget || propertyPrice <= maxBudget));
+
+    // Other filters (same as before)
+    const matchesSearch = !searchQuery || p.project_name?.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesPurpose = !filter.purpose || p.purpose?.toLowerCase() === filter.purpose.toLowerCase();
+    const matchesBHK = !filter.bhk || String(p.bedrooms) === filter.bhk;
+    const matchesPropertyType = !filter.propertyType || p.property_type?.toLowerCase() === filter.propertyType.toLowerCase();
+    const matchesHouseType = !filter.houseType || p.apartment_type?.toLowerCase() === filter.houseType.toLowerCase();
+    const matchesPossession = !filter.possession || p.possession_status?.toLowerCase() === filter.possession.toLowerCase();
+    const matchesLocality = !filter.locality || (p.locality?.toLowerCase() || '').includes(filter.locality.toLowerCase());
+
+    return (
+      matchesSearch &&
+      matchesPurpose &&
+      matchesBHK &&
+      matchesPropertyType &&
+      matchesHouseType &&
+      matchesPossession &&
+      matchesLocality &&
+      matchesBudget
+    );
+  });
 
   // Format date string to "DD MMM YYYY"
   function formatDate(dateString) {
@@ -112,7 +113,7 @@ const BuilderProject = () => {
     });
   }
 
-   // Convert price to Lac or Cr format
+  // Convert price to Lac or Cr format
   function formatPrice(price) {
     const num = parseInt(price, 10);
     if (num >= 10000000) return `${(num / 10000000).toFixed(2)} Cr`;
@@ -142,7 +143,7 @@ const BuilderProject = () => {
                 <div className="flex items-center bg-[#fff] w-full py-[5px] px-[10px] rounded-[20px]">
                   <FaSearch className="text-gray-500 mr-2" />
                   <input
-                   type="text"
+                    type="text"
                     placeholder="Search Project"
                     value={searchQuery}
                     onChange={(e) => {
@@ -153,7 +154,7 @@ const BuilderProject = () => {
                   />
                 </div>
                 <button className="bg-white text-gray-700 font-semibold px-3 py-1 rounded-full flex items-center h-[34px]"
-                 onClick={() => setIsFilterModalOpen(true)}>
+                  onClick={() => setIsFilterModalOpen(true)}>
                   <FaFilter className="me-2" /> Filter
                 </button>
               </div>
@@ -313,7 +314,7 @@ const BuilderProject = () => {
               {/* ======== Project Card ==========> */}
               {loading ? (
                 <p className="text-center text-gray-600 text-lg py-6">Loading properties...</p>
-              ) : ( filteredProperties.map((project, index) => (
+              ) : (filteredProperties.map((project, index) => (
                 <div
                   key={index}
                   className="bg-[#fff] rounded-lg mb-4 flex md:flex-row flex-col shadow-[0_4px_20px_rgba(0,95,107,0.2)]"
@@ -413,55 +414,13 @@ const BuilderProject = () => {
                   </div>
                 </div>
               ))
-            )}
+              )}
 
             </div>
 
             {/* ------- right box ------- */}
-            <div className="hidden lg:block bg-white rounded-lg shadow-md p-4 sticky top-20">
-              <div>
-                <h2 className="text-lg font-roboto-bold ">If want to list your property   <Link to={`/postreq`}> contact us</Link></h2>
-
-              </div>
-              {/* Advertise Section */}
-              <div className="hidden md:block bg-white rounded-lg shadow-md p-4  ">
-                <div className="bg-yellow-100 text-center p-4 rounded-lg">
-                  <img
-                    src="https://img.staticmb.com/mbphoto/property/cropped_images/2025/Feb/28/Photo_h180_w240/77495663_3_1740730784979-294_180_240.jpg"
-                    alt="Advertise"
-                    className="mx-auto mb-3"
-                  />
-                  <h3 className="text-xl font-semibold">Advertise With Us</h3>
-                  <p className="text-gray-600">
-                    Reach millions of potential customers
-                  </p>
-                </div>
-                <button className="mt-3 px-4 py-2 bg-yellow-500 text-white rounded-md w-full hover:bg-yellow-600">
-                  Post Property
-                </button>
-                <div className="mt-6">
-                  <h4 className="text-lg font-semibold">
-                    Why Advertise With Us?
-                  </h4>
-                  <ul className="list-disc pl-4 text-gray-600">
-                    <li>Millions of Active Users</li>
-                    <li>Targeted Audience</li>
-                    <li>High Conversion Rates</li>
-                  </ul>
-                </div>
-              </div>
-              <div className="bg-white rounded-lg shadow-md p-4 mt-5">
-                <img
-                  src="https://img.staticmb.com/mbphoto/property/cropped_images/2025/Feb/28/Photo_h180_w240/77495663_3_1740730784979-294_180_240.jpg"
-                  alt="3 BHK Flat"
-                  className="w-full h-48 object-cover rounded-md"
-                />
-                <h3 className="text-xl font-semibold mt-3">3 BHK Flat</h3>
-                <p className="text-gray-600">Electronic City, Bangalore</p>
-                <p className="mt-2 text-gray-700">Ready to Move</p>
-                <p className="text-lg font-semibold text-black mt-1">₹2.1 Cr</p>
-                <p className="text-gray-500 mt-1">Owner Arun</p>
-              </div>{" "}
+            <div className="block lg:flex flex-col gap-4 p-4">
+              <AdCards />
             </div>
           </div>
 
