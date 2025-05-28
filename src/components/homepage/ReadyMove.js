@@ -31,18 +31,14 @@ const ReadyToMove = ({adCard}) => {
       });
   }, []);
   // --------------- API INTEGRATION END -------> 
-  const [visibleAds, setVisibleAds] = useState(adCard);
-
-  const handleClose = (id) => {
-    setVisibleAds((prev) => prev.filter((ad) => ad.id !== id));
-  };
+  const [adCard, setAdCard] = useState([]);
   // --------------- AD API INTEGRATION START -------> 
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_BASE_URL}/advertisement`, {
       withCredentials: true, // replaces fetch's `credentials: 'include'`
     })
       .then((res) => {
-        setVisibleAds(res.data);
+        setAdCard(res.data);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
@@ -78,6 +74,11 @@ const ReadyToMove = ({adCard}) => {
     property.project_name.toLowerCase().includes(search.toLowerCase())
   );
 
+  const [visibleAds, setVisibleAds] = useState(adCard);
+
+  const handleClose = (id) => {
+    setVisibleAds((prev) => prev.filter((ad) => ad.id !== id));
+  };
 
   return (
     <>
@@ -209,13 +210,9 @@ const ReadyToMove = ({adCard}) => {
           </div>
           {/* Right - Ads & Promotions */}
           <div className="block lg:flex flex-col gap-4 p-4">
-            {visibleAds.map((ad) => (
+            {adCard.map((ad) => (
               <a href={ad.link} key={ad.id} className="cursor-pointer">
                 <button className="absolute top-3 right-3 text-gray-500 lg:hidden"
-                 onClick={(e) => {
-              e.preventDefault(); 
-              handleClose(ad.id);
-            }}
                 >
                   <FaTimes size={20} />
                 </button>
