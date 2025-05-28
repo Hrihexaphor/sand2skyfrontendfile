@@ -8,6 +8,7 @@ import { GiSofa } from "react-icons/gi";
 import { LuBedSingle } from "react-icons/lu";
 import { ChevronRightIcon, ChevronLeftIcon } from 'lucide-react';
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import AdCards from "../advertisement/AdvertiseCard";
 import axios from 'axios';
 
 
@@ -36,172 +37,172 @@ const Projects = () => {
       year: "numeric"
     });
   }
-  
+
 
   const location = useLocation();
-      const navigate = useNavigate();
-  
-      // Filter data passed via navigate state (from previous page)
-      const passedFilter = location.state || {};
-  
-      // API data
-      const [properties, setProperties] = useState([]);
-      const [loading, setLoading] = useState(true);
-  
-      // UI states
-      const [searchQuery, setSearchQuery] = useState("");
-      const [page, setPage] = useState(1);
-      const listRef = useRef();
-  
-      // Internal filter state for user filtering on this page
-      const [filter, setFilter] = useState({
-          bhk: "",
-          minBudget: "",
-          maxBudget: "",
-          locality: "",
-          propertyType: "",
-          houseType: "",
-          possession: "",
+  const navigate = useNavigate();
+
+  // Filter data passed via navigate state (from previous page)
+  const passedFilter = location.state || {};
+
+  // API data
+  const [properties, setProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // UI states
+  const [searchQuery, setSearchQuery] = useState("");
+  const [page, setPage] = useState(1);
+  const listRef = useRef();
+
+  // Internal filter state for user filtering on this page
+  const [filter, setFilter] = useState({
+    bhk: "",
+    minBudget: "",
+    maxBudget: "",
+    locality: "",
+    propertyType: "",
+    houseType: "",
+    possession: "",
+  });
+
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+
+  // Scroll on page change (pagination)
+  useEffect(() => {
+    listRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [page]);
+
+  // Fetch properties from API once
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_BASE_URL}/getminimumproperty`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        setProperties(res.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setLoading(false);
       });
-  
-      const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-      const [showToast, setShowToast] = useState(false);
-  
-      // Scroll on page change (pagination)
-      useEffect(() => {
-          listRef.current?.scrollIntoView({ behavior: "smooth" });
-      }, [page]);
-  
-      // Fetch properties from API once
-      useEffect(() => {
-          axios
-              .get(`${process.env.REACT_APP_BASE_URL}/getminimumproperty`, {
-                  withCredentials: true,
-              })
-              .then((res) => {
-                  setProperties(res.data);
-                  setLoading(false);
-              })
-              .catch((error) => {
-                  console.error("Error fetching data:", error);
-                  setLoading(false);
-              });
-      }, []);
-  
-      // Helpers to parse budgets/prices from strings
-      const parseBudget = (val) => {
-          if (!val) return null;
-          const num = parseFloat(val.replace(/[^0-9.]/g, ""));
-          return val.toLowerCase().includes("cr") ? num * 10000000 : num;
+  }, []);
+
+  // Helpers to parse budgets/prices from strings
+  const parseBudget = (val) => {
+    if (!val) return null;
+    const num = parseFloat(val.replace(/[^0-9.]/g, ""));
+    return val.toLowerCase().includes("cr") ? num * 10000000 : num;
+  };
+
+  const minBudget = parseBudget(filter.minBudget);
+  const maxBudget = parseBudget(filter.maxBudget);
+
+  let passedMinBudget = null;
+  let passedMaxBudget = null;
+
+  if (passedFilter.priceRange) {
+    if (passedFilter.priceRange === "bellow1cr") {
+      passedMaxBudget = 10000000; // Below 1 CR
+    } else {
+      const [minStr, maxStr] = passedFilter.priceRange.split("-");
+      const parseCR = (str) => {
+        if (!str) return null;
+        return parseFloat(str.replace("CR", "")) * 10000000;
       };
-  
-      const minBudget = parseBudget(filter.minBudget);
-      const maxBudget = parseBudget(filter.maxBudget);
-  
-      let passedMinBudget = null;
-      let passedMaxBudget = null;
-  
-      if (passedFilter.priceRange) {
-          if (passedFilter.priceRange === "bellow1cr") {
-              passedMaxBudget = 10000000; // Below 1 CR
-          } else {
-              const [minStr, maxStr] = passedFilter.priceRange.split("-");
-              const parseCR = (str) => {
-                  if (!str) return null;
-                  return parseFloat(str.replace("CR", "")) * 10000000;
-              };
-              passedMinBudget = parseCR(minStr);
-              passedMaxBudget = parseCR(maxStr);
-          }
-      }
-  
-      // Combine internal filters + passed filters
-      const filteredProperties = properties.filter((p) => {
-          const propertyPrice = parseBudget(p.expected_price);
-  
-          const matchesBudget =
-              propertyPrice != null &&
-              (
-                  // Matches internal filter
-                  (
-                      (!minBudget && !maxBudget) ||
-                      (
-                          (!minBudget || propertyPrice >= minBudget) &&
-                          (!maxBudget || propertyPrice <= maxBudget)
-                      )
-                  ) &&
-                  // Matches Buy page passed price range
-                  (
-                      (!passedMinBudget && !passedMaxBudget) ||
-                      (
-                          (!passedMinBudget || propertyPrice >= passedMinBudget) &&
-                          (!passedMaxBudget || propertyPrice <= passedMaxBudget)
-                      )
-                  )
-              );
-  
-  
-          const matchesSearch =
-              !searchQuery ||
-              p.project_name?.toLowerCase().includes(searchQuery.toLowerCase());
-  
-          const matchesBHK = !filter.bhk || String(p.bedrooms) === filter.bhk;
-  
-          const matchesPropertyType =
-              !filter.propertyType ||
-              p.property_type?.toLowerCase() === filter.propertyType.toLowerCase();
-  
-          const matchesHouseType =
-              !filter.houseType ||
-              p.apartment_type?.toLowerCase() === filter.houseType.toLowerCase();
-  
-          const matchesPossession =
-              !filter.possession ||
-              p.possession_status?.toLowerCase() === filter.possession.toLowerCase();
-  
-          const matchesLocality =
-              !filter.locality ||
-              (p.locality?.toLowerCase() || "").includes(filter.locality.toLowerCase());
-  
-          const matchesPassedLocation =
-              !passedFilter.location || p.city === passedFilter.location;
-  
-          const matchesPassedLocalities =
-              !passedFilter.locality ||
-              passedFilter.locality.length === 0 ||
-              passedFilter.locality.includes(p.locality);
-  
-          const matchesPassedProjectNames =
-              !passedFilter.projectNames ||
-              passedFilter.projectNames.length === 0 ||
-              passedFilter.projectNames.includes(p.title || p.project_name);
-  
-          const matchesPassedBuilders =
-              !passedFilter.builders ||
-              passedFilter.builders.length === 0 ||
-              passedFilter.builders.includes(p.developer_name);
-  
-          const matchesPassedPropertyType =
-              !passedFilter.propertyType || p.subcategory_name === passedFilter.propertyType;
-  
-          return (
-              matchesBudget &&
-              matchesSearch &&
-              matchesBHK &&
-              matchesPropertyType &&
-              matchesHouseType &&
-              matchesPossession &&
-              matchesLocality &&
-              matchesPassedLocation &&
-              matchesPassedLocalities &&
-              matchesPassedProjectNames &&
-              matchesPassedBuilders &&
-              matchesPassedPropertyType
-          );
-      });
+      passedMinBudget = parseCR(minStr);
+      passedMaxBudget = parseCR(maxStr);
+    }
+  }
+
+  // Combine internal filters + passed filters
+  const filteredProperties = properties.filter((p) => {
+    const propertyPrice = parseBudget(p.expected_price);
+
+    const matchesBudget =
+      propertyPrice != null &&
+      (
+        // Matches internal filter
+        (
+          (!minBudget && !maxBudget) ||
+          (
+            (!minBudget || propertyPrice >= minBudget) &&
+            (!maxBudget || propertyPrice <= maxBudget)
+          )
+        ) &&
+        // Matches Buy page passed price range
+        (
+          (!passedMinBudget && !passedMaxBudget) ||
+          (
+            (!passedMinBudget || propertyPrice >= passedMinBudget) &&
+            (!passedMaxBudget || propertyPrice <= passedMaxBudget)
+          )
+        )
+      );
+
+
+    const matchesSearch =
+      !searchQuery ||
+      p.project_name?.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesBHK = !filter.bhk || String(p.bedrooms) === filter.bhk;
+
+    const matchesPropertyType =
+      !filter.propertyType ||
+      p.property_type?.toLowerCase() === filter.propertyType.toLowerCase();
+
+    const matchesHouseType =
+      !filter.houseType ||
+      p.apartment_type?.toLowerCase() === filter.houseType.toLowerCase();
+
+    const matchesPossession =
+      !filter.possession ||
+      p.possession_status?.toLowerCase() === filter.possession.toLowerCase();
+
+    const matchesLocality =
+      !filter.locality ||
+      (p.locality?.toLowerCase() || "").includes(filter.locality.toLowerCase());
+
+    const matchesPassedLocation =
+      !passedFilter.location || p.city === passedFilter.location;
+
+    const matchesPassedLocalities =
+      !passedFilter.locality ||
+      passedFilter.locality.length === 0 ||
+      passedFilter.locality.includes(p.locality);
+
+    const matchesPassedProjectNames =
+      !passedFilter.projectNames ||
+      passedFilter.projectNames.length === 0 ||
+      passedFilter.projectNames.includes(p.title || p.project_name);
+
+    const matchesPassedBuilders =
+      !passedFilter.builders ||
+      passedFilter.builders.length === 0 ||
+      passedFilter.builders.includes(p.developer_name);
+
+    const matchesPassedPropertyType =
+      !passedFilter.propertyType || p.subcategory_name === passedFilter.propertyType;
+
+    return (
+      matchesBudget &&
+      matchesSearch &&
+      matchesBHK &&
+      matchesPropertyType &&
+      matchesHouseType &&
+      matchesPossession &&
+      matchesLocality &&
+      matchesPassedLocation &&
+      matchesPassedLocalities &&
+      matchesPassedProjectNames &&
+      matchesPassedBuilders &&
+      matchesPassedPropertyType
+    );
+  });
 
   const handleDetailsClick = (id) => {
-        navigate(`/details/${id}`);
+    navigate(`/details/${id}`);
   }
 
   return (
@@ -397,12 +398,12 @@ const Projects = () => {
 
               {/* ======== Project Card ==========> */}
               {loading ? (
-                                          <p className="text-center text-gray-600 text-lg py-6">Loading properties...</p>
-                                      ) : filteredProperties.length === 0 ? (
-                                          <div className="text-center text-gray-600 text-lg py-6">
-                                              No properties match your criteria.
-                                          </div>
-                                      ) : (
+                <p className="text-center text-gray-600 text-lg py-6">Loading properties...</p>
+              ) : filteredProperties.length === 0 ? (
+                <div className="text-center text-gray-600 text-lg py-6">
+                  No properties match your criteria.
+                </div>
+              ) : (
                 [...filteredProperties]
                   .sort((a, b) => (b.is_featured === true) - (a.is_featured === true)) // Featured first
                   .map((property, index) => (
@@ -512,50 +513,8 @@ const Projects = () => {
             </div>
 
             {/* ------- right box ------- */}
-            <div className="hidden lg:block bg-white rounded-lg shadow-md p-4 sticky top-20">
-              <div>
-                <h2 className="text-lg font-roboto-bold ">If want to list your property   <Link to={`/postreq`}> contact us</Link></h2>
-
-              </div>
-              {/* Advertise Section */}
-              <div className="hidden md:block bg-white rounded-lg shadow-md p-4  ">
-                <div className="bg-yellow-100 text-center p-4 rounded-lg">
-                  <img
-                    src="https://img.staticmb.com/mbphoto/property/cropped_images/2025/Feb/28/Photo_h180_w240/77495663_3_1740730784979-294_180_240.jpg"
-                    alt="Advertise"
-                    className="mx-auto mb-3"
-                  />
-                  <h3 className="text-xl font-semibold">Advertise With Us</h3>
-                  <p className="text-gray-600">
-                    Reach millions of potential customers
-                  </p>
-                </div>
-                <button className="mt-3 px-4 py-2 bg-yellow-500 text-white rounded-md w-full hover:bg-yellow-600">
-                  Post Property
-                </button>
-                <div className="mt-6">
-                  <h4 className="text-lg font-semibold">
-                    Why Advertise With Us?
-                  </h4>
-                  <ul className="list-disc pl-4 text-gray-600">
-                    <li>Millions of Active Users</li>
-                    <li>Targeted Audience</li>
-                    <li>High Conversion Rates</li>
-                  </ul>
-                </div>
-              </div>
-              <div className="bg-white rounded-lg shadow-md p-4 mt-5">
-                <img
-                  src="https://img.staticmb.com/mbphoto/property/cropped_images/2025/Feb/28/Photo_h180_w240/77495663_3_1740730784979-294_180_240.jpg"
-                  alt="3 BHK Flat"
-                  className="w-full h-48 object-cover rounded-md"
-                />
-                <h3 className="text-xl font-semibold mt-3">3 BHK Flat</h3>
-                <p className="text-gray-600">Electronic City, Bangalore</p>
-                <p className="mt-2 text-gray-700">Ready to Move</p>
-                <p className="text-lg font-semibold text-black mt-1">₹2.1 Cr</p>
-                <p className="text-gray-500 mt-1">Owner Arun</p>
-              </div>{" "}
+            <div className="block lg:flex flex-col gap-4 p-4 top-20">
+              <AdCards />
             </div>
           </div>
 

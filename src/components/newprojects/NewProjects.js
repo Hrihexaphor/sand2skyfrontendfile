@@ -8,6 +8,7 @@ import { GiSofa } from "react-icons/gi";
 import { LuBedSingle } from "react-icons/lu";
 import { ChevronRightIcon, ChevronLeftIcon } from 'lucide-react';
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import AdCards from "../advertisement/AdvertiseCard";
 import axios from 'axios';
 
 
@@ -37,7 +38,7 @@ const NewProjects = () => {
     });
   }
 
-   const location = useLocation();
+  const location = useLocation();
   const navigate = useNavigate();
 
   const passedFilter = location.state || {};
@@ -188,7 +189,7 @@ const NewProjects = () => {
   // );
 
   const handleDetailsClick = (id) => {
-        navigate(`/details/${id}`);
+    navigate(`/details/${id}`);
   }
 
   return (
@@ -386,171 +387,129 @@ const NewProjects = () => {
               )}
 
               {/* ======== Project Card ==========> */}
-               {loading ? (
-                                          <p className="text-center text-gray-600 text-lg py-6">Loading properties...</p>
-                                      ) : filteredProperties.length === 0 ? (
-                                          <div className="text-center text-gray-600 text-lg py-6">
-                                              No properties match your criteria.
-                                          </div>
-                                      ) : (
-                                          [...filteredProperties]
-                                              .sort((a, b) => (b.is_featured === true) - (a.is_featured === true)) // Featured first
-                                              .map((property, index) => (
-                                                  <React.Fragment key={index}>
-                                                      <div className="bg-[#fff] rounded-lg mb-4 flex md:flex-row flex-col shadow-[0_4px_20px_rgba(0,95,107,0.2)]">
-                                                          <Link to={`/imgsec`} className="md:w-[40%] relative list-imgbox">
-                                                              <img
-                                                                  src={property.primary_image}
-                                                                  alt={property.project_name}
-                                                                  className="w-[100%] h-[100%] rounded-tl-md md:rounded-bl-md object-cover"
-                                                              />
-                                                              {property.is_featured === true && (
-                                                                  <p className="text-white flex gap-1 items-center font-bold mt-2 absolute top-[1px] left-[3%] bg-yellow-500 py-[5px] px-[10px] rounded-[5px]">
-                                                                      Featured
-                                                                  </p>
-                                                              )}
-                                                          </Link>
-                                                          <div className="flex-1 p-4 md:w-[60%]">
-                                                              <h3 className="text-sm text-gray-500 semibold mb-0">{property.title}</h3>
-                                                              <h3 className="text-lg text-[#3C4142] bold mb-3">{property.project_name}</h3>
-                                                              <div className="flex gap-2 items-center mb-2">
-                                                                  <FaMapMarkerAlt className="text-[17px] text-[#367588]" />
-                                                                  <p className="text-gray-600 mb-0">
-                                                                      {property.locality}, {property.city}
-                                                                  </p>
-                                                              </div>
-                                                              <div className="flex flex-wrap justify-between items-center bg-[#F4EFE5] p-2 mb-2">
-                                                                  {/* Price */}
-                                                                  <div className="flex gap-2 items-center w-[50%] md:w-[33%] mb-2">
-                                                                      <FaRupeeSign className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
-                                                                      <div>
-                                                                          <p className="text-[#3C4142] text-[13px] font-bold mb-0">Price</p>
-                                                                          <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">
-                                                                              {formatPrice(property.price)}
-                                                                          </p>
-                                                                      </div>
-                                                                  </div>
-                                                                  {/* SBA */}
-                                                                  <div className="flex gap-2 items-center w-[50%] md:w-[33%] mb-2">
-                                                                      <FaArrowsLeftRightToLine className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
-                                                                      <div>
-                                                                          <p className="text-[#3C4142] text-[13px] font-bold mb-0">SBA</p>
-                                                                          <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">
-                                                                              {property.built_up_area} sq.ft.
-                                                                          </p>
-                                                                      </div>
-                                                                  </div>
-                                                                  {/* Per sq.ft. */}
-                                                                  <div className="flex gap-2 items-center w-[50%] md:w-[33%] mb-2">
-                                                                      <RiMoneyRupeeCircleLine className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
-                                                                      <div>
-                                                                          <p className="text-[#3C4142] text-[13px] font-bold mb-0">Per sq.ft.</p>
-                                                                          <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">
-                                                                              {property.price_per_sqft} sq.ft.
-                                                                          </p>
-                                                                      </div>
-                                                                  </div>
-                                                                  {/* Carpet Area */}
-                                                                  <div className="flex gap-2 items-center w-[50%] md:w-[33%]">
-                                                                      <FaHome className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
-                                                                      <div>
-                                                                          <p className="text-[#3C4142] text-[13px] font-bold mb-0">Carpet Area</p>
-                                                                          <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">{property.carpet_area} sq.ft.</p>
-                                                                      </div>
-                                                                  </div>
-                                                                  {/* Bathroom */}
-                                                                  <div className="flex gap-2 items-center w-[50%] md:w-[33%]">
-                                                                      <FaBath className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
-                                                                      <div>
-                                                                          <p className="text-[#3C4142] text-[13px] font-bold mb-0">Bathroom</p>
-                                                                          <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">{property.bathrooms}</p>
-                                                                      </div>
-                                                                  </div>
-                                                                  {/* Furnishing */}
-                                                                  <div className="flex gap-2 items-center w-[50%] md:w-[33%]">
-                                                                      <GiSofa className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
-                                                                      <div>
-                                                                          <p className="text-[#3C4142] text-[13px] font-bold mb-0">Furnishing</p>
-                                                                          <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">{property.furnished_status}</p>
-                                                                      </div>
-                                                                  </div>
-                                                              </div>
-                                                              {/* Possession */}
-                                                              <div className="flex gap-4 items-center mb-2">
-                                                                  <div className="flex gap-2 items-center">
-                                                                      <FaBuildingCircleExclamation className="text-[17px] text-[#367588]" />
-                                                                      <p className="text-gray-600 mb-0">
-                                                                          Possessioned By: {formatDate(property.available_from)}
-                                                                      </p>
-                                                                  </div>
-                                                              </div>
-                                                              {/* Developer */}
-                                                              <div className="flex bg-[#f4efe5] py-[2px] px-[13px]">
-                                                                  <small className="text-[12px] font-bold">Property Listed By:</small>
-                                                                  <p className="text-gray-600 mb-0 mt-[-4px]">{property.developer_name}</p>
-                                                              </div>
-                                                              {/* CTA */}
-                                                              <div className="flex float-right mt-2">
-                                                                  <button
-                                                                      className="px-4 py-2 bg-[#367588] text-white rounded-md hover:bg-[#1386a8]"
-                                                                      onClick={() => handleDetailsClick(property.id)}
-                                                                  >
-                                                                      View Details
-                                                                  </button>
-                                                              </div>
-                                                          </div>
-                                                      </div>
-                                                      {index === 1 && <AdComponent />}
-                                                  </React.Fragment>
-                                              ))
-                                      )}
+              {loading ? (
+                <p className="text-center text-gray-600 text-lg py-6">Loading properties...</p>
+              ) : filteredProperties.length === 0 ? (
+                <div className="text-center text-gray-600 text-lg py-6">
+                  No properties match your criteria.
+                </div>
+              ) : (
+                [...filteredProperties]
+                  .sort((a, b) => (b.is_featured === true) - (a.is_featured === true)) // Featured first
+                  .map((property, index) => (
+                    <React.Fragment key={index}>
+                      <div className="bg-[#fff] rounded-lg mb-4 flex md:flex-row flex-col shadow-[0_4px_20px_rgba(0,95,107,0.2)]">
+                        <Link to={`/imgsec`} className="md:w-[40%] relative list-imgbox">
+                          <img
+                            src={property.primary_image}
+                            alt={property.project_name}
+                            className="w-[100%] h-[100%] rounded-tl-md md:rounded-bl-md object-cover"
+                          />
+                          {property.is_featured === true && (
+                            <p className="text-white flex gap-1 items-center font-bold mt-2 absolute top-[1px] left-[3%] bg-yellow-500 py-[5px] px-[10px] rounded-[5px]">
+                              Featured
+                            </p>
+                          )}
+                        </Link>
+                        <div className="flex-1 p-4 md:w-[60%]">
+                          <h3 className="text-sm text-gray-500 semibold mb-0">{property.title}</h3>
+                          <h3 className="text-lg text-[#3C4142] bold mb-3">{property.project_name}</h3>
+                          <div className="flex gap-2 items-center mb-2">
+                            <FaMapMarkerAlt className="text-[17px] text-[#367588]" />
+                            <p className="text-gray-600 mb-0">
+                              {property.locality}, {property.city}
+                            </p>
+                          </div>
+                          <div className="flex flex-wrap justify-between items-center bg-[#F4EFE5] p-2 mb-2">
+                            {/* Price */}
+                            <div className="flex gap-2 items-center w-[50%] md:w-[33%] mb-2">
+                              <FaRupeeSign className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
+                              <div>
+                                <p className="text-[#3C4142] text-[13px] font-bold mb-0">Price</p>
+                                <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">
+                                  {formatPrice(property.price)}
+                                </p>
+                              </div>
+                            </div>
+                            {/* SBA */}
+                            <div className="flex gap-2 items-center w-[50%] md:w-[33%] mb-2">
+                              <FaArrowsLeftRightToLine className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
+                              <div>
+                                <p className="text-[#3C4142] text-[13px] font-bold mb-0">SBA</p>
+                                <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">
+                                  {property.built_up_area} sq.ft.
+                                </p>
+                              </div>
+                            </div>
+                            {/* Per sq.ft. */}
+                            <div className="flex gap-2 items-center w-[50%] md:w-[33%] mb-2">
+                              <RiMoneyRupeeCircleLine className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
+                              <div>
+                                <p className="text-[#3C4142] text-[13px] font-bold mb-0">Per sq.ft.</p>
+                                <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">
+                                  {property.price_per_sqft} sq.ft.
+                                </p>
+                              </div>
+                            </div>
+                            {/* Carpet Area */}
+                            <div className="flex gap-2 items-center w-[50%] md:w-[33%]">
+                              <FaHome className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
+                              <div>
+                                <p className="text-[#3C4142] text-[13px] font-bold mb-0">Carpet Area</p>
+                                <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">{property.carpet_area} sq.ft.</p>
+                              </div>
+                            </div>
+                            {/* Bathroom */}
+                            <div className="flex gap-2 items-center w-[50%] md:w-[33%]">
+                              <FaBath className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
+                              <div>
+                                <p className="text-[#3C4142] text-[13px] font-bold mb-0">Bathroom</p>
+                                <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">{property.bathrooms}</p>
+                              </div>
+                            </div>
+                            {/* Furnishing */}
+                            <div className="flex gap-2 items-center w-[50%] md:w-[33%]">
+                              <GiSofa className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
+                              <div>
+                                <p className="text-[#3C4142] text-[13px] font-bold mb-0">Furnishing</p>
+                                <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">{property.furnished_status}</p>
+                              </div>
+                            </div>
+                          </div>
+                          {/* Possession */}
+                          <div className="flex gap-4 items-center mb-2">
+                            <div className="flex gap-2 items-center">
+                              <FaBuildingCircleExclamation className="text-[17px] text-[#367588]" />
+                              <p className="text-gray-600 mb-0">
+                                Possessioned By: {formatDate(property.available_from)}
+                              </p>
+                            </div>
+                          </div>
+                          {/* Developer */}
+                          <div className="flex bg-[#f4efe5] py-[2px] px-[13px]">
+                            <small className="text-[12px] font-bold">Property Listed By:</small>
+                            <p className="text-gray-600 mb-0 mt-[-4px]">{property.developer_name}</p>
+                          </div>
+                          {/* CTA */}
+                          <div className="flex float-right mt-2">
+                            <button
+                              className="px-4 py-2 bg-[#367588] text-white rounded-md hover:bg-[#1386a8]"
+                              onClick={() => handleDetailsClick(property.id)}
+                            >
+                              View Details
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      {index === 1 && <AdComponent />}
+                    </React.Fragment>
+                  ))
+              )}
             </div>
 
             {/* ------- right box ------- */}
-            <div className="hidden lg:block bg-white rounded-lg shadow-md p-4 sticky top-20">
-              <div>
-                <h2 className="text-lg font-roboto-bold ">If want to list your property   <Link to={`/postreq`}> contact us</Link></h2>
-
-              </div>
-              {/* Advertise Section */}
-              <div className="hidden md:block bg-white rounded-lg shadow-md p-4  ">
-                <div className="bg-yellow-100 text-center p-4 rounded-lg">
-                  <img
-                    src="https://img.staticmb.com/mbphoto/property/cropped_images/2025/Feb/28/Photo_h180_w240/77495663_3_1740730784979-294_180_240.jpg"
-                    alt="Advertise"
-                    className="mx-auto mb-3"
-                  />
-                  <h3 className="text-xl font-semibold">Advertise With Us</h3>
-                  <p className="text-gray-600">
-                    Reach millions of potential customers
-                  </p>
-                </div>
-                <button className="mt-3 px-4 py-2 bg-yellow-500 text-white rounded-md w-full hover:bg-yellow-600">
-                  Post Property
-                </button>
-                <div className="mt-6">
-                  <h4 className="text-lg font-semibold">
-                    Why Advertise With Us?
-                  </h4>
-                  <ul className="list-disc pl-4 text-gray-600">
-                    <li>Millions of Active Users</li>
-                    <li>Targeted Audience</li>
-                    <li>High Conversion Rates</li>
-                  </ul>
-                </div>
-              </div>
-              <div className="bg-white rounded-lg shadow-md p-4 mt-5">
-                <img
-                  src="https://img.staticmb.com/mbphoto/property/cropped_images/2025/Feb/28/Photo_h180_w240/77495663_3_1740730784979-294_180_240.jpg"
-                  alt="3 BHK Flat"
-                  className="w-full h-48 object-cover rounded-md"
-                />
-                <h3 className="text-xl font-semibold mt-3">3 BHK Flat</h3>
-                <p className="text-gray-600">Electronic City, Bangalore</p>
-                <p className="mt-2 text-gray-700">Ready to Move</p>
-                <p className="text-lg font-semibold text-black mt-1">₹2.1 Cr</p>
-                <p className="text-gray-500 mt-1">Owner Arun</p>
-              </div>{" "}
+            <div className="block lg:flex flex-col gap-4 p-4 top-20">
+              <AdCards />
             </div>
           </div>
 
