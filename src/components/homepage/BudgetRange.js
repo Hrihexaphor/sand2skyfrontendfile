@@ -78,26 +78,25 @@ const BudgetRange = () => {
 
         if (filtered.length === 0) return null;
 
-
+        const isSingleCard = filtered.length === 1;
         const settings = {
           dots: false,
-          infinite: true,
+          infinite: !isSingleCard, // Disable loop for 1 card
           speed: 500,
-          slidesToShow: 4, // Show 2 cards on larger screens
-           slidesToShow: Math.min(filtered.length, 4),
+          slidesToShow: isSingleCard ? 1 : Math.min(filtered.length, 4),
           autoplay: true,
           autoplaySpeed: 3000,
           responsive: [
             {
               breakpoint: 1024, // For smaller screens
               settings: {
-                slidesToShow: Math.min(filtered.length, 3),
+                slidesToShow: isSingleCard ? 1 : Math.min(filtered.length, 3),
               },
             },
             {
               breakpoint: 768, // For smaller screens
               settings: {
-                slidesToShow: Math.min(filtered.length, 3),
+                slidesToShow: isSingleCard ? 1 : Math.min(filtered.length, 3),
               },
             },
             {
