@@ -118,7 +118,7 @@ const BudgetRange = () => {
             </p>
             <Slider {...settings}>
               {filtered.map((property) => (
-                <div key={property.id} className="p-2 lg:w-[25%] custom-width">
+                <div key={property.id} className={`p-2 ${isSingleCard ? 'custom-width' : ''}`}>
                   <div className="w-full bg-white rounded-lg cursor-pointer tranding-card">
                     <div className="h-[200px] w-full img-box relative">
                       <img
