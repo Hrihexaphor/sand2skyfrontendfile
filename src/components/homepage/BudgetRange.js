@@ -82,47 +82,32 @@ const BudgetRange = () => {
         const settings = {
           dots: false,
           infinite: true,
-          autoplay: true,
           speed: 500,
-          slidesToShow: filtered.length === 1 ? 1 : 3,
+          slidesToShow: 4, // Show 2 cards on larger screens
           slidesToScroll: 1,
-          centerMode: filtered.length === 1,
-          centerPadding:
-            filtered.length === 1
-              ? window.innerWidth < 768
-                ? '0px' // Full width on mobile
-                : '40%' // Center on larger screens
-              : '0px',
+          autoplay: true,
+          autoplaySpeed: 3000,
           responsive: [
             {
-              breakpoint: 1024,
+              breakpoint: 1024, // For smaller screens
               settings: {
-                slidesToShow: 3,
-                centerPadding:
-                  filtered.length === 1
-                    ? '20%' // Optional adjust
-                    : '0px',
+                slidesToShow: 3, // Show 1 card
               },
             },
             {
-              breakpoint: 768,
+              breakpoint: 768, // For smaller screens
               settings: {
-                slidesToShow: 2,
-                centerMode: false,
-                centerPadding: '0px',
+                slidesToShow: 2, // Show 1 card
               },
             },
             {
-              breakpoint: 480,
+              breakpoint: 425, // For smaller screens
               settings: {
-                slidesToShow: 1,
-                centerMode: false,
-                centerPadding: '0px',
+                slidesToShow: 1, // Show 1 card
               },
             },
           ],
         };
-
 
         return (
           <div key={index} className="mb-0 pb-1">
