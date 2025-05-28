@@ -150,11 +150,11 @@ const BudgetRange = () => {
                     </div>
 
                     <div className="p-3">
-                      <h3 className="text-base text-[#3C4142] font-semibold mb-2">
+                      <h3 className="text-lg text-[#3C4142] font-semibold mb-2">
                         {property.project_name}
                       </h3>
 
-                      <div className="card-body flex flex-wrap justify-between items-center">
+                      <div className="flex flex-wrap justify-between items-center">
                         <div className="flex gap-2 items-center w-[50%] mb-2">
                           <FaRupeeSign className="text-[17px] bg-[#367588] text-white h-[26px] w-[26px] rounded-full p-1" />
                           <div>
@@ -209,7 +209,7 @@ const BudgetRange = () => {
                         </div>
                       </div>
 
-                      <div className="flex gap-2 items-center mb-3">
+                      <div className="flex gap-2 items-center mb-2">
                         <FaMapMarkerAlt className="text-[17px] bg-[#367588] text-white h-[26px] w-[26px] rounded-full p-1" />
                         <div>
                           <p className="text-[13px] text-[#3C4142] font-bold mb-0">

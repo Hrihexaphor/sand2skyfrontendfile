@@ -28,6 +28,12 @@ const NewFeature = () => {
           slidesToShow: 1, // Show 1 card
         },
       },
+       {
+        breakpoint: 768, // For smaller screens
+        settings: {
+          slidesToShow: 2, // Show 1 card
+        },
+      },
     ],
   };
 
