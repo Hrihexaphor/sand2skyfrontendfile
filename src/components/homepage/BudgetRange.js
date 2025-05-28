@@ -84,20 +84,20 @@ const BudgetRange = () => {
           infinite: true,
           speed: 500,
           slidesToShow: 4, // Show 2 cards on larger screens
-          slidesToScroll: 1,
+           slidesToShow: Math.min(filtered.length, 4),
           autoplay: true,
           autoplaySpeed: 3000,
           responsive: [
             {
               breakpoint: 1024, // For smaller screens
               settings: {
-                slidesToShow: 3, // Show 1 card
+                slidesToShow: Math.min(filtered.length, 3),
               },
             },
             {
               breakpoint: 768, // For smaller screens
               settings: {
-                slidesToShow: 2, // Show 1 card
+                slidesToShow: Math.min(filtered.length, 3),
               },
             },
             {
