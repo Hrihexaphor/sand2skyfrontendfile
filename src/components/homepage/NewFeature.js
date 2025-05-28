@@ -84,12 +84,14 @@ const NewFeature = () => {
           transition={{ duration: 0.8 }}
         >
           <img
-            src="http://hompark.themezinho.net/wp-content/uploads/2020/03/gallery-thumb03.jpg"
+            // src="http://hompark.themezinho.net/wp-content/uploads/2020/03/gallery-thumb03.jpg"
+            src="https://res.cloudinary.com/djqpz99jb/image/upload/v1748413014/sale2_ncmz6x.jpg"
             alt="Family"
             className="rounded-lg shadow-lg h-auto relative small-img"
           />
           <img
-            src="http://hompark.themezinho.net/wp-content/uploads/2020/03/side-image02.jpg"
+            // src="http://hompark.themezinho.net/wp-content/uploads/2020/03/side-image02.jpg"
+            src="https://res.cloudinary.com/djqpz99jb/image/upload/v1748412981/saleimg1_uzedc8.jpg"
             alt="Overlay"
             className="absolute left-36 bottom-16 h-[100%] rounded-lg opacity-80 small-img hidden md:block"
           />
