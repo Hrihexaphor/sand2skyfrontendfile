@@ -1326,7 +1326,7 @@ const PropertyDetails = () => {
                 Explore Neighbourhood - {property?.details?.project_name}
               </h2>
 
-              <div className="space-y-6">
+              <div className="space-y-6 mb-4">
                 {property?.nearest_to?.map((place) => (
                   <div
                     key={place.id}

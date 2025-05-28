@@ -45,7 +45,7 @@ const Review = () => {
 
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition"
+          className="w-full bg-[#367588] text-white py-2 px-4 rounded hover:bg-[#1386a8] transition"
         >
           Submit
         </button>

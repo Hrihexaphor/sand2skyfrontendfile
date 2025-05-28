@@ -96,7 +96,7 @@ const BudgetRange = () => {
             {
               breakpoint: 768, // For smaller screens
               settings: {
-                slidesToShow: isSingleCard ? 1 : Math.min(filtered.length, 3),
+                slidesToShow: isSingleCard ? 1 : Math.min(filtered.length, 2),
               },
             },
             {
@@ -118,7 +118,7 @@ const BudgetRange = () => {
             </p>
             <Slider {...settings}>
               {filtered.map((property) => (
-                <div key={property.id} className="p-2">
+                <div key={property.id} className="p-2 w-[100%] lg:w-[25%]">
                   <div className="w-full bg-white rounded-lg cursor-pointer tranding-card">
                     <div className="h-[200px] w-full img-box relative">
                       <img
