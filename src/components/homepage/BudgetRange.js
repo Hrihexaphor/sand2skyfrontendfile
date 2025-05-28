@@ -179,7 +179,7 @@ const BudgetRange = () => {
                           </div>
                         </div>
 
-                        <div className="flex gap-2 items-center w-[100%] mb-2">
+                        <div className="flex gap-2 items-center w-[50%] mb-2">
                           <FaArrowsLeftRightToLine className="text-[17px] bg-[#367588] text-white h-[26px] w-[26px] rounded-full p-1" />
                           <div>
                             <p className="text-[13px] text-[#3C4142] font-bold mb-0">
