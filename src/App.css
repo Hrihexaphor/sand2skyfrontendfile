@@ -579,3 +579,11 @@ body{
    width: 100% !important;
   }
 }
+@media screen and (width: 1024px){
+  .custom-width{
+    width: 33% !important;
+  }
+  .custom-double-width{
+   width: 50% !important;
+  }
+}

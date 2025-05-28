@@ -85,7 +85,7 @@ const BudgetRange = () => {
           infinite: !isSingleCard, // Disable loop for 1 card
           speed: 500,
           slidesToShow: isSingleCard ? 1 : Math.min(filtered.length, 4),
-          autoplay: true,
+          autoplay: false,
           autoplaySpeed: 3000,
           responsive: [
             {
