@@ -80,41 +80,48 @@ const BudgetRange = () => {
 
 
         const settings = {
-  dots: false,
-  infinite: true,
-  autoplay: true,
-  speed: 500,
-  slidesToShow: Math.min(filtered.length, 3), // Always max 3 visible
-  slidesToScroll: 1,
-  centerMode: false, // No center
-  centerPadding: '0px', // No padding
-  responsive: [
-    {
-      breakpoint: 1024,
-      settings: {
-        slidesToShow: Math.min(filtered.length, 3), // up to 3 on desktop
-        centerMode: false,
-        centerPadding: '0px',
-      },
-    },
-    {
-      breakpoint: 768,
-      settings: {
-        slidesToShow: Math.min(filtered.length, 2), // up to 2 on tablet
-        centerMode: false,
-        centerPadding: '0px',
-      },
-    },
-    {
-      breakpoint: 480,
-      settings: {
-        slidesToShow: 1, // Full width on mobile
-        centerMode: false,
-        centerPadding: '0px',
-      },
-    },
-  ],
-};
+          dots: false,
+          infinite: true,
+          autoplay: true,
+          speed: 500,
+          slidesToShow: filtered.length === 1 ? 1 : 3,
+          slidesToScroll: 1,
+          centerMode: filtered.length === 1,
+          centerPadding:
+            filtered.length === 1
+              ? window.innerWidth < 768
+                ? '0px' // Full width on mobile
+                : '40%' // Center on larger screens
+              : '0px',
+          responsive: [
+            {
+              breakpoint: 1024,
+              settings: {
+                slidesToShow: 3,
+                centerPadding:
+                  filtered.length === 1
+                    ? '20%' // Optional adjust
+                    : '0px',
+              },
+            },
+            {
+              breakpoint: 768,
+              settings: {
+                slidesToShow: 2,
+                centerMode: false,
+                centerPadding: '0px',
+              },
+            },
+            {
+              breakpoint: 480,
+              settings: {
+                slidesToShow: 1,
+                centerMode: false,
+                centerPadding: '0px',
+              },
+            },
+          ],
+        };
 
 
         return (
