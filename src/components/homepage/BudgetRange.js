@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -12,7 +12,6 @@ const BudgetRange = () => {
   const navigate = useNavigate();
 
   const [properties, setProperties] = useState([]);
-   const scrollRefs = useRef([]);
 
   useEffect(() => {
     axios
@@ -47,16 +46,6 @@ const BudgetRange = () => {
   ];
 
 
-   const scroll = (index, direction) => {
-    const container = scrollRefs.current[index];
-    if (!container) return;
-    const scrollAmount = container.offsetWidth / 4;
-    container.scrollBy({
-      left: direction === "left" ? -scrollAmount : scrollAmount,
-      behavior: "smooth",
-    });
-  };
-  
   const handleDetailsClick = (id) => {
     navigate(`/details/${id}`);
   };
@@ -81,36 +70,54 @@ const BudgetRange = () => {
         </h2>
       </div>
 
-      {priceCategories.map((category, idx) => {
+      {priceCategories.map((category, index) => {
         const filtered = properties.filter((property) => {
           const price = parsePrice(property.expected_price);
           return price >= category.range[0] && price < category.range[1];
         });
 
+        if (filtered.length === 0) return null;
+
+  const isSingleCard = filtered.length === 1;
+        const settings = {
+          dots: false,
+          infinite: !isSingleCard, // Disable loop for 1 card
+          speed: 500,
+          slidesToShow: isSingleCard ? 1 : Math.min(filtered.length, 4),
+          autoplay: true,
+          autoplaySpeed: 3000,
+          responsive: [
+            {
+              breakpoint: 1024, // For smaller screens
+              settings: {
+                slidesToShow: isSingleCard ? 1 : Math.min(filtered.length, 3),
+              },
+            },
+            {
+              breakpoint: 768, // For smaller screens
+              settings: {
+                slidesToShow: isSingleCard ? 1 : Math.min(filtered.length, 3),
+              },
+            },
+            {
+              breakpoint: 425, // For smaller screens
+              settings: {
+                slidesToShow: 1, // Show 1 card
+              },
+            },
+          ],
+        };
+
         return (
-          <div key={idx} className="mb-0 pb-1">
+          <div key={index} className="mb-0 pb-1">
             <h1 className="mt-2 font-bold text-[#3C4142] text-2xl font-geometric-regular text-center">
               {category.title}
             </h1>
             <p className="text-gray-500 mt-2 mb-8 max-w-xl mx-auto font-sans text-center">
               Browse premium apartments, villas, and independent homes that suit your dream lifestyle.
             </p>
-
-           
-            {/* ------- new --------- */}
-                        <div className="relative">
-              <button
-                onClick={() => scroll(idx, "left")}
-                className="absolute z-10 left-0 top-1/2 -translate-y-1/2 bg-white shadow p-2 rounded-full hidden sm:block"
-              >
-                ◀
-              </button>
-
-              <div
-                ref={(el) => (scrollRefs.current[idx] = el)}
-                className="flex overflow-x-auto no-scrollbar space-x-4 scroll-smooth"
-              >
-               {filtered.map((property) => (
+            <Slider {...settings}>
+              {filtered.map((property) => (
                 <div key={property.id} className="p-2">
                   <div className="w-full bg-white rounded-lg cursor-pointer tranding-card">
                     <div className="h-[200px] w-full img-box relative">
@@ -208,17 +215,7 @@ const BudgetRange = () => {
                   </div>
                 </div>
               ))}
-              </div>
-
-              <button
-                onClick={() => scroll(idx, "right")}
-                className="absolute z-10 right-0 top-1/2 -translate-y-1/2 bg-white shadow p-2 rounded-full hidden sm:block"
-              >
-                ▶
-              </button>
-            </div>
-
-            {/* ------- new ------- */}
+            </Slider>
           </div>
         );
       })}
