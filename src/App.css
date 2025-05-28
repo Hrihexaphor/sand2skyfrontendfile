@@ -564,3 +564,6 @@ body{
     overflow-y: auto;
   }
 }
+.custom-width{
+  width: 25% !important;
+}
