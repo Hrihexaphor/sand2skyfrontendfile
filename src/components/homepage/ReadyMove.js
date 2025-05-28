@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaMapMarkerAlt, FaRupeeSign, FaBath, FaHome, } from "react-icons/fa";
+import { FaMapMarkerAlt, FaRupeeSign, FaBath, FaHome, FaTimes } from "react-icons/fa";
 import { FaBuildingCircleExclamation, FaArrowsLeftRightToLine } from "react-icons/fa6";
 import { RiMoneyRupeeCircleLine } from "react-icons/ri";
 import { GiSofa } from "react-icons/gi";
@@ -8,7 +8,7 @@ import axios from 'axios';
 
 
 
-const ReadyToMove = () => {
+const ReadyToMove = ({adCard}) => {
 
   const [search, setSearch] = useState("");
   const [properties, setProperties] = useState([]);
@@ -31,14 +31,18 @@ const ReadyToMove = () => {
       });
   }, []);
   // --------------- API INTEGRATION END -------> 
-  const [adCard, setAdCard] = useState([]);
+  const [visibleAds, setVisibleAds] = useState(adCard);
+
+  const handleClose = (id) => {
+    setVisibleAds((prev) => prev.filter((ad) => ad.id !== id));
+  };
   // --------------- AD API INTEGRATION START -------> 
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_BASE_URL}/advertisement`, {
       withCredentials: true, // replaces fetch's `credentials: 'include'`
     })
       .then((res) => {
-        setAdCard(res.data);
+        setVisibleAds(res.data);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
@@ -205,8 +209,16 @@ const ReadyToMove = () => {
           </div>
           {/* Right - Ads & Promotions */}
           <div className="block lg:flex flex-col gap-4 p-4">
-            {adCard.map((ad) => (
+            {visibleAds.map((ad) => (
               <a href={ad.link} key={ad.id} className="cursor-pointer">
+                <button className="absolute top-3 right-3 text-gray-500 lg:hidden"
+                 onClick={(e) => {
+              e.preventDefault(); 
+              handleClose(ad.id);
+            }}
+                >
+                  <FaTimes size={20} />
+                </button>
                 <img
                   src={ad.image_url}
                   alt="Ad"
