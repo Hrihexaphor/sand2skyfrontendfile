@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { FaSearch, FaMapMarkerAlt, FaRupeeSign, FaBath, FaFilter, FaHome } from "react-icons/fa";
+import { FaSearch, FaMapMarkerAlt, FaRupeeSign, FaBath, FaFilter, FaHome, FaTimes } from "react-icons/fa";
 import { FaArrowsLeftRightToLine, FaBuildingCircleExclamation } from "react-icons/fa6";
 import { GiSofa } from "react-icons/gi";
 import { RiMoneyRupeeCircleLine } from "react-icons/ri";
@@ -7,36 +7,6 @@ import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
 import NewNav from "../header/NewNav";
 import Footer from "../footer/Footer";
 import axios from "axios";
-
-
-// const newProject = [
-//   {
-//     id: 1,
-//     carpetArea: "900 sqft",
-//     furnishing: "Unfurnished",
-//     bathroom: "2",
-//     bhk: "2",
-//     totalPrice: "1 Cr",
-//     projectName: "Flat for Sale in Mysore Road, Bangalore",
-//     location: "Yelahanka, Bangalore",
-//     posession: "Construction",
-//     image:
-//       "https://media.istockphoto.com/id/1170947768/photo/houses-in-the-sunlight.jpg?s=1024x1024&w=is&k=20&c=zE5WsT7NYvpDxAn7v7rB0D0TFRH6IR2whDtqjqI8fQE=",
-//   },
-//   {
-//     id: 2,
-//     carpetArea: "1200 sqft",
-//     furnishing: "Semi-Furnished",
-//     bathroom: "2",
-//     bhk: "3",
-//     totalPrice: "85 Lac",
-//     projectName: "Flat for Sale in Nayapalli, Bhubaneswar",
-//     location: "Nayapalli, Bhubaneswar",
-//     posession: "Ready to Move",
-//     image:
-//       "https://media.istockphoto.com/id/1170947768/photo/houses-in-the-sunlight.jpg?s=1024x1024&w=is&k=20&c=zE5WsT7NYvpDxAn7v7rB0D0TFRH6IR2whDtqjqI8fQE=",
-//   },
-// ];
 
 const BuilderProject = () => {
 
@@ -68,6 +38,69 @@ const BuilderProject = () => {
       });
   }, [developer]);
   // <------------ API INTEGRATION END -------------->
+
+  // ======================== main filter ===================>
+    const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+    const [filter, setFilter] = useState({
+      // purpose: "",  
+      bhk: "",
+      minBudget: "",
+      maxBudget: "",
+      locality: "",
+      propertyType: "",
+      houseType: "",
+      possession: ""
+    });
+    const [page, setPage] = useState(1);
+    const listRef = useRef();
+    useEffect(() => {
+      listRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [page]);
+    const [searchQuery, setSearchQuery] = useState("");
+  
+    const parseCr = (value) => {
+      if (!value) return null;
+      return parseFloat(value.replace(/[^\d.]/g, '')) * 10000000;
+    };
+  
+    const parseBudget = (val) => {
+      if (!val) return null;
+      const num = parseFloat(val.replace(/[^0-9.]/g, ''));
+      return val.includes('CR') ? num * 10000000 : num;
+    };
+  
+    const minBudget = parseBudget(filter.minBudget);
+    const maxBudget = parseBudget(filter.maxBudget);
+  
+    const filteredProperties = projects.filter((p) => {
+      const propertyPrice = parseBudget(p.expected_price);
+  
+      const matchesBudget =
+        (!minBudget && !maxBudget) || // no filter set
+        (propertyPrice != null &&
+          (!minBudget || propertyPrice >= minBudget) &&
+          (!maxBudget || propertyPrice <= maxBudget));
+  
+      // Other filters (same as before)
+      const matchesSearch = !searchQuery || p.project_name?.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesPurpose = !filter.purpose || p.purpose?.toLowerCase() === filter.purpose.toLowerCase();
+      const matchesBHK = !filter.bhk || String(p.bedrooms) === filter.bhk;
+      const matchesPropertyType = !filter.propertyType || p.property_type?.toLowerCase() === filter.propertyType.toLowerCase();
+      const matchesHouseType = !filter.houseType || p.apartment_type?.toLowerCase() === filter.houseType.toLowerCase();
+      const matchesPossession = !filter.possession || p.possession_status?.toLowerCase() === filter.possession.toLowerCase();
+      const matchesLocality = !filter.locality || (p.locality?.toLowerCase() || '').includes(filter.locality.toLowerCase());
+  
+      return (
+        matchesSearch &&
+        matchesPurpose &&
+        matchesBHK &&
+        matchesPropertyType &&
+        matchesHouseType &&
+        matchesPossession &&
+        matchesLocality &&
+        matchesBudget
+      );
+    });
 
   // Format date string to "DD MMM YYYY"
   function formatDate(dateString) {
@@ -109,18 +142,23 @@ const BuilderProject = () => {
                 <div className="flex items-center bg-[#fff] w-full py-[5px] px-[10px] rounded-[20px]">
                   <FaSearch className="text-gray-500 mr-2" />
                   <input
-                    type="text"
+                   type="text"
                     placeholder="Search Project"
+                    value={searchQuery}
+                    onChange={(e) => {
+                      setSearchQuery(e.target.value);
+                      setPage(1);
+                    }}
                     className="search outline-none w-full bg-transparent"
                   />
                 </div>
                 <button className="bg-white text-gray-700 font-semibold px-3 py-1 rounded-full flex items-center h-[34px]"
-                >
+                 onClick={() => setIsFilterModalOpen(true)}>
                   <FaFilter className="me-2" /> Filter
                 </button>
               </div>
               {/* ----------- Filter Model ----------> */}
-              {/* {isFilterModalOpen && (
+              {isFilterModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center  z-50">
                   <div className="bg-white filter-modal w-full mx-3 lg:w-[600px] top-[18%] max-w-4xl rounded shadow-lg p-6 relative">
                     <button
@@ -270,12 +308,12 @@ const BuilderProject = () => {
                     >Done</button>
                   </div>
                 </div>
-              )} */}
+              )}
 
               {/* ======== Project Card ==========> */}
               {loading ? (
                 <p className="text-center text-gray-600 text-lg py-6">Loading properties...</p>
-              ) : ( projects.map((project, index) => (
+              ) : ( filteredProperties.map((project, index) => (
                 <div
                   key={index}
                   className="bg-[#fff] rounded-lg mb-4 flex md:flex-row flex-col shadow-[0_4px_20px_rgba(0,95,107,0.2)]"
