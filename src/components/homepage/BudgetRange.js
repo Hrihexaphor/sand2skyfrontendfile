@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useNavigate } from "react-router-dom";
@@ -55,7 +56,7 @@ const BudgetRange = () => {
       behavior: "smooth",
     });
   };
-
+  
   const handleDetailsClick = (id) => {
     navigate(`/details/${id}`);
   };
@@ -81,23 +82,23 @@ const BudgetRange = () => {
       </div>
 
       {priceCategories.map((category, idx) => {
-        const filtered = properties.filter((p) => {
-          const price = parsePrice(p.expected_price);
+        const filtered = properties.filter((property) => {
+          const price = parsePrice(property.expected_price);
           return price >= category.range[0] && price < category.range[1];
         });
 
-        if (filtered.length === 0) return null;
-
         return (
-          <div key={idx} className="mb-16">
-            <h3 className="text-2xl font-bold text-center text-[#3C4142]">
+          <div key={idx} className="mb-0 pb-1">
+            <h1 className="mt-2 font-bold text-[#3C4142] text-2xl font-geometric-regular text-center">
               {category.title}
-            </h3>
-            <p className="text-center text-gray-500 mb-6">
+            </h1>
+            <p className="text-gray-500 mt-2 mb-8 max-w-xl mx-auto font-sans text-center">
               Browse premium apartments, villas, and independent homes that suit your dream lifestyle.
             </p>
 
-            <div className="relative">
+           
+            {/* ------- new --------- */}
+                        <div className="relative">
               <button
                 onClick={() => scroll(idx, "left")}
                 className="absolute z-10 left-0 top-1/2 -translate-y-1/2 bg-white shadow p-2 rounded-full hidden sm:block"
@@ -109,56 +110,104 @@ const BudgetRange = () => {
                 ref={(el) => (scrollRefs.current[idx] = el)}
                 className="flex overflow-x-auto no-scrollbar space-x-4 scroll-smooth"
               >
-                {filtered.map((property) => (
-                  <div
-                    key={property.id}
-                    className="flex-none w-[250px] sm:w-[300px] bg-white rounded-lg shadow-md"
-                  >
-                    <div className="h-[180px] w-full overflow-hidden rounded-t-lg">
+               {filtered.map((property) => (
+                <div key={property.id} className="p-2">
+                  <div className="w-full bg-white rounded-lg cursor-pointer tranding-card">
+                    <div className="h-[200px] w-full img-box relative">
                       <img
                         src={property.primary_image}
-                        alt={property.project_name}
                         className="h-full w-full object-cover"
+                        alt={property.project_name}
                       />
+                      {property.is_featured && (
+                        <p className="absolute top-1 left-[3%] bg-yellow-500 text-white py-1 px-2 rounded font-bold text-sm">
+                          Featured
+                        </p>
+                      )}
                     </div>
-                    <div className="p-3 space-y-2">
-                      <h3 className="text-lg font-semibold text-[#3C4142]">
+
+                    <div className="p-3">
+                      <h3 className="text-lg text-[#3C4142] font-semibold mb-2">
                         {property.project_name}
                       </h3>
-                      <div className="flex items-center text-sm text-gray-700">
-                        <FaRupeeSign className="mr-2" />
-                        {formatPrice(property.expected_price)}
+
+                      <div className="flex flex-wrap justify-between items-center">
+                        <div className="flex gap-2 items-center w-[50%] mb-2">
+                          <FaRupeeSign className="text-[17px] bg-[#367588] text-white h-[26px] w-[26px] rounded-full p-1" />
+                          <div>
+                            <p className="text-[13px] text-[#3C4142] font-bold mb-0">
+                              Price
+                            </p>
+                            <p className="text-[13px] text-gray-600 mt-0 mb-0">
+                              {formatPrice(property.expected_price)}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex gap-2 items-center w-[50%] mb-2">
+                          <IoHome className="text-[17px] bg-[#367588] text-white h-[26px] w-[26px] rounded-full p-1" />
+                          <div>
+                            <p className="text-[13px] text-[#3C4142] font-bold mb-0">
+                              Type
+                            </p>
+                            <p className="text-[13px] text-gray-600 mt-0 w-[90px] overflow-hidden text-ellipsis whitespace-nowrap mb-0">
+                              {property.subcategory_name}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex gap-2 items-center w-[50%] mb-2">
+                          <FaArrowsLeftRightToLine className="text-[17px] bg-[#367588] text-white h-[26px] w-[26px] rounded-full p-1" />
+                          <div>
+                            <p className="text-[13px] text-[#3C4142] font-bold mb-0">
+                              SBA
+                            </p>
+                            <p className="text-[13px] text-gray-600 mt-0 mb-0">
+                              {property.built_up_area} sq.ft.
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex gap-2 items-center w-[50%] mb-2">
+                          <FaBuildingUser className="text-[17px] bg-[#367588] text-white h-[26px] w-[26px] rounded-full p-1" />
+                          <div>
+                            <p className="text-[13px] text-[#3C4142] font-bold mb-0">
+                              Builder
+                            </p>
+                            <p
+                              className="text-[13px] text-gray-600 mt-0 w-[90px] overflow-hidden text-ellipsis whitespace-nowrap cursor-pointer mb-0"
+                              onClick={() =>
+                                handleDeveloper(property.developer_name)
+                              }
+                            >
+                              {property.developer_name}
+                            </p>
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex items-center text-sm text-gray-700">
-                        <IoHome className="mr-2" />
-                        {property.subcategory_name}
+
+                      <div className="flex gap-2 items-center mb-2">
+                        <FaMapMarkerAlt className="text-[17px] bg-[#367588] text-white h-[26px] w-[26px] rounded-full p-1" />
+                        <div>
+                          <p className="text-[13px] text-[#3C4142] font-bold mb-0">
+                            Location
+                          </p>
+                          <p className="text-[13px] text-gray-600 mt-0 mb-0">
+                            {property.locality}, {property.city}
+                          </p>
+                        </div>
                       </div>
-                      <div className="flex items-center text-sm text-gray-700">
-                        <FaArrowsLeftRightToLine className="mr-2" />
-                        {property.built_up_area} sq.ft.
-                      </div>
-                      <div className="flex items-center text-sm text-gray-700">
-                        <FaBuildingUser className="mr-2" />
-                        <span
-                          onClick={() => handleDeveloper(property.developer_name)}
-                          className="cursor-pointer hover:underline"
-                        >
-                          {property.developer_name}
-                        </span>
-                      </div>
-                      <div className="flex items-center text-sm text-gray-700">
-                        <FaMapMarkerAlt className="mr-2" />
-                        {property.locality}, {property.city}
-                      </div>
+
                       <button
-                        className="mt-2 w-full bg-[#367588] text-white py-1 px-3 rounded hover:bg-[#1386a8]"
+                        className="px-3 py-1 bg-[#367588] w-full text-white text-base rounded-md hover:bg-[#1386a8]"
                         onClick={() => handleDetailsClick(property.id)}
                       >
                         View Details
                       </button>
                     </div>
                   </div>
-                ))}
+                </div>
+              ))}
               </div>
 
               <button
@@ -168,6 +217,8 @@ const BudgetRange = () => {
                 ▶
               </button>
             </div>
+
+            {/* ------- new ------- */}
           </div>
         );
       })}
