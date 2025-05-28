@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { FaMapMarkerAlt, FaRupeeSign, FaBath, FaHome, FaTimes } from "react-icons/fa";
+import AdCards from "../advertisement/AdvertiseCard";
+import { FaMapMarkerAlt, FaRupeeSign, FaBath, FaHome } from "react-icons/fa";
 import { FaBuildingCircleExclamation, FaArrowsLeftRightToLine } from "react-icons/fa6";
 import { RiMoneyRupeeCircleLine } from "react-icons/ri";
 import { GiSofa } from "react-icons/gi";
@@ -31,21 +32,6 @@ const ReadyToMove = () => {
       });
   }, []);
   // --------------- API INTEGRATION END -------> 
-  const [adCard, setAdCard] = useState([]);
-  // --------------- AD API INTEGRATION START -------> 
-  useEffect(() => {
-    axios.get(`${process.env.REACT_APP_BASE_URL}/advertisement`, {
-      withCredentials: true, // replaces fetch's `credentials: 'include'`
-    })
-      .then((res) => {
-        setAdCard(res.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-      });
-  }, []);
-  // --------------- API INTEGRATION END -------> 
-
 
   const handleDetailsClick = (id) => {
     navigate(`/details/${id}`);
@@ -204,23 +190,7 @@ const ReadyToMove = () => {
           </div>
           {/* Right - Ads & Promotions */}
           <div className="block lg:flex flex-col gap-4 p-4">
-            {adCard.map((ad) => (
-              <a href={ad.link} key={ad.id} className="cursor-pointer">
-                <button className="absolute top-3 right-3 text-gray-500 lg:hidden"
-                >
-                  <FaTimes size={20} />
-                </button>
-                <img
-                  src={ad.image_url}
-                  alt="Ad"
-                  className="w-full rounded-lg"
-                />
-                {/* <div className="bg-white shadow-lg p-2 rounded-lg mt-2 ">
-                  <p className="text-sm text-semibold font-sans mb-0">₹90.0 L - 2.13 Cr</p>
-                  <p className="text-sm text-gray-600 font-sans mb-0">JBMR Green Vista, Alwar</p>
-                </div> */}
-              </a>
-            ))}
+            <AdCards/>
 
             <div className="bg-white shadow-lg p-4 rounded-lg">
               <p className="text-sm font-bold font-sans">
