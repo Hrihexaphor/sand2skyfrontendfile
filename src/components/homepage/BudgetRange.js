@@ -81,37 +81,48 @@ const BudgetRange = () => {
 
         const settings = {
           dots: false,
-  infinite: false, // No need for loop with 1 item
-  autoplay: true,
-  speed: 500,
-  slidesToShow: filtered.length === 1 ? 1 : 3,
-  slidesToScroll: 1,
-  centerMode: filtered.length === 1,
-  centerPadding: filtered.length === 1 ? '30%' : '0px',
+          infinite: false,
+          autoplay: true,
+          speed: 500,
+          slidesToShow: filtered.length === 1 ? 1 : 3,
+          slidesToScroll: 1,
+          centerMode: filtered.length === 1,
+          centerPadding:
+            filtered.length === 1
+              ? window.innerWidth < 768
+                ? '0px' // Full width on mobile
+                : '30%' // Center on larger screens
+              : '0px',
           responsive: [
             {
               breakpoint: 1024,
-              settings: { 
+              settings: {
                 slidesToShow: 3,
-                centerPadding: filtered.length === 1 ? '30%' : '0px', 
+                centerPadding:
+                  filtered.length === 1
+                    ? '20%' // Optional adjust
+                    : '0px',
               },
             },
             {
               breakpoint: 768,
-              settings: { 
-                slidesToShow: 2, 
-                centerPadding: filtered.length === 1 ? '50%' : '0px',
+              settings: {
+                slidesToShow: 1,
+                centerMode: false,
+                centerPadding: '0px',
               },
             },
             {
               breakpoint: 480,
-              settings: { 
+              settings: {
                 slidesToShow: 1,
-                centerPadding: filtered.length === 1 ? '100%' : '0px', 
+                centerMode: false,
+                centerPadding: '0px',
               },
             },
           ],
         };
+
 
         return (
           <div key={index} className="mb-0 pb-1">
