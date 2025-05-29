@@ -34,7 +34,7 @@ const NewNav = () => {
         {/* Top Navbar */}
         <nav className="bg-dark fixed top-0 left-0 w-full z-50 px-6 lg:px-16 py-2 shadow-sm flex justify-between items-center">
           {/* Logo */}
-          <div className="flex items-center space-x-2 w-[150px] lg:w-[200px]">
+          <Link to="/" className="flex items-center space-x-2 w-[150px] lg:w-[200px]">
             {/* <img
               src="https://cdn.staticmb.com/magicservicestatic/images/revamp/mb-logo-web-white.svg"
               alt="magicbricks Logo"
@@ -42,7 +42,7 @@ const NewNav = () => {
             /> */}
             {/* <span className="text-3xl font-bold text-gray-300">Sand2sky</span> */}
             <img src={dark_logo}/>
-          </div>
+          </Link>
 
           {/* Contact Info (Visible on Desktop) */}
           <div className="hidden  lg:flex space-x-10">

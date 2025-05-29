@@ -9,7 +9,7 @@ const Imgsec = () => {
     <>
       <NewNav />
       <div className="bg-[#F4EFE5] p-20">
-        <Link to="/listing" className="cursor-pointer mt-3 text-xl font-[600] no-underline flex items-center text-white bg-[#367588] hover:bg-[#1386a8] w-[90px] rounded-lg pb-1 gap-1">
+        <Link to="/" className="cursor-pointer mt-3 text-xl font-[600] no-underline flex items-center text-white bg-[#367588] hover:bg-[#1386a8] w-[90px] rounded-lg pb-1 gap-1">
           <RiArrowLeftSLine className="text-[25px] font-bold mt-[4px]" /> Back
         </Link>
         <div className="max-w-screen-2xl mx-auto mt-4">

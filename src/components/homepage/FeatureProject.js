@@ -6,44 +6,22 @@ import { HiMiniBuildingOffice2 } from "react-icons/hi2";
 import { Link, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
+// ------- slider -----------
+import "swiper/css";
+import "swiper/css/navigation";
+import 'swiper/css/autoplay';
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Autoplay } from "swiper/modules";
+// ------- slider end -----
 
-const settings = {
-  dots: false,
-  infinite: true,
-  speed: 500,
-  slidesToShow: 2,
-  slidesToScroll: 1,
-  autoplay: true,
-  gap: 3,
-  responsive: [
-    {
-      breakpoint: 1024,
-      settings: {
-        slidesToShow: 2,
-      },
-    },
-    {
-      breakpoint: 768,
-      settings: {
-        slidesToShow: 2,
-      },
-    },
-    {
-      breakpoint: 480,
-      settings: {
-        slidesToShow: 1,
-      },
-    },
-  ],
-};
-
+const BASE_URL = process.env.REACT_APP_BASE_URL
 const FeatureProject = () => {
   const navigate = useNavigate();
   const [featureProperty, setFeatureProperty] = useState([]);
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_BASE_URL}/featured-properties-lite`, {
+      .get(`${BASE_URL}/featured-properties-lite`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -58,14 +36,8 @@ const FeatureProject = () => {
     navigate(`/details/${id}`);
   };
 
-  const handleDeveloper = (developer_name) => {
-    if (developer_name) {
-      navigate(
-        `/builderProject?developer_name=${encodeURIComponent(developer_name)}`
-      );
-    } else {
-      console.warn("Developer Name is undefined");
-    }
+  const handleImageClick = (id) => {
+    navigate(`/imgsec/${id}`);
   };
 
   const formatPrice = (price) => {
@@ -93,24 +65,37 @@ const FeatureProject = () => {
             See all Projects <span className="ml-1">→</span>
           </Link>
         </div>
-
-        <Slider {...settings}>
-          {featureProperty.map((property, index) => (
-            <div key={index} className="p-2">
-              <div className="card border rounded font-geometric-regular mb-3">
+        <Swiper
+            spaceBetween={24}
+            loop={true}
+            autoplay={{ delay: 2000 }}
+            modules={[Autoplay]}
+            breakpoints={{
+              320: { slidesPerView: 1 },
+              425: { slidesPerView: 1 },
+              768: { slidesPerView: 2 },
+              1024: { slidesPerView: 2 },
+              1440: { slidesPerView: 2 },
+            }}
+          >
+            {featureProperty.map((property, index) => (
+              <SwiperSlide>
+                <div key={index} className="p-2">
+              <div className="card border rounded font-geometric-regular mb-3 cursor-pointer">
                 <img
                   src={property.primary_image}
                   className="card-img-top"
                   alt={property.project_name}
                   style={{ height: "300px", objectFit: "cover" }}
+                  onClick={() => handleImageClick(property.id)}
                 />
-                <div className="card-body font-roboto-light justify-between flex lg:items-center flex-col lg:flex-row px-4 pb-0">
+                <div onClick={() => handleDetailsClick(property.id)}>
+                   <div className="card-body font-roboto-light justify-between flex lg:items-center flex-col lg:flex-row px-4 pb-0">
                   <h5 className="card-title font-bold text-[#3C4142] md:text-md sm:text-md mb-2 lg:mb-0">
                     {property.project_name}
                   </h5>
                   <button
                     className="px-4 py-1 bg-[#367588] text-white text-base rounded-md hover:bg-[#1386a8]"
-                    onClick={() => handleDetailsClick(property.id)}
                   >
                     View Details
                   </button>
@@ -157,17 +142,19 @@ const FeatureProject = () => {
                       </p>
                       <p
                         className="text-gray-600 text-[13px] mb-0 mt-[0px] cursor-pointer"
-                        onClick={() => handleDeveloper(property.developer_name)}
                       >
                         {property.developer_name}
                       </p>
                     </div>
                   </div>
                 </div>
+                </div>
               </div>
             </div>
-          ))}
-        </Slider>
+              </SwiperSlide>
+
+            ))}
+          </Swiper>
       </div>
     </div>
   );

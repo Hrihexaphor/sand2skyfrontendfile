@@ -9,9 +9,7 @@ import { IoBedOutline } from "react-icons/io5";
 import { ChevronDown } from "lucide-react";
 import Review from "../review/Review";
 import AdCards from "../advertisement/AdvertiseCard";
-import {
-  FaDumbbell,
-} from "react-icons/fa";
+import PropertyCard from "./PropertyCard";
 
 import {
   FaBuilding,
@@ -58,7 +56,13 @@ import * as MdIcons from "react-icons/md";
 import * as AiIcons from "react-icons/ai";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+// ------- slider -----------
+import "swiper/css";
+import "swiper/css/navigation";
 import 'swiper/css/autoplay';
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Autoplay } from "swiper/modules";
+// ------- slider end -----
 
 const PropertyDetails = () => {
   const [isContactSellerModalOpen, setIsContactSellerModalOpen] = useState(false);
@@ -1408,81 +1412,41 @@ const PropertyDetails = () => {
 
           {/* Property in Similar Project */}
           <div className="mt-5">
-            <div className="mb-3 container">
+            <div className="mb-5 container">
               <h2 className="mb-2 ms-[-12px] text-2xl font-bold font-geometric-regular text-[#3C4142] ">
                 Property in Similar Project
               </h2>
               <div className="w-12 h-1 bg-yellow-500"></div>
             </div>
 
-            <Slider {...setting}>
-              {similar.filter(
+            <Swiper
+            spaceBetween={24}
+            loop={true}
+            autoplay={{ delay: 2000 }}
+            modules={[Autoplay]}
+            breakpoints={{
+              320: { slidesPerView: 1 },
+              425: { slidesPerView: 1 },
+              768: { slidesPerView: 2 },
+              1024: { slidesPerView: 3 },
+              1440: { slidesPerView: 4 },
+            }}
+          >
+            {similar.filter(
                 (similar) =>
-                  (similar.subcategory_name === property?.basic?.property_subcategory_name) && (similar.id !== property?.basic?.id)
-              ).map((similar) => (
-                <div key={similar.id} className="p-2">
-                  <div className="w-full bg-white rounded-lg cursor-pointer tranding-card">
-                    <div className="h-[200px] w-[100%] img-box relative">
-                      <img src={similar.primary_image} className="h-[100%] w-[100%]" />
-                      {similar.featured === true && (
-                        <p className="text-white flex gap-1 items-center font-bold mt-2 absolute top-[1px] left-[3%] bg-yellow-500 text-[#fff] py-[5px] px-[10px] rounded-[5px]">
-                          Featured
-                        </p>
-                      )}
-                    </div>
-                    <div className="p-3">
-                      <h3 className="text-lg text-[#3C4142] bold mb-2 mt-[-2px]">{similar.project_name}</h3>
-                      <div className="flex flex-wrap justify-between items-center">
-                        <div className="flex gap-2 items-center w-[50%] mb-2">
-                          <FaRupeeSign className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
-                          <div>
-                            <p className="text-[#3C4142] text-[13px] font-bold mb-0">Price</p>
-                            <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">{formatPrice(similar.expected_price)}</p>
-                          </div>
+                  (similar.subcategory_name === property?.basic?.property_subcategory_name && (similar.id !== property?.basic?.id))
+              ).map((property, index) => (
+              <SwiperSlide>
+                <PropertyCard
+                  key={index}
+                  property={property}
+                  onViewDetails={(id) => navigate(`/details/${id}`)}
+                  onImgClick={(id) => navigate(`/imgsec/${id}`)}
+                />
+              </SwiperSlide>
 
-                        </div>
-                        <div className="flex gap-2 items-center w-[50%]  mb-2">
-                          <IoBedOutline className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
-                          <div>
-                            <p className="text-[#3C4142] text-[13px] font-bold mb-0">Type</p>
-                            <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">{similar.subcategory_name}</p>
-                          </div>
-
-                        </div>
-                        <div className="flex gap-2 items-center w-[50%] mb-2">
-                          <FaArrowsLeftRightToLine className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
-                          <div>
-                            <p className="text-[#3C4142] text-[13px] font-bold mb-0">SBA</p>
-                            <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">{similar.built_up_area} sq.ft.</p>
-                          </div>
-                        </div>
-                        <div className="flex gap-2 items-center w-[50%]">
-                          <FaBuildingUser className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
-                          <div>
-                            <p className="text-[#3C4142] text-[13px] font-bold mb-0">Builder</p>
-                            <p className="text-gray-600 text-[13px] mb-0 mt-[0px] w-[90px] overflow-hidden text-ellipsis whitespace-nowrap cursor-pointer" onClick={() => handleDeveloper(similar.developer_name)}>{similar.developer_name}</p>
-                          </div>
-
-                        </div>
-                      </div>
-                      <div className="flex gap-2 items-center mb-2">
-                        <FaMapMarkerAlt className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
-                        <div>
-                          <p className="text-[#3C4142] text-[13px] font-bold mb-0">Location</p>
-                          <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">{similar.locality}, {similar.city}</p>
-                        </div>
-                      </div>
-                      <button
-                        className="px-3 py-1 bg-[#367588] w-full text-white text-base rounded-md hover:bg-[#1386a8]"
-                        onClick={() => handleDetailsClick(property.id)}
-                      >
-                        View Details
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </Slider>
+            ))}
+          </Swiper>
           </div>
           {/* ------- Faq------ */}
           <div className="bg-[#F4EFE5]">

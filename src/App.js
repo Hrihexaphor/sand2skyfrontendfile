@@ -26,6 +26,9 @@ import ProperyByArea from "./components/properties/PropertyByArea";
 import EmaiCalculator from "./components/emiCalculator/EmiCalculator";
 import BlogCard from "./components/homepage/BlogCard";
 import SearchBar from "./components/searchbar/searchbar";
+import ReadyToMove from "./components/readytomove/ReadytoMoveProperty";
+import ResaleProperty from "./components/resaleproperty/ResaleProperty";
+import BudgetRangeProperties from "./components/budgetRangeProperties/BudgetRangeProperties";
 import { FaSpinner } from "react-icons/fa";
 
 const App = () => {
@@ -66,12 +69,15 @@ const App = () => {
           <Route path="/cancellationPolicy" element={<CancellationPolicy />} />
           <Route path="/admin" element={<AdminLogin />} />
           <Route path="/addproperties" element={<AddProperties />} />
-          <Route path="/imgsec" element={<Imgsec />} />
+          <Route path="/imgsec/:id" element={<Imgsec />} />
           <Route path="/projects" element={<Projects/>} />
           <Route path="/propertyByArea" element={<ProperyByArea/>} />
           <Route path="/emiCalculator" element={<EmaiCalculator/>} />
           <Route path="/blogCard" element={<BlogCard/>} />
           <Route path="/searchbar" element={<SearchBar/>}/>
+          <Route path="/readytomoveproperties" element={<ReadyToMove/>}/>
+          <Route path="/resaleproperty" element={<ResaleProperty/>}/>
+          <Route path="/budgetrangeproperties" element={<BudgetRangeProperties/>}/>
           <Route path="/*" element={<Error />} />
         </Routes>
     </Router>

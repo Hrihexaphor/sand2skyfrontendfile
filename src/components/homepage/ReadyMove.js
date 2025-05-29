@@ -60,6 +60,10 @@ const ReadyToMove = () => {
     property.project_name.toLowerCase().includes(search.toLowerCase())
   );
 
+  const handleNavigate = () => {
+    window.open("/postreq", "_blank");
+  };
+
   return (
     <>
       <div className="bg-[#F4EFE5]" id="ready-to-move-section">
@@ -68,7 +72,7 @@ const ReadyToMove = () => {
           <div className="lg:col-span-2">
             <div className="mb-3">
               <h2 className="mb-2 text-2xl font-bold  font-geometric-regular text-[#3C4142] ">
-                Ready to Move-In Projects
+                Ready to Move-In Properties
               </h2>
               <div className="w-12 h-1 bg-yellow-500"></div>
             </div>
@@ -194,9 +198,9 @@ const ReadyToMove = () => {
 
             <div className="bg-white shadow-lg p-4 rounded-lg">
               <p className="text-sm font-bold font-sans">
-                Are you a property owner looking to rent/sell?
+                Property Owner or Dev ? Sell your property fast with us!
               </p>
-              <button className="bg-purple-500 text-white px-4 py-2 rounded mt-2 w-full font-sans">
+              <button onClick={handleNavigate} className="bg-purple-500 text-white px-4 py-2 rounded mt-2 w-full font-sans">
                 Post your property for FREE
               </button>
             </div>

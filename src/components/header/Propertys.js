@@ -10,6 +10,7 @@ import 'swiper/css/autoplay';
 import NewNav from "./NewNav";
 import RealEstateTabs from "../homepage/RealEstateTabs";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const SearchBar = () => {
   // ============= add after 5 second End ===========>
@@ -33,25 +34,28 @@ const SearchBar = () => {
       image:
         "https://cdn.staticmb.com/magicservicestatic/images/mb-home-web/collection/buy/webp/owner-property.webp",
       url: `${process.env.REACT_APP_BASE_URL}/getminimumproperty`,
+      visit: "/projects"
     },
     {
       name: "Ready to move",
       image:
         "https://cdn.staticmb.com/magicservicestatic/images/mb-home-web/collection/buy/webp/new-projects.webp",
       url: `${process.env.REACT_APP_BASE_URL}/getreadytomoveproperty`,
+      visit: "/readytomoveproperties"
     },
     {
       name: "New Project",
       image:
         "https://cdn.staticmb.com/magicservicestatic/images/mb-home-web/collection/buy/webp/ready-to-move-in.webp",
       url: `${process.env.REACT_APP_BASE_URL}/getnewproperty`,
-
+      visit: "/newprojects"
     },
     {
       name: "Resale Property",
       image:
         "https://cdn.staticmb.com/magicservicestatic/images/mb-home-web/collection/buy/webp/budget-homes.webp",
       url: `${process.env.REACT_APP_BASE_URL}/getresaleproperty`,
+      visit: "/resaleproperty"
     },
   ];
 
@@ -104,7 +108,7 @@ const SearchBar = () => {
 
       <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center px-6 z-10">
         <h1 className="text-white mb-5 font-bold text-3xl md:text-5xl lg:text-5xl text-center font-roboto-bold">
-          Luxury Living, Elevated
+           Luxury Living, Priceless Memories
         </h1>
 
         <RealEstateTabs/>
@@ -131,14 +135,8 @@ const SearchBar = () => {
         >
           {propertyCounts.map((property, index) => (
             <SwiperSlide>
-              <div key={property.index}
-                onClick={() => {
-                  const targetId = property.name.toLowerCase().replace(/\s+/g, '-') + '-section';
-                  const section = document.getElementById(targetId);
-                  if (section) {
-                    section.scrollIntoView({ behavior: 'smooth' });
-                  }
-                }}
+               <Link to={apiEndpoints[index].visit}>
+               <div key={property.index}
                 className="cursor-pointer sm:me-5 mt-4 bg-gray-900 rounded-xl overflow-hidden shadow-lg relative hover:scale-105 transition transform duration-300">
                 <div
                   className="h-48 bg-cover bg-center relative rounded-xl"
@@ -157,6 +155,7 @@ const SearchBar = () => {
                   </a>
                 </div>
               </div>
+               </Link>
             </SwiperSlide>
           ))}
         </Swiper>

@@ -105,35 +105,38 @@ const ListingWf = () => {
   };
 
   // --------------- API INTEGRATION --------->
-    const [topLocations, setTopLocations] = useState([]);
-  
-      useEffect(() => {
-            axios.get(`${process.env.REACT_APP_BASE_URL}/localities`, {
-                withCredentials: true, // replaces fetch's `credentials: 'include'`
-            })
-                .then((res) => {
-                    setTopLocations(res.data);
-                })
-                .catch((error) => {
-                    console.error('Error fetching data:', error);
-                });
-      }, []);
+  const [topLocations, setTopLocations] = useState([]);
+
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_BASE_URL}/localities`, {
+      withCredentials: true, // replaces fetch's `credentials: 'include'`
+    })
+      .then((res) => {
+        setTopLocations(res.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
   // --------------- API INTEGRATION END -------> 
 
- const handleDetailsClick = (locality) => {
-  if (locality) {
-    navigate(`/propertyByArea?locality=${encodeURIComponent(locality)}`);
-  } else {
-    console.warn("Locality is undefined");
-  }
-};
+  const handleDetailsClick = (locality) => {
+    if (locality) {
+      navigate(`/propertyByArea?locality=${encodeURIComponent(locality)}`);
+    } else {
+      console.warn("Locality is undefined");
+    }
+  };
 
   return (
     <div className="bg-[#F4EFE5]">
       <div className="text-center container mx-auto pb-16 pt-10">
-        <h2 className="text-yellow-700 text-lg font-semibold uppercase tracking-widest mb-10">
-          Top Locations
-        </h2>
+        <div class="one">
+          <h1 className="text-yellow-700 text-lg font-semibold uppercase tracking-widest mb-2">
+            Top Locations
+          </h1>
+        </div>
+
         <h1 className=" font-bold text-[#3C4142] mt-1 text-2xl  font-geometric-regular">
           Find Property in Popular Areas
         </h1>
@@ -180,96 +183,7 @@ const ListingWf = () => {
       </div>
 
       <BudgetRange />
-
-      {/* property listing section */}
-      {/* <div className="container mx-auto pt-10">
-        <div className="flex items-center justify-between">
-          <div className="mb-3">
-            <h2 className="mb-2 text-2xl text-[#3C4142] font-bold font-geometric-regular">
-              Featured Listings
-            </h2>
-            <div className="w-12 h-1 bg-yellow-500"></div>
-          </div>
-
-          <Link
-            to="/listing"
-            className="text-[#367588] font-bold flex items-center no-underline"
-          >
-            See all Listings <span className="ml-1">→</span>
-          </Link>
-        </div>
-        <Slider {...settings}>
-         
-          {properties.map((property) => (
-            <div key={property.id} className="p-2">
-              <div className="bg-white shadow-md rounded-lg overflow-hidden">
-              
-                <div className="overflow-hidden relative rounded-t-lg">
-                  <img
-                    src={property.image}
-                    alt={property.title}
-                    className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
-                  />
-                  <p className="text-white flex gap-1 items-center font-bold mt-2 absolute top-[1px] left-[3%] bg-yellow-500 text-[#fff] py-[5px] px-[10px] rounded-[5px]">
-                    {property.rentsell}
-                  </p>
-                </div>
-                <div className="p-3">
-                  <h3 className="text-lg text-[#3C4142] bold mb-2 mt-[-2px]">{property.title}</h3>
-                  <div className="flex flex-wrap justify-between items-center">
-                    <div className="flex gap-2 items-center w-[50%] mb-2">
-                      <FaRupeeSign className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
-                      <div>
-                        <p className="text-[#3C4142] text-[13px] font-bold mb-0">Price</p>
-                        <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">{property.price}</p>
-                      </div>
-
-                    </div>
-                    <div className="flex gap-2 items-center w-[50%]  mb-2">
-                      <IoHome className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
-                      <div>
-                        <p className="text-[#3C4142] text-[13px] font-bold mb-0">Type</p>
-                        <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">{property.type}</p>
-                      </div>
-
-                    </div>
-                    <div className="flex gap-2 items-center w-[50%] mb-2">
-                      <FaArrowsLeftRightToLine className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
-                      <div>
-                        <p className="text-[#3C4142] text-[13px] font-bold mb-0">SBA</p>
-                        <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">{property.area}</p>
-                      </div>
-                    </div>
-                    <div className="flex gap-2 items-center w-[50%]">
-                      <FaBuildingUser className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
-                      <div>
-                        <p className="text-[#3C4142] text-[13px] font-bold mb-0">Builder</p>
-                        <p className="text-gray-600 text-[13px] mb-0 mt-[0px] cursor-pointer" onClick={() => navigate(`/builderProject`)}>{property.builder}</p>
-                      </div>
-
-                    </div>
-                  </div>
-                  <div className="flex gap-2 items-center mb-2">
-                    <FaMapMarkerAlt className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
-                    <div>
-                      <p className="text-[#3C4142] text-[13px] font-bold mb-0">Location</p>
-                      <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">{property.location}</p>
-                    </div>
-                  </div>
-                  <button
-                    className="px-3 py-1 bg-[#367588] w-full text-white text-base rounded-md hover:bg-[#1386a8]"
-                    onClick={() => navigate(`/details`)}
-                  >
-                    View Details
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </Slider>
-
-      </div> */}
-      {/* ------------------------------------------------ */}
+    
     </div>
   );
 };

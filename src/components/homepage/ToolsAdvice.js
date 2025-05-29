@@ -1,75 +1,17 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Slider from "react-slick";
 import axios from "axios";
+// ------- slider -----------
+import "swiper/css";
+import "swiper/css/navigation";
+import 'swiper/css/autoplay';
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Autoplay } from "swiper/modules";
+// ------- slider end -----
 
 const ToolsAdvice = () => {
   const navigate = useNavigate();
 
-  const settings = {
-    dots: false,
-    infinite: true,
-    autoplay: true,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-        },
-      },
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 2,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-        },
-      },
-    ],
-  };
-
-  // const posts = [
-  //   {
-  //     id: 1,
-  //     author: "Jonathan Reinink",
-  //     date: "Aug 18",
-  //     categories: ["Cooking"],
-  //     image:
-  //       "https://images.pexels.com/photos/61180/pexels-photo-61180.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-  //     title: "Simplest Salad Recipe ever",
-  //     description:
-  //       "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-  //   },
-  //   {
-  //     id: 2,
-  //     author: "Jonathan Reinink",
-  //     date: "Aug 18",
-  //     categories: ["Recipe"],
-  //     image:
-  //       "https://images.pexels.com/photos/1653877/pexels-photo-1653877.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-  //     title: "Best Pizza in Town",
-  //     description:
-  //       "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-  //   },
-  //   {
-  //     id: 3,
-  //     author: "Jonathan Reinink",
-  //     date: "Aug 18",
-  //     categories: ["Cooking"],
-  //     image:
-  //       "https://images.pexels.com/photos/257816/pexels-photo-257816.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-  //     title: "Best Salad Images ever",
-  //     description:
-  //       "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-  //   },
-  // ];
   const cards = [
     {
       title: "Rates & Trends",
@@ -117,36 +59,36 @@ const ToolsAdvice = () => {
     },
   ];
 
-   const [blogs, setBlogs] = useState([]);
-   // <------------ API INTEGRATION START -------------->
-    // Fetch blog data
-    useEffect(() => {
-      axios
-        .get(`${process.env.REACT_APP_BASE_URL}/blogs`, {
-          withCredentials: true,
-        })
-        .then((res) => {
-          setBlogs(res.data.blogs);
-        })
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-        });
-    }, []);
-    // <------------ API INTEGRATION END -------------->
+  const [blogs, setBlogs] = useState([]);
+  // <------------ API INTEGRATION START -------------->
+  // Fetch blog data
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_BASE_URL}/blogs`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        setBlogs(res.data.blogs);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+  // <------------ API INTEGRATION END -------------->
 
-    // Format date string to "DD MMM YYYY"
-function formatDate(dateString) {
+  // Format date string to "DD MMM YYYY"
+  function formatDate(dateString) {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-IN", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric"
+      day: "2-digit",
+      month: "short",
+      year: "numeric"
     });
-}
+  }
 
-const handleDetailsClick = (id) => {
+  const handleDetailsClick = (id) => {
     navigate(`/blogDetails/${id}`);
-}
+  }
 
   return (
     <div className="bg-[#F4EFE5]">
@@ -189,14 +131,27 @@ const handleDetailsClick = (id) => {
           </Link>
         </div>
 
-        <Slider {...settings}>
-          {blogs.map((blog) => (
-            <div key={blog.id} className="p-2">
-            <div
-               onClick={() => handleDetailsClick(blog.id)}
-              className="rounded overflow-hidden flex flex-col cursor-pointer bg-white cursor-pointer border"
-            >
-              <div className="h-[200px] w-full">
+        <Swiper
+          spaceBetween={24}
+          loop={true}
+          autoplay={{ delay: 2000 }}
+          modules={[Autoplay]}
+          breakpoints={{
+            320: { slidesPerView: 1 },
+            425: { slidesPerView: 1 },
+            768: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 },
+            1440: { slidesPerView: 4 },
+          }}
+        >
+          {blogs.map((blog, index) => (
+            <SwiperSlide>
+              <div key={blog.id} className="p-2">
+                <div
+                  onClick={() => handleDetailsClick(blog.id)}
+                  className="rounded overflow-hidden flex flex-col cursor-pointer bg-white cursor-pointer border"
+                >
+                  <div className="h-[200px] w-full">
                     {blog.image_url ? (
                       <img className="w-full h-[100%] cover" src={blog.image_url} alt={blog.title} />
                     ) : blog.youtube_link ? (
@@ -206,27 +161,28 @@ const handleDetailsClick = (id) => {
                       />
                     ) : null}
                   </div>
-              <div className="p-4 pb-6">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="bg-[#367588] text-white text-sm py-[5px] px-[15px] rounded-lg">{blog.category_name}</div>
-                  <p className="mb-0 text-[#367588] text-base font-semibold">
-                     {formatDate(blog.created_at)}
-                  </p>
+                  <div className="p-4 pb-6">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="bg-[#367588] text-white text-sm py-[5px] px-[15px] rounded-lg">{blog.category_name}</div>
+                      <p className="mb-0 text-[#367588] text-sm font-semibold">
+                        {formatDate(blog.created_at)}
+                      </p>
+                    </div>
+                    <h3
+                      className="font-lg text-center text-lg text-[#3C4142] transition duration-500 ease-in-out block mb-2"
+                    >
+                      {blog.title}
+                    </h3>
+                    <div
+                      className="w-full text-gray-500 text-sm"
+                      dangerouslySetInnerHTML={{ __html: blog.description }}
+                    />
+                  </div>
                 </div>
-                <h3
-                  className="font-lg text-center text-lg text-[#3C4142] transition duration-500 ease-in-out block mb-2"
-                >
-                  {blog.title}
-                </h3>
-                <div
-                        className="w-full text-gray-500 text-sm"
-                        dangerouslySetInnerHTML={{ __html: blog.description }}
-                      />
               </div>
-            </div>
-            </div>
+            </SwiperSlide>
           ))}
-        </Slider>
+        </Swiper>
       </div>
     </div>
   );

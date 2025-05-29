@@ -63,22 +63,22 @@ const PostReq = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const requiredFields = ["name", "email", "whatsapp", "city", "budget", "property", "constructionStatus", "payBrokerage"];
+    const requiredFields = ["name", "email", "whatsapp", "city", "budget", "payBrokerage"];
     if (activeTab === "Buy") {
-      requiredFields.push("professionTp", "intrestHloan", "knowCreditScore", "onsiteExpl");
+      requiredFields.push("professionTp", "intrestHloan", "knowCreditScore", "property", "constructionStatus", "onsiteExpl");
     }
 
     const errors = {};
-  requiredFields.forEach((field) => {
-    if (!formData[field]) {
-      errors[field] = "This field is required";
-    }
-  });
+    requiredFields.forEach((field) => {
+      if (!formData[field]) {
+        errors[field] = "This field is required";
+      }
+    });
 
-  // WhatsApp specific validation
-  if ((formData.whatsapp || "").length !== 10) {
-  errors.whatsapp = "WhatsApp number must be exactly 10 digits";
-}
+    // WhatsApp specific validation
+    if ((formData.whatsapp || "").length !== 10) {
+      errors.whatsapp = "WhatsApp number must be exactly 10 digits";
+    }
 
     setFormErrors(errors);
     if (Object.keys(errors).length === 0) {
@@ -148,15 +148,15 @@ const PostReq = () => {
                       required
                     />
                     {formErrors[field] && (
-      <p className="text-red-500 text-sm mt-1">{formErrors[field]}</p>
-    )}
+                      <p className="text-red-500 text-sm mt-1">{formErrors[field]}</p>
+                    )}
                   </div>
                 ))}
 
-                <SelectField name="property" label="Property Category" options={["Apartment", "Premium", "Mid-Range", "Budget"]} value={formData.property} onChange={handleChange} error={formErrors.property} />
-                <SelectField name="constructionStatus" label="Construction Status" options={["Ready to Move", "Pre-Launch", "New Launch", "Possession within 2 Year", "Possession Above 2 Year"]} value={formData.constructionStatus} onChange={handleChange} error={formErrors.constructionStatus} />
                 {activeTab === "Buy" && (
                   <>
+                    <SelectField name="property" label="Property Category" options={["Apartment", "Pent House", "Villa", "House", "Residential Plot", "Commercial Plot"]} value={formData.property} onChange={handleChange} error={formErrors.property} />
+                    <SelectField name="constructionStatus" label="Construction Status" options={["Ready to Move", "Pre-Launch", "New Launch", "Possession within 2 Year", "Possession Above 2 Year"]} value={formData.constructionStatus} onChange={handleChange} error={formErrors.constructionStatus} />
                     <SelectField name="professionTp" label="Profession Type" options={["Salaried", "Self-Employed", "Business"]} value={formData.professionTp} onChange={handleChange} error={formErrors.professionTp} />
                     <SelectField name="intrestHloan" label="Interested in Loan?" options={["Yes", "No"]} value={formData.intrestHloan} onChange={handleChange} error={formErrors.intrestHloan} />
                     <SelectField name="knowCreditScore" label="Know Credit Score?" options={["Yes", "No"]} value={formData.knowCreditScore} onChange={handleChange} error={formErrors.knowCreditScore} />

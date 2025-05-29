@@ -3,40 +3,16 @@ import NewNav from "../header/NewNav";
 import Footer from "../footer/Footer";
 import { BsCalendarDate } from "react-icons/bs";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import AdCards from "../advertisement/AdvertiseCard";
 import axios from "axios";
+// ------- slider -----------
+import "swiper/css";
+import "swiper/css/navigation";
+import 'swiper/css/autoplay';
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Autoplay } from "swiper/modules";
+// ------- slider end -----
 
-
-const settings = {
-  dots: false,
-  infinite: true,
-  speed: 500,
-  slidesToShow: 3,
-  slidesToScroll: 1,
-  autoplay: true,
-  responsive: [
-    {
-      breakpoint: 1024,
-      settings: {
-        slidesToShow: 2,
-      },
-    },
-    {
-      breakpoint: 768,
-      settings: {
-        slidesToShow: 2,
-      },
-    },
-    {
-      breakpoint: 480,
-      settings: {
-        slidesToShow: 1,
-      },
-    },
-  ],
-};
 
 const posts = [
   {
@@ -184,15 +160,28 @@ const handleDetailsClick = (id) => {
                 </h2>
                 <div className="w-12 h-1 bg-yellow-500"></div>
               </div>
-              <Slider {...settings}>
-                {similar.filter(
+              <Swiper
+            spaceBetween={24}
+            loop={true}
+            autoplay={{ delay: 2000 }}
+            modules={[Autoplay]}
+            breakpoints={{
+              320: { slidesPerView: 1 },
+              425: { slidesPerView: 1 },
+              768: { slidesPerView: 2 },
+              1024: { slidesPerView: 2 },
+              1440: { slidesPerView: 3 },
+            }}
+          >
+            {similar.filter(
                 (similar) =>
                   (similar.category_name === blogs.category_name) && (similar.id !== blogs.id)
-              ).map((post) => (
-                  <div key={post.id} className="p-2">
+              ).map((post, index) => (
+              <SwiperSlide>
+                <div key={post.id} className="p-2">
                     <div
                       className="rounded overflow-hidden flex flex-col cursor-pointer border h-[400px] bg-[#e6e6e6]"
-                    >
+                    onClick={() => handleDetailsClick(post.id)}>
                       <a href="#">
                         {post.image_url ? (
                       <img className="w-full h-[100%] cover" src={post.image_url} alt={post.title} />
@@ -205,8 +194,8 @@ const handleDetailsClick = (id) => {
                       </a>
                       <div className="p-4 pb-6 bg-[#e6e6e6]">
                         <div className="flex items-center justify-between mb-3">
-                          <div className="bg-[#367588] text-white text-sm py-[5px] px-[15px] rounded-lg">{post.category_name}</div>
-                          <p className="mb-0 text-[#367588] font-semibold">
+                          <div className="bg-[#367588] text-white text-sm py-[2px] px-[15px] rounded-lg">{post.category_name}</div>
+                          <p className="mb-0 text-[#367588] text-sm font-semibold">
                            {formatDate(post.created_at)}
                           </p>
                         </div>
@@ -219,45 +208,17 @@ const handleDetailsClick = (id) => {
                         className="w-full text-gray-500 text-sm"
                         dangerouslySetInnerHTML={{ __html: post.description }}
                       />
-                      <button className="w-full bg-[#367588] hover:bg-[#1386a8] text-white text-sm py-[5px] px-[15px] rounded-lg"
-                    onClick={() => handleDetailsClick(post.id)}>
-                      Read More
-                    </button>
                       </div>
                     </div>
                   </div>
-                ))}
-              </Slider>
+              </SwiperSlide>
+
+            ))}
+          </Swiper>
             </div>
             {/* Sidebar */}
-            <aside className="hidden lg:block lg:w-1/3 bg-white rounded-lg p-4">
-              <h4 className="font-semibold mb-2 text-gray-700">Add Sections</h4>
-              <div className="hidden md:block bg-white rounded-lg shadow-md p-4  ">
-                <div className="bg-yellow-100 text-center p-4 rounded-lg">
-                  <img
-                    src="https://img.staticmb.com/mbphoto/property/cropped_images/2025/Feb/28/Photo_h180_w240/77495663_3_1740730784979-294_180_240.jpg"
-                    alt="Advertise"
-                    className="mx-auto mb-3"
-                  />
-                  <h3 className="text-xl font-semibold">Advertise With Us</h3>
-                  <p className="text-gray-600">
-                    Reach millions of potential customers
-                  </p>
-                </div>
-                <button className="mt-3 px-4 py-2 bg-yellow-500 text-white rounded-md w-full hover:bg-yellow-600">
-                  Post Property
-                </button>
-                <div className="mt-6">
-                  <h4 className="text-lg font-semibold">
-                    Why Advertise With Us?
-                  </h4>
-                  <ul className="list-disc pl-4 text-gray-600">
-                    <li>Millions of Active Users</li>
-                    <li>Targeted Audience</li>
-                    <li>High Conversion Rates</li>
-                  </ul>
-                </div>
-              </div>
+            <aside className="hidden lg:block lg:w-1/3 p-4">
+              <AdCards/>
             </aside>
           </div>
         </div>

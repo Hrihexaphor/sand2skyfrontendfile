@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import { useNavigate } from "react-router-dom";
-import { FaBuildingUser, FaArrowsLeftRightToLine } from "react-icons/fa6";
-import { IoHome } from "react-icons/io5";
-import { FaRupeeSign, FaMapMarkerAlt } from "react-icons/fa";
 import axios from "axios";
+import PropertyCard from "./PropertyCard";
+// ------- slider -----------
+import "swiper/css";
+import "swiper/css/navigation";
+import 'swiper/css/autoplay';
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Autoplay } from "swiper/modules";
+// ------- slider end -----
 
 const BudgetRange = () => {
   const navigate = useNavigate();
@@ -41,33 +43,22 @@ const BudgetRange = () => {
   const priceCategories = [
     { title: "Properties Below ₹1 Cr", range: [0, 10000000] },
     { title: "Properties Between ₹1 Cr – ₹2 Cr", range: [10000000, 20000000] },
-    { title: "Properties Between ₹2 Cr – ₹3 Cr", range: [20000000, 30000000] },
-    { title: "Properties Above ₹3 Cr", range: [30000000, Infinity] },
+    { title: "Properties Between ₹2 Cr – ₹4 Cr", range: [20000000, 40000000] },
+    { title: "Properties Above ₹4 Cr", range: [40000000, Infinity] },
   ];
 
-
-  const handleDetailsClick = (id) => {
-    navigate(`/details/${id}`);
-  };
-
-  const handleDeveloper = (developer_name) => {
-    if (developer_name) {
-      navigate(
-        `/builderProject?developer_name=${encodeURIComponent(developer_name)}`
+  const handleRange = (title) => {
+   navigate(
+        `/budgetrangeproperties?title=${encodeURIComponent(title)}`
       );
-    } else {
-      console.warn("Developer Name is undefined");
-    }
   };
-
-
 
   return (
     <div className="container">
-      <div className="text-center mx-auto mt-5">
-        <h2 className="text-yellow-700 text-lg font-semibold uppercase tracking-wide mb-10">
+      <div className="text-center mx-auto mt-2 one">
+        <h1 className="text-yellow-700 text-lg font-semibold uppercase tracking-wide mb-2">
           Budget Range
-        </h2>
+        </h1>
       </div>
 
       {priceCategories.map((category, index) => {
@@ -78,145 +69,47 @@ const BudgetRange = () => {
 
         if (filtered.length === 0) return null;
 
-  const isSingleCard = filtered.length === 1;
-   const isdoubleCard = filtered.length === 2;
-        const settings = {
-          dots: false,
-          infinite: !isSingleCard, // Disable loop for 1 card
-          speed: 500,
-          slidesToShow: isSingleCard ? 1 : Math.min(filtered.length, 4),
-          autoplay: false,
-          autoplaySpeed: 3000,
-          responsive: [
-            {
-              breakpoint: 1024, // For smaller screens
-              settings: {
-                slidesToShow: isSingleCard ? 1 : Math.min(filtered.length, 3),
-              },
-            },
-            {
-              breakpoint: 768, // For smaller screens
-              settings: {
-                slidesToShow: isSingleCard ? 1 : Math.min(filtered.length, 2),
-              },
-            },
-            {
-              breakpoint: 425, // For smaller screens
-              settings: {
-                slidesToShow: 1, // Show 1 card
-              },
-            },
-          ],
-        };
-
         return (
-          <div key={index} className="mb-0 pb-1">
+          <div key={index} className="mb-0 pb-1 mt-2">
             <h1 className="mt-2 font-bold text-[#3C4142] text-2xl font-geometric-regular text-center">
               {category.title}
             </h1>
             <p className="text-gray-500 mt-2 mb-8 max-w-xl mx-auto font-sans text-center">
               Browse premium apartments, villas, and independent homes that suit your dream lifestyle.
             </p>
-            <Slider {...settings}>
-              {filtered.map((property) => (
-                <div key={property.id} className={`p-2 ${isSingleCard ? 'custom-width' : ''} ${isdoubleCard ? 'custom-double-width' : ''}`}>
-                  <div className="w-full bg-white rounded-lg cursor-pointer tranding-card">
-                    <div className="h-[200px] w-full img-box relative">
-                      <img
-                        src={property.primary_image}
-                        className="h-full w-full object-cover"
-                        alt={property.project_name}
-                      />
-                      {property.is_featured && (
-                        <p className="absolute top-1 left-[3%] bg-yellow-500 text-white py-1 px-2 rounded font-bold text-sm">
-                          Featured
-                        </p>
-                      )}
-                    </div>
+            <p
+               onClick={() => handleRange(category.title)}
+              className="text-[#367588] cursor-pointer text-right block -mt-[30px] mb-[27px] font-bold items-center no-underline"
+            >
+              See all Properties <span className="ml-1">→</span>
+            </p>
 
-                    <div className="p-3">
-                      <h3 className="text-lg text-[#3C4142] font-semibold mb-2">
-                        {property.project_name}
-                      </h3>
+            <Swiper
+              spaceBetween={24}
+              loop={true}
+              autoplay={{ delay: 2000 }}
+              modules={[Autoplay]}
+              breakpoints={{
+                320: { slidesPerView: 1 },
+                425: { slidesPerView: 1 },
+                768: { slidesPerView: 2 },
+                1024: { slidesPerView: 3 },
+                1440: { slidesPerView: 4 },
+              }}
+              className="mb-5"
+            >
+              {filtered.map((property, index) => (
+                <SwiperSlide>
+                  <PropertyCard
+                    key={index}
+                    property={property}
+                    onViewDetails={(id) => navigate(`/details/${id}`)}
+                    onImgClick={(id) => navigate(`/imgsec/${id}`)}
+                  />
+                </SwiperSlide>
 
-                      <div className="flex flex-wrap justify-between items-center">
-                        <div className="flex gap-2 items-center w-[50%] mb-2">
-                          <FaRupeeSign className="text-[17px] bg-[#367588] text-white h-[26px] w-[26px] rounded-full p-1" />
-                          <div>
-                            <p className="text-[13px] text-[#3C4142] font-bold mb-0">
-                              Price
-                            </p>
-                            <p className="text-[13px] text-gray-600 mt-0 mb-0">
-                              {formatPrice(property.expected_price)}
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="flex gap-2 items-center w-[50%] mb-2">
-                          <IoHome className="text-[17px] bg-[#367588] text-white h-[26px] w-[26px] rounded-full p-1" />
-                          <div>
-                            <p className="text-[13px] text-[#3C4142] font-bold mb-0">
-                              Type
-                            </p>
-                            <p className="text-[13px] text-gray-600 mt-0 w-[90px] overflow-hidden text-ellipsis whitespace-nowrap mb-0">
-                              {property.subcategory_name}
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="flex gap-2 items-center w-[50%] mb-2">
-                          <FaArrowsLeftRightToLine className="text-[17px] bg-[#367588] text-white h-[26px] w-[26px] rounded-full p-1" />
-                          <div>
-                            <p className="text-[13px] text-[#3C4142] font-bold mb-0">
-                              SBA
-                            </p>
-                            <p className="text-[13px] text-gray-600 mt-0 mb-0">
-                              {property.built_up_area} sq.ft.
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="flex gap-2 items-center w-[50%] mb-2">
-                          <FaBuildingUser className="text-[17px] bg-[#367588] text-white h-[26px] w-[26px] rounded-full p-1" />
-                          <div>
-                            <p className="text-[13px] text-[#3C4142] font-bold mb-0">
-                              Builder
-                            </p>
-                            <p
-                              className="text-[13px] text-gray-600 mt-0 w-[90px] overflow-hidden text-ellipsis whitespace-nowrap cursor-pointer mb-0"
-                              onClick={() =>
-                                handleDeveloper(property.developer_name)
-                              }
-                            >
-                              {property.developer_name}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flex gap-2 items-center mb-2">
-                        <FaMapMarkerAlt className="text-[17px] bg-[#367588] text-white h-[26px] w-[26px] rounded-full p-1" />
-                        <div>
-                          <p className="text-[13px] text-[#3C4142] font-bold mb-0">
-                            Location
-                          </p>
-                          <p className="text-[13px] text-gray-600 mt-0 mb-0">
-                            {property.locality}, {property.city}
-                          </p>
-                        </div>
-                      </div>
-
-                      <button
-                        className="px-3 py-1 bg-[#367588] w-full text-white text-base rounded-md hover:bg-[#1386a8]"
-                        onClick={() => handleDetailsClick(property.id)}
-                      >
-                        View Details
-                      </button>
-                    </div>
-                  </div>
-                </div>
               ))}
-            </Slider>
+            </Swiper>
           </div>
         );
       })}
