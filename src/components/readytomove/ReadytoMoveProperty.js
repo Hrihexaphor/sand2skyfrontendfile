@@ -307,7 +307,7 @@ const ReadyToMove = () => {
               {/* ======== Project Card ==========> */}
               {loading ? (
                 <p className="text-center text-gray-600 text-lg py-6">Loading properties...</p>
-              ) : (filteredProperties.map((project, index) => (
+              ) : (filteredProperties.sort((a, b) => (b.is_featured === true) - (a.is_featured === true)).map((project, index) => (
                 <div
                   key={index}
                   className="bg-[#fff] rounded-lg mb-4 flex md:flex-row flex-col shadow-[0_4px_20px_rgba(0,95,107,0.2)]"
