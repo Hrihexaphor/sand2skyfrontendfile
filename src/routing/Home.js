@@ -41,7 +41,7 @@ const Home = () => {
       <Faq />
       <ToolsAdvice />
       {/* <BlogPage /> */}
-      <PropertyOption/>
+      {/* <PropertyOption/> */}
       <Footer />
     </div>
   );
