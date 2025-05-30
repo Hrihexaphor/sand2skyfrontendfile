@@ -29,7 +29,7 @@ const ProjectGallery = () => {
       const [projects, setProjects] = useState([]);
   
       useEffect(() => {
-          axios.get(`${process.env.REACT_APP_BASE_URL}/latest-with-images`, {
+          axios.get(`${process.env.REACT_APP_BASE_URL}/activegallary`, {
               withCredentials: true, // replaces fetch's `credentials: 'include'`
           })
               .then((res) => {
@@ -92,7 +92,7 @@ function formatPrice(price) {
                     {project.images.map((img, index) => (
                       <img
                         key={index}
-                        src={img.image_url}
+                        src={img}
                         alt={`Project ${index + 1}`}
                         className="h-[350px] w-[600px] object-cover"
                       />

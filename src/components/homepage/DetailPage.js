@@ -170,6 +170,8 @@ const PropertyDetails = () => {
           } else {
             toast.error("No brochure found to download.");
           }
+         
+
         }
       } catch (error) {
         console.error("Submission Error:", error);
@@ -199,131 +201,6 @@ const PropertyDetails = () => {
     </div>
   );
 
-  const posts = [
-    {
-      id: 1,
-      author: "Jonathan Reinink",
-      date: "Aug 18",
-      categories: ["Cooking", "Recipe"],
-      image:
-        "https://images.pexels.com/photos/61180/pexels-photo-61180.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-      title: "Simplest Salad Recipe ever",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-    },
-    {
-      id: 2,
-      author: "Jonathan Reinink",
-      date: "Aug 18",
-      categories: ["Cooking", "Recipe"],
-      image:
-        "https://images.pexels.com/photos/1653877/pexels-photo-1653877.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-      title: "Best Pizza in Town",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-    },
-    {
-      id: 3,
-      author: "Jonathan Reinink",
-      date: "Aug 18",
-      categories: ["Cooking", "Recipe"],
-      image:
-        "https://images.pexels.com/photos/257816/pexels-photo-257816.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-      title: "Best Salad Images ever",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-    },
-  ];
-
-  const amenities = [
-    {
-      name: "Convenience",
-      icon: convenience,
-      items: [
-        "24X7 Water Supply",
-        "Party Lawn",
-        "Children Playing Zone",
-        "Senior Citizens' Walking Track",
-        "Co-working Space",
-        "Society Office",
-        "Yoga Room",
-        "Meditation Zone",
-        "Senior Citizen Sitting Area",
-        "Parking and Transportation",
-        "Multipurpose Hall",
-        "Convenience Store",
-      ],
-    },
-    {
-      name: "Safety",
-      icon: safety,
-      items: [
-        "Reserved Parking",
-        "CCTV For Common Areas",
-        "Earthquake-resistant",
-        "24/7 Security",
-        "CCTV Surveillance",
-        "Entrance Gate With Security",
-        "Smart Locks",
-      ],
-    },
-  ];
-
-
-  const tools = [
-    {
-      icon: <FaChartLine className="text-red-500 text-4xl" />,
-      title: "Rates & Trends",
-      description: "Know all about Property Rates & Trends in your city",
-      link: "#",
-    },
-    {
-      icon: <FaCalculator className="text-red-500 text-4xl" />,
-      title: "EMI Calculator",
-      description: "Know how much you'll have to pay every month on your loan",
-      link: "#",
-    },
-    {
-      icon: <FaRupeeSign className="text-red-500 text-4xl" />,
-      title: "Investment Hotspot",
-      description: "Discover the top localities in your city for investment",
-      link: "#",
-    },
-    {
-      icon: <FaBook className="text-red-500 text-4xl" />,
-      title: "Research Insights",
-      description: "Get experts insights and research reports on real estate",
-      link: "#",
-    },
-  ];
-
-  const setting = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-        },
-      },
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 2,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-        },
-      },
-    ],
-  };
 
   const nearby = {
     dots: false,
@@ -508,14 +385,13 @@ const PropertyDetails = () => {
   useEffect(() => {
     if (property) {
       const isProjectType =
-        property.basic?.property_category_name === "Project Apartment" ||
-        property.basic?.property_category_name === "Project Villa";
+        property?.basic?.property_category_name === "Project Apartment"
 
       if (isProjectType && Array.isArray(property.bhk_configurations) && property.bhk_configurations.length > 0) {
         setActiveTab(property.bhk_configurations[0].bhk_type);
       } else if (Array.isArray(property.documents)) {
         const matchingDoc = property.documents.find(
-          (doc) => /BHK$/i.test(doc.type) || doc.type.toLowerCase() === "floorplan"
+          (doc) => /BHK$/i.test(doc.type) || doc.type.toLowerCase() === "floorplan" || doc.type.toLowerCase() === "Masterplan"
         );
         if (matchingDoc) {
           setActiveTab(matchingDoc.type);
@@ -1265,7 +1141,7 @@ const PropertyDetails = () => {
                         </button>
                       ))} */}
                     {(property?.basic?.property_category_name === "Project Apartment" ||
-                      property?.basic?.property_category_name === "Project Villa") &&
+                      property?.basic?.property_category_name === "Project/Villa") &&
                       Array.isArray(property?.bhk_configurations) &&
                       property.bhk_configurations.map((config) => (
                         <button
@@ -1281,10 +1157,10 @@ const PropertyDetails = () => {
                       ))}
 
                     {property?.basic?.property_category_name !== "Project Apartment" &&
-                      property?.basic?.property_category_name !== "Project Villa" &&
+                      property?.basic?.property_category_name !== "Project/Villa" &&
                       property?.documents
                         ?.filter(
-                          (doc) => /BHK$/i.test(doc.type) || doc.type.toLowerCase() === "floorplan"
+                          (doc) => /BHK$/i.test(doc.type) || doc.type.toLowerCase() === "floorplan" || doc.type.toLowerCase() === "Masterplan"
                         )
                         .map((doc) => (
                           <button
@@ -1304,7 +1180,8 @@ const PropertyDetails = () => {
                   {/* Tab Content */}
                   <div className="mt-2 p-4">
                     {(property?.basic?.property_category_name === "Project Apartment" ||
-                      property?.basic?.property_category_name === "Project Villa") &&
+                      property?.basic?.property_category_name === "Project/Villa") &&
+
                       property?.bhk_configurations
                         ?.filter((config) => config.bhk_type === activeTab)
                         .map((config) => (
@@ -1325,10 +1202,10 @@ const PropertyDetails = () => {
                           </div>
                         ))}
                     {property?.basic?.property_category_name !== "Project Apartment" &&
-                      property?.basic?.property_category_name !== "Project Villa" &&
+                      property?.basic?.property_category_name !== "Project/Villa" &&
                       property?.documents
                         ?.filter(
-                          (doc) => /BHK$/i.test(doc.type) || doc.type.toLowerCase() === "floorplan"
+                          (doc) => /BHK$/i.test(doc.type) || doc.type.toLowerCase() === "floorplan" || doc.type.toLowerCase() === "Masterplan"
                         )
                         .map((doc) => (
                           <div key={doc.id} className="mt-4">
@@ -1467,7 +1344,7 @@ const PropertyDetails = () => {
                 ))} */}
               </div>
 
-              <Review />
+              <Review propertyId={id} />
             </div>
           </section>
 
