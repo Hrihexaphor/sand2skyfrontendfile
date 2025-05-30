@@ -11,9 +11,7 @@ import axios from 'axios';
 
 const ProjectGallery = () => {
 
-  const navigate = useNavigate();
   const sliderRef = useRef(null);
-
 
   const settings = {
     dots: true,
@@ -26,35 +24,6 @@ const ProjectGallery = () => {
     autoplaySpeed: 5000,
   };
 
-  // const projectDetails = [
-  //   {
-  //     title: "Shree Omkar Residency",
-  //     subTitle: "Starting from ₹ 45 Lac",
-  //     objective1: "Luxury & Affordable Flats Available",
-  //     objective2: "Marketed by Top Realty Companies",
-  //     projectImage: [
-  //        "https://img.staticmb.com/mbimages/project/Photo_h410_w1440/2024/07/25/Project-Photo-49-Khushi-Capella-Bhubaneswar-5333617_410_1440_410_1440.jpg",
-  //        "https://img.staticmb.com/mbimages/project/popup/2023/01/17/Project-Photo-35-Khushi-Capella-Bhubaneswar-5333617_1800_2400.jpg",
-  //        "https://img.staticmb.com/mbimages/project/popup/2023/01/17/Project-Photo-34-Khushi-Capella-Bhubaneswar-5333617_1800_2400.jpg",
-  //        "https://img.staticmb.com/mbimages/project/Photo_h410_w1440/2024/07/25/Project-Photo-49-Khushi-Capella-Bhubaneswar-5333617_410_1440_410_1440.jpg",
-  //        "https://img.staticmb.com/mbimages/project/popup/2023/01/17/Project-Photo-27-Khushi-Capella-Bhubaneswar-5333617_1800_2400.jpg",
-  //     ]
-  //   },
-  //   {
-  //     title: "Raghuram Properties",
-  //     subTitle: "Starting from ₹ 45 Lac",
-  //     objective1: "Luxury & Affordable Flats Available",
-  //     objective2: "Marketed by Top Realty Companies",
-  //     projectImage: [
-  //        "https://img.staticmb.com/mbimages/project/Photo_h410_w1440/2024/07/25/Project-Photo-49-Khushi-Capella-Bhubaneswar-5333617_410_1440_410_1440.jpg",
-  //        "https://img.staticmb.com/mbimages/project/popup/2023/01/17/Project-Photo-35-Khushi-Capella-Bhubaneswar-5333617_1800_2400.jpg",
-  //        "https://img.staticmb.com/mbimages/project/popup/2023/01/17/Project-Photo-34-Khushi-Capella-Bhubaneswar-5333617_1800_2400.jpg",
-  //        "https://img.staticmb.com/mbimages/project/Photo_h410_w1440/2024/07/25/Project-Photo-49-Khushi-Capella-Bhubaneswar-5333617_410_1440_410_1440.jpg",
-  //        "https://img.staticmb.com/mbimages/project/popup/2023/01/17/Project-Photo-27-Khushi-Capella-Bhubaneswar-5333617_1800_2400.jpg",
-  //     ]
-  //   },
-    
-  // ];
 
    // --------------- API INTEGRATION --------->
       const [projects, setProjects] = useState([]);
@@ -81,7 +50,7 @@ function formatPrice(price) {
 }
 
  const handleDetailsClick = (id) => {
-        navigate(`/details/${id}`);
+        window.open(`/details/${id}`, '_blank');
   }
 
   return (

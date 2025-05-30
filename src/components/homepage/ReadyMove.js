@@ -34,7 +34,7 @@ const ReadyToMove = () => {
   // --------------- API INTEGRATION END -------> 
 
   const handleDetailsClick = (id) => {
-    navigate(`/details/${id}`);
+    window.open(`/details/${id}`, '_blank');
   }
 
   // Convert price to Lac or Cr format

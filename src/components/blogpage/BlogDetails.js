@@ -14,41 +14,6 @@ import { Navigation, Autoplay } from "swiper/modules";
 // ------- slider end -----
 
 
-const posts = [
-  {
-    id: 1,
-    author: "Jonathan Reinink",
-    date: "Aug 18",
-    categories: ["Cooking"],
-    image:
-      "https://images.pexels.com/photos/61180/pexels-photo-61180.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-    title: "Simplest Salad Recipe ever",
-    description:
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-  },
-  {
-    id: 2,
-    author: "Jonathan Reinink",
-    date: "Aug 18",
-    categories: ["Recipe"],
-    image:
-      "https://images.pexels.com/photos/1653877/pexels-photo-1653877.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-    title: "Best Pizza in Town",
-    description:
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-  },
-  {
-    id: 3,
-    author: "Jonathan Reinink",
-    date: "Aug 18",
-    categories: ["Cooking"],
-    image:
-      "https://images.pexels.com/photos/257816/pexels-photo-257816.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-    title: "Best Salad Images ever",
-    description:
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-  },
-];
 const BlogDetails = () => {
 
   const { id } = useParams();
@@ -176,13 +141,19 @@ const handleDetailsClick = (id) => {
             {similar.filter(
                 (similar) =>
                   (similar.category_name === blogs.category_name) && (similar.id !== blogs.id)
-              ).map((post, index) => (
+              ).map((post, index) => {
+                const category = post.category_name?.trim()
+              ? post.category_name
+              : post.category?.trim()
+                ? post.category
+                : "Uncategorized";
+                return (
               <SwiperSlide>
                 <div key={post.id} className="p-2">
                     <div
-                      className="rounded overflow-hidden flex flex-col cursor-pointer border h-[400px] bg-[#e6e6e6]"
+                      className="rounded overflow-hidden flex flex-col cursor-pointer border bg-[#e6e6e6]"
                     onClick={() => handleDetailsClick(post.id)}>
-                      <a href="#">
+                      <a href="#" className=" h-[200px]">
                         {post.image_url ? (
                       <img className="w-full h-[100%] cover" src={post.image_url} alt={post.title} />
                     ) : post.youtube_link ? (
@@ -192,10 +163,10 @@ const handleDetailsClick = (id) => {
                       />
                     ) : null}
                       </a>
-                      <div className="p-4 pb-6 bg-[#e6e6e6]">
+                      <div className="p-4 pb-6 bg-[#e6e6e6] relative h-[150px]">
                         <div className="flex items-center justify-between mb-3">
-                          <div className="bg-[#367588] text-white text-sm py-[2px] px-[15px] rounded-lg">{post.category_name}</div>
-                          <p className="mb-0 text-[#367588] text-sm font-semibold">
+                          <div className="bg-[#367588] text-white text-xs py-[5px] px-[10px] rounded-lg">{category}</div>
+                          <p className="mb-0 text-[#367588] text-xs font-semibold">
                            {formatDate(post.created_at)}
                           </p>
                         </div>
@@ -204,16 +175,17 @@ const handleDetailsClick = (id) => {
                         >
                           {post.title}
                         </h3>
-                         <div
+                        <p className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-sm text-[#367588] font-bold">Read More..</p>
+                         {/* <div
                         className="w-full text-gray-500 text-sm"
                         dangerouslySetInnerHTML={{ __html: post.description }}
-                      />
+                      /> */}
                       </div>
                     </div>
                   </div>
               </SwiperSlide>
 
-            ))}
+            )})}
           </Swiper>
             </div>
             {/* Sidebar */}

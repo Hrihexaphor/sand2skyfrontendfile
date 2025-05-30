@@ -144,44 +144,52 @@ const ToolsAdvice = () => {
             1440: { slidesPerView: 4 },
           }}
         >
-          {blogs.map((blog, index) => (
-            <SwiperSlide>
-              <div key={blog.id} className="p-2">
-                <div
-                  onClick={() => handleDetailsClick(blog.id)}
-                  className="rounded overflow-hidden flex flex-col cursor-pointer bg-white cursor-pointer border"
-                >
-                  <div className="h-[200px] w-full">
-                    {blog.image_url ? (
-                      <img className="w-full h-[100%] cover" src={blog.image_url} alt={blog.title} />
-                    ) : blog.youtube_link ? (
-                      <div
-                        className="w-full h-[200px] w-full"
-                        dangerouslySetInnerHTML={{ __html: blog.youtube_link }}
-                      />
-                    ) : null}
-                  </div>
-                  <div className="p-4 pb-6">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="bg-[#367588] text-white text-sm py-[5px] px-[15px] rounded-lg">{blog.category_name}</div>
-                      <p className="mb-0 text-[#367588] text-sm font-semibold">
-                        {formatDate(blog.created_at)}
-                      </p>
+          {blogs.map((blog, index) => {
+            const category = blog.category_name?.trim()
+              ? blog.category_name
+              : blog.category?.trim()
+                ? blog.category
+                : "Uncategorized";
+            return (
+              <SwiperSlide>
+                <div key={blog.id} className="p-2">
+                  <div
+                    onClick={() => handleDetailsClick(blog.id)}
+                    className="rounded overflow-hidden flex flex-col cursor-pointer bg-white cursor-pointer border"
+                  >
+                    <div className="h-[200px] w-full">
+                      {blog.image_url ? (
+                        <img className="w-full h-[100%] cover" src={blog.image_url} alt={blog.title} />
+                      ) : blog.youtube_link ? (
+                        <div
+                          className="w-full h-[200px] w-full"
+                          dangerouslySetInnerHTML={{ __html: blog.youtube_link }}
+                        />
+                      ) : null}
                     </div>
-                    <h3
-                      className="font-lg text-center text-lg text-[#3C4142] transition duration-500 ease-in-out block mb-2"
-                    >
-                      {blog.title}
-                    </h3>
-                    <div
+                    <div className="p-4 pb-6 relative h-[150px]">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="bg-[#367588] text-white text-xs py-[4px] px-[10px] rounded-lg mt-0">{category}</div>
+                        <p className="mb-0 text-[#367588] text-xs font-semibold mt-0">
+                          {formatDate(blog.created_at)}
+                        </p>
+                      </div>
+                      <h3
+                        className="font-lg text-center text-lg text-[#3C4142] transition duration-500 ease-in-out block mb-2"
+                      >
+                        {blog.title}
+                      </h3>
+                      <p className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-sm text-[#367588] font-bold">Read More..</p>
+                      {/* <div
                       className="w-full text-gray-500 text-sm"
                       dangerouslySetInnerHTML={{ __html: blog.description }}
-                    />
+                    /> */}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </SwiperSlide>
-          ))}
+              </SwiperSlide>
+            )
+          })}
         </Swiper>
       </div>
     </div>

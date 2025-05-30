@@ -127,8 +127,8 @@ const NewFeature = () => {
                 <PropertyCard
                   key={index}
                   property={property}
-                  onViewDetails={(id) => navigate(`/details/${id}`)}
-                  onImgClick={(id) => navigate(`/imgsec/${id}`)}
+                  onViewDetails={(id) => window.open(`/details/${id}`, '_blank')}
+                  onImgClick={(id) => window.open(`/imgsec/${id}`, '_blank')}
                 />
               </SwiperSlide>
 

@@ -12,7 +12,7 @@ import AdCards from "../advertisement/AdvertiseCard";
 import PropertyCard from "./PropertyCard";
 
 import {
-  FaBuilding,
+  FaCar ,
   FaVectorSquare,
   FaKey,
   FaEye,
@@ -31,18 +31,20 @@ import {
   FaBalanceScale,
   FaBuffer,
 } from "react-icons/fa";
+import { SiHomeadvisor } from "react-icons/si";
+import {RiCarouselView} from "react-icons/ri";
 import { HiMiniBuildingOffice2 } from "react-icons/hi2";
 import { LuBuilding2, LuReceiptIndianRupee } from "react-icons/lu";
 import { BsHouseGearFill } from "react-icons/bs";
 import { GiSofa } from "react-icons/gi";
 import { FaArrowsLeftRightToLine, FaUserGraduate } from "react-icons/fa6";
 import { GrStatusGood } from "react-icons/gr";
-import { AiOutlineRightCircle } from "react-icons/ai";
+import { GiModernCity  } from "react-icons/gi";
 import { MdArrowForwardIos, MdBalcony } from "react-icons/md";
 import { PiBuildingOfficeBold, PiHospital } from "react-icons/pi";
 import { LiaSchoolSolid } from "react-icons/lia";
 import { IoBed } from "react-icons/io5";
-import { FiShoppingCart } from "react-icons/fi";
+import { BiArea  } from "react-icons/bi";
 import NewNav from "../header/NewNav";
 import Footer from "../footer/Footer";
 //  import water from "../../assets/images/water.jpg";
@@ -478,13 +480,15 @@ const PropertyDetails = () => {
   // --------------- API INTEGRATION --------->
   const { id } = useParams();
   const [property, setProperty] = useState(null);
-
+  const [pjName, setPjName] = useState("");
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_BASE_URL}/property/${id}`, {
       withCredentials: true, // replaces fetch's `credentials: 'include'`
     })
       .then((res) => {
         setProperty(res.data);
+        setPjName(res.data.details.project_name);
+        console.log(res.data.details.project_name);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
@@ -578,9 +582,9 @@ const PropertyDetails = () => {
     setOpenFAQ(openFAQ === index ? null : index);
   };
 
-  const handleDetailsClick = (id) => {
-    navigate(`/details/${id}`);
-  };
+  // const handleDetailsClick = (id) => {
+  //   navigate(`/details/${id}`);
+  // };
 
   const handleDeveloper = (developer_name) => {
     if (developer_name) {
@@ -683,10 +687,10 @@ const PropertyDetails = () => {
                 </div>
                 <div>
                   <div className="flex gap-2 items-center dtl-head">
-                    <FaBalanceScale />
-                    <p className="font-semibold mb-0">No. of Unit</p>
+                    <GrStatusGood/>
+                    <p className="font-semibold mb-0">Status</p>
                   </div>
-                  <p className="dtl-body">{property?.details?.num_of_units ?? 0}</p>
+                  <p className="dtl-body">{property?.basic?.possession_status}</p>
                 </div>
               </div>
 
@@ -944,73 +948,65 @@ const PropertyDetails = () => {
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-5">
               <div className="flex items-center space-x-3">
-                <FaBuilding className="text-purple-600 text-xl" />
+                <FaVectorSquare className="text-[#367588] text-xl" />
                 <div>
-                  <p className="text-gray-500 font-bold text-sm mb-2">Project Type</p>
-                  <p className="font-semibold mb-0">{property?.basic?.property_subcategory_name}</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-3">
-                <FaVectorSquare className="text-blue-600 text-xl" />
-                <div>
-                  <p className="text-gray-500 font-bold text-sm mb-2">Project Area</p>
+                  <p className="text-gray-500 font-bold text-sm mb-0">Project Area</p>
                   <p className="font-semibold mb-2">{property?.details?.project_area} sq.ft.</p>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
-                <FaArrowsLeftRightToLine className="text-red-600 text-xl" />
+                <LuBuilding2 className="text-[#367588] text-xl" />
                 <div>
-                  <p className="text-gray-500 font-bold text-sm mb-2">Carpet Area</p>
-                  <p className="font-semibold mb-2">{property?.details?.carpet_area} sq.ft.</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-3">
-                <FaKey className="text-green-600 text-xl" />
-                <div>
-                  <p className="text-gray-500 font-bold text-sm mb-2">Transaction Type</p>
-                  <p className="font-semibold mb-2">{property?.basic?.transaction_type}</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-3">
-                <LuBuilding2 className="text-orange-600 text-xl" />
-                <div>
-                  <p className="text-gray-500 font-bold text-sm mb-2">No. Of Towers</p>
+                  <p className="text-gray-500 font-bold text-sm mb-0">No. Of Towers</p>
                   <p className="font-semibold mb-2">{property?.details?.no_of_tower}</p>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
-                <HiMiniBuildingOffice2 className="text-emerald-400 text-xl" />
+                <HiMiniBuildingOffice2 className="text-[#367588] text-xl" />
                 <div>
-                  <p className="text-gray-500 font-bold text-sm mb-2">Total Floors</p>
+                  <p className="text-gray-500 font-bold text-sm mb-0">Total Floors</p>
                   <p className="font-semibold mb-2">{property?.details?.total_floors}</p>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
-                <FaBuffer className="text-cyan-600 text-xl" />
+                <FaBuffer className="text-[#367588] text-xl" />
                 <div>
-                  <p className="text-gray-500 font-bold text-sm mb-2">Number of Flat</p>
+                  <p className="text-gray-500 font-bold text-sm mb-0">Number of Flats</p>
                   <p className="font-semibold mb-2">{property?.details?.no_of_flat}</p>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
-                <MdBalcony className="text-blue-600 text-xl" />
+                <SiHomeadvisor className="text-[#367588] text-xl" />
                 <div>
-                  <p className="text-gray-500 font-bold text-sm mb-2">No. Of Balcony</p>
-                  {/* <p className="font-semibold mb-2">{property?.details?.balconies}</p> */}
-                  {property?.basic?.property_category_name !== 'Project Apartment' &&
-                    property?.basic?.property_category_name !== 'Project Flat' ? (
-                    <p className="font-semibold mb-2">{property?.details?.balconies ?? 0}</p>
-                  ) : (
-                    <p className="font-semibold mb-2">
-                      {property?.bhk_configurations?.map((balconie) => balconie.balconies).join(', ') || '0'}
-                    </p>
-                  )}
+                  <p className="text-gray-500 font-bold text-sm mb-0">Property in Floor</p>
+                  <p className="font-semibold mb-2">{property?.details?.floor}</p>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
-                <IoBed className="text-green-600 text-xl" />
+                <RiCarouselView className="text-[#367588] text-xl" />
                 <div>
-                  <p className="text-gray-500 font-bold text-sm mb-2">Bedrooms</p>
+                  <p className="text-gray-500 font-bold text-sm mb-0">Facing</p>
+                  <p className="font-semibold mb-2">{property?.details?.facing}</p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-3">
+                <BiArea  className="text-[#367588] text-xl" />
+                <div>
+                  <p className="text-gray-500 font-bold text-sm mb-0">Built-up Area</p>
+                  <p className="font-semibold mb-2">{property?.details?.built_up_area}</p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-3">
+                <FaArrowsLeftRightToLine className="text-[#367588] text-xl" />
+                <div>
+                  <p className="text-gray-500 font-bold text-sm mb-0">Carpet Area</p>
+                  <p className="font-semibold mb-2">{property?.details?.carpet_area} sq.ft.</p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-3">
+                <IoBed className="text-[#367588] text-xl" />
+                <div>
+                  <p className="text-gray-500 font-bold text-sm mb-0">Bedrooms</p>
                   {/* <p className="font-semibold mb-2">{property?.details?.bathrooms}</p> */}
                   {property?.basic?.property_category_name !== 'Project Apartment' &&
                     property?.basic?.property_category_name !== 'Project Flat' ? (
@@ -1023,9 +1019,9 @@ const PropertyDetails = () => {
                 </div>
               </div>
               <div className="flex items-center space-x-3">
-                <FaBath className="text-indigo-600 text-xl" />
+                <FaBath className="text-[#367588] text-xl" />
                 <div>
-                  <p className="text-gray-500 font-bold text-sm mb-2">Bathrooms</p>
+                  <p className="text-gray-500 font-bold text-sm mb-0">Bathrooms</p>
                   {/* <p className="font-semibold mb-2">{property?.details?.bathrooms}</p> */}
                   {property?.basic?.property_category_name !== 'Project Apartment' &&
                     property?.basic?.property_category_name !== 'Project Flat' ? (
@@ -1038,24 +1034,67 @@ const PropertyDetails = () => {
                 </div>
               </div>
               <div className="flex items-center space-x-3">
-                <BsHouseGearFill className="text-fuchsia-600 text-xl" />
+                <MdBalcony className="text-[#367588] text-xl" />
                 <div>
-                  <p className="text-gray-500 font-bold text-sm mb-2">Maintainance Charge</p>
+                  <p className="text-gray-500 font-bold text-sm mb-0">No. Of Balcony</p>
+                  {/* <p className="font-semibold mb-2">{property?.details?.balconies}</p> */}
+                  {property?.basic?.property_category_name !== 'Project Apartment' &&
+                    property?.basic?.property_category_name !== 'Project Flat' ? (
+                    <p className="font-semibold mb-2">{property?.details?.balconies ?? 0}</p>
+                  ) : (
+                    <p className="font-semibold mb-2">
+                      {property?.bhk_configurations?.map((balconie) => balconie.balconies).join(', ') || '0'}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <div className="flex items-center space-x-3">
+                <FaCar  className="text-[#367588] text-xl" />
+                <div>
+                  <p className="text-gray-500 font-bold text-sm mb-0">Parking</p>
+                  <p className="font-semibold mb-2">{property?.details?.covered_parking}</p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-3">
+                <FaKey className="text-[#367588] text-xl" />
+                <div>
+                  <p className="text-gray-500 font-bold text-sm mb-0">Transaction Type</p>
+                  <p className="font-semibold mb-2">{property?.basic?.transaction_type}</p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-3">
+                <FaEye className="text-[#367588] text-2xl" />
+                <div>
+                  <p className="text-gray-500 font-bold text-sm mb-0">Property Overlooking</p>
+                  <p className="font-semibold mb-2">{property?.details?.overlooking.join(', ') ?? 'N/A'}</p>
+                </div>
+              </div>
+               <div className="flex items-center space-x-3">
+                <BsHouseGearFill className="text-[#367588] text-xl" />
+                <div>
+                  <p className="text-gray-500 font-bold text-sm mb-0">Maintainance Charge</p>
                   <p className="font-semibold mb-2">₹ {property?.details?.maintenance_charge}</p>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
-                <GrStatusGood className="text-blue-600 text-xl" />
+                <GiModernCity  className="text-[#367588] text-xl" />
                 <div>
-                  <p className="text-gray-500 font-bold text-sm mb-2">Status</p>
-                  <p className="font-semibold mb-2">{property?.basic?.possession_status}</p>
+                  <p className="text-gray-500 font-bold text-sm mb-0">City</p>
+                  <p className="font-semibold mb-2">{property?.details?.city}</p>
                 </div>
               </div>
-              <div className="flex items-center space-x-3">
-                <FaEye className="text-yellow-600 text-xl" />
+              {/* <div className="flex items-center space-x-3">
+                <FaBuilding className="text-purple-600 text-xl" />
                 <div>
-                  <p className="text-gray-500 font-bold text-sm mb-2">Property Overlooking</p>
-                  <p className="font-semibold mb-2">{property?.details?.overlooking.join(', ') ?? 'N/A'}</p>
+                  <p className="text-gray-500 font-bold text-sm mb-2">Project Type</p>
+                  <p className="font-semibold mb-0">{property?.basic?.property_subcategory_name}</p>
+                </div>
+              </div> */}
+              <div className="flex items-center space-x-3">
+                <FaBalanceScale className="text-[#367588] text-xl" />
+                <div>
+                  <p className="text-gray-500 font-bold text-sm mb-0">No. of Unit</p>
+                  <p className="font-semibold mb-2">{property?.details?.num_of_units ?? 0}</p>
                 </div>
               </div>
             </div>
@@ -1440,8 +1479,8 @@ const PropertyDetails = () => {
                 <PropertyCard
                   key={index}
                   property={property}
-                  onViewDetails={(id) => navigate(`/details/${id}`)}
-                  onImgClick={(id) => navigate(`/imgsec/${id}`)}
+                  onViewDetails={(id) => window.open(`/details/${id}`, '_blank')}
+                  onImgClick={(id) => window.open(`/imgsec/${id}`, '_blank')}
                 />
               </SwiperSlide>
 
@@ -1477,7 +1516,7 @@ const PropertyDetails = () => {
                       >
                         <div className="flex gap-2 items-center">
                           <span className="faq_count">{index + 1}</span>
-                          {faq.question}
+                          {faq.question} {" ("}{pjName}{") "}
                         </div>
                         <ChevronDown
                           className={`transition-transform ${openFAQ === index ? "rotate-180" : "rotate-0"}`}

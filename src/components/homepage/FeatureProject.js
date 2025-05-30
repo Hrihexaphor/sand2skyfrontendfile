@@ -16,7 +16,6 @@ import { Navigation, Autoplay } from "swiper/modules";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const FeatureProject = () => {
-  const navigate = useNavigate();
   const [featureProperty, setFeatureProperty] = useState([]);
 
   useEffect(() => {
@@ -33,11 +32,11 @@ const FeatureProject = () => {
   }, []);
 
   const handleDetailsClick = (id) => {
-    navigate(`/details/${id}`);
+    window.open(`/details/${id}`, '_blank');
   };
 
   const handleImageClick = (id) => {
-    navigate(`/imgsec/${id}`);
+    window.open(`/imgsec/${id}`, '_blank');
   };
 
   const formatPrice = (price) => {

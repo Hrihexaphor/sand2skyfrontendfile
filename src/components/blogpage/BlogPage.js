@@ -117,12 +117,12 @@ const handleDetailsClick = (id) => {
                       />
                     ) : null}
                   </div>
-                  <div className="p-3 pb-6">
+                  <div className="p-3 pb-6 relative h-[150px]">
                     <div className="flex items-center justify-between mb-2">
-                      <div className="bg-[#367588] text-white text-sm py-[5px] px-[15px] rounded-lg">
+                      <p className="bg-[#367588] text-white text-xs py-[4px] px-[10px] rounded-lg mt-0 mb-0">
                         {category}
-                      </div>
-                      <p className="no-underline mb-0 cursor-pointer text-sm text-[#367588] font-semibold flex items-center gap-2">
+                      </p>
+                      <p className="no-underline mb-0 cursor-pointer text-xs text-[#367588] font-semibold flex items-center gap-2 mt-0">
                         {formatDate(blog.created_at)}
                       </p>
                     </div>
@@ -132,10 +132,11 @@ const handleDetailsClick = (id) => {
                     >
                       {blog.title}
                     </a>
-                    <div
+                    <p className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-sm text-[#367588] font-bold">Read More..</p>
+                    {/* <div
                         className="w-full text-gray-500 text-sm"
                         dangerouslySetInnerHTML={{ __html: blog.description }}
-                      />
+                      /> */}
                   </div>
                 </div>
               );
