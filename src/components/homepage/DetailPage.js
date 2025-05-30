@@ -12,7 +12,7 @@ import AdCards from "../advertisement/AdvertiseCard";
 import PropertyCard from "./PropertyCard";
 
 import {
-  FaCar ,
+  FaCar,
   FaVectorSquare,
   FaKey,
   FaEye,
@@ -32,19 +32,19 @@ import {
   FaBuffer,
 } from "react-icons/fa";
 import { SiHomeadvisor, SiTicktick } from "react-icons/si";
-import {RiCarouselView} from "react-icons/ri";
+import { RiCarouselView } from "react-icons/ri";
 import { HiMiniBuildingOffice2 } from "react-icons/hi2";
 import { LuBuilding2, LuReceiptIndianRupee } from "react-icons/lu";
 import { BsHouseGearFill } from "react-icons/bs";
 import { GiSofa } from "react-icons/gi";
 import { FaArrowsLeftRightToLine, FaUserGraduate } from "react-icons/fa6";
 import { GrStatusGood } from "react-icons/gr";
-import { GiModernCity  } from "react-icons/gi";
+import { GiModernCity } from "react-icons/gi";
 import { MdArrowForwardIos, MdBalcony } from "react-icons/md";
 import { PiBuildingOfficeBold, PiHospital } from "react-icons/pi";
 import { LiaSchoolSolid } from "react-icons/lia";
 import { IoBed } from "react-icons/io5";
-import { BiArea  } from "react-icons/bi";
+import { BiArea } from "react-icons/bi";
 import NewNav from "../header/NewNav";
 import Footer from "../footer/Footer";
 //  import water from "../../assets/images/water.jpg";
@@ -631,16 +631,16 @@ const PropertyDetails = () => {
                 <FaMapMarkerAlt className="text-[#367588]" />
                 <p className="mb-0 text-[#3C4142] w-[326px] overflow-hidden text-ellipsis whitespace-nowrap" title={property?.location?.address}>{property?.location?.address}</p>
               </div>
-               <div className="bg-[#F5F5DC] rounded-lg mt-2 p-2 shadow-md flex items-center gap-4 m-auto cursor-pointer" 
-            onClick={() => handleDeveloper(property?.basic?.developer_name)}>
-              <div className="h-[40px] w-[40px] rounded-full bg-yellow-500 p-1">
-                <img src={property?.basic?.developer_logo || "https://w7.pngwing.com/pngs/247/564/png-transparent-computer-icons-user-profile-user-avatar-blue-heroes-electric-blue-thumbnail.png"} alt="Builder img" className="h-[100%] w-[100%] rounded-full" />
+              <div className="bg-[#F5F5DC] rounded-lg mt-2 p-2 shadow-md flex items-center gap-4 m-auto cursor-pointer"
+                onClick={() => handleDeveloper(property?.basic?.developer_name)}>
+                <div className="h-[40px] w-[40px] rounded-full bg-yellow-500 p-1">
+                  <img src={property?.basic?.developer_logo || "https://w7.pngwing.com/pngs/247/564/png-transparent-computer-icons-user-profile-user-avatar-blue-heroes-electric-blue-thumbnail.png"} alt="Builder img" className="h-[100%] w-[100%] rounded-full" />
+                </div>
+                <div className="flex flex-col">
+                  <p className="text-base font-semibold mb-0">Builder :</p>
+                  <p className="text-sm font-semibold mb-0">{property?.basic?.developer_name}</p>
+                </div>
               </div>
-              <div className="flex flex-col">
-                <p className="text-base font-semibold mb-0">Builder :</p>
-                <p className="text-sm font-semibold mb-0">{property?.basic?.developer_name}</p>
-              </div>
-            </div>
               <div className=" text-xl font-bold text-gray-900 dtl-price">
                 ₹{formatPrice(property?.basic?.expected_price)}
               </div>
@@ -688,7 +688,7 @@ const PropertyDetails = () => {
                 </div>
                 <div>
                   <div className="flex gap-2 items-center dtl-head">
-                    <GrStatusGood/>
+                    <GrStatusGood />
                     <p className="font-semibold mb-0">Status</p>
                   </div>
                   <p className="dtl-body">{property?.basic?.possession_status}</p>
@@ -722,13 +722,13 @@ const PropertyDetails = () => {
                     <FaTimes size={20} />
                   </button>
                   <h3 className="text-lg text-[#3C4142] font-bold text-center mb-4">
-  Please fill The Details to{" "}
-  {formPurpose === "contact"
-    ? "get the Contact Number."
-    : formPurpose === "brochure"
-    ? "Download Brochure."
-    : ""}
-</h3>
+                    Please fill The Details to{" "}
+                    {formPurpose === "contact"
+                      ? "get the Contact Number."
+                      : formPurpose === "brochure"
+                        ? "Download Brochure."
+                        : ""}
+                  </h3>
                   <form onSubmit={handleContactSeller}>
                     <div className="mb-2">
                       <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
@@ -991,7 +991,7 @@ const PropertyDetails = () => {
                 </div>
               </div>
               <div className="flex items-center space-x-3">
-                <BiArea  className="text-[#367588] text-xl" />
+                <BiArea className="text-[#367588] text-xl" />
                 <div>
                   <p className="text-gray-500 font-bold text-sm mb-0">Built-up Area</p>
                   <p className="font-semibold mb-2">{property?.details?.built_up_area}</p>
@@ -1050,7 +1050,7 @@ const PropertyDetails = () => {
                 </div>
               </div>
               <div className="flex items-center space-x-3">
-                <FaCar  className="text-[#367588] text-xl" />
+                <FaCar className="text-[#367588] text-xl" />
                 <div>
                   <p className="text-gray-500 font-bold text-sm mb-0">Parking</p>
                   <p className="font-semibold mb-2">{property?.details?.covered_parking}</p>
@@ -1070,7 +1070,7 @@ const PropertyDetails = () => {
                   <p className="font-semibold mb-2">{property?.details?.overlooking.join(', ') ?? 'N/A'}</p>
                 </div>
               </div>
-               <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-3">
                 <BsHouseGearFill className="text-[#367588] text-xl" />
                 <div>
                   <p className="text-gray-500 font-bold text-sm mb-0">Maintainance Charge</p>
@@ -1078,7 +1078,7 @@ const PropertyDetails = () => {
                 </div>
               </div>
               <div className="flex items-center space-x-3">
-                <GiModernCity  className="text-[#367588] text-xl" />
+                <GiModernCity className="text-[#367588] text-xl" />
                 <div>
                   <p className="text-gray-500 font-bold text-sm mb-0">City</p>
                   <p className="font-semibold mb-2">{property?.details?.city}</p>
@@ -1114,7 +1114,7 @@ const PropertyDetails = () => {
 
           <section className="grid grid-cols-1 md:grid-cols-12 gap-8 mt-5 items-start dtl-other-box">
             <div className="md:col-span-8">
-               {/* <div className="mb-3 container">
+              {/* <div className="mb-3 container">
                 <h2 className="mb-2 ms-[-12px] text-2xl font-bold font-geometric-regular text-[#3C4142] ">
                   Other Properties in this Project and Nearby
                 </h2>
@@ -1213,27 +1213,27 @@ const PropertyDetails = () => {
                     })}
                   </div> */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 dtl-amenities-inner">
-  {property?.amenities?.map((category, index) => {
-    const allIcons = { ...FaIcons, ...MdIcons, ...AiIcons, ...GiIcons };
-    const Icon = allIcons[category.icon];
+                    {property?.amenities?.map((category, index) => {
+                      const allIcons = { ...FaIcons, ...MdIcons, ...AiIcons, ...GiIcons };
+                      const Icon = allIcons[category.icon];
 
-    return (
-      <div
-        key={index}
-        className="flex flex-col items-center space-y-1 border-2 border-dashed border-[#367588] p-[11px] rounded-[7px]"
-      >
-        {Icon ? (
-          <Icon className="text-[30px] text-[#367588]" />
-        ) : (
-           <SiTicktick className="text-[30px] text-[#367588]" />
-        )}
-        <p className="text-sm text-gray-500 font-semibold text-center">
-          {category.name}
-        </p>
-      </div>
-    );
-  })}
-</div>
+                      return (
+                        <div
+                          key={index}
+                          className="flex flex-col items-center space-y-1 border-2 border-dashed border-[#367588] p-[11px] rounded-[7px]"
+                        >
+                          {Icon ? (
+                            <Icon className="text-[30px] text-[#367588]" />
+                          ) : (
+                            <SiTicktick className="text-[30px] text-[#367588]" />
+                          )}
+                          <p className="text-sm text-gray-500 font-semibold text-center">
+                            {category.name}
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
 
                 </div>
               </div>
@@ -1370,16 +1370,16 @@ const PropertyDetails = () => {
                     />
                   </div> */}
                   {property?.details?.youtube_link && (
-  <div
-    className="relative w-full overflow-hidden rounded-lg pt-[56.25%]" // 16:9 aspect ratio
-    dangerouslySetInnerHTML={{
-      __html: property.details.youtube_link.replace(
-        '<iframe',
-        '<iframe class="absolute top-0 left-0 w-full h-full"'
-      ),
-    }}
-  />
-)}
+                    <div
+                      className="relative w-full overflow-hidden rounded-lg pt-[56.25%]" // 16:9 aspect ratio
+                      dangerouslySetInnerHTML={{
+                        __html: property.details.youtube_link.replace(
+                          '<iframe',
+                          '<iframe class="absolute top-0 left-0 w-full h-full"'
+                        ),
+                      }}
+                    />
+                  )}
                 </div>
               </div>
             </div>
@@ -1398,7 +1398,7 @@ const PropertyDetails = () => {
                     className="flex items-center justify-between bg-white p-4 rounded-lg shadow-md"
                   >
                     <span className="text-gray-700 font-medium">{place.name}</span>
-                    <span className="text-[#367588] font-semibold">{place.distance_km} km</span>
+                    <span className="text-[#367588] font-semibold">{place.distance_km}</span>
                   </div>
                 ))}
                 {/* {[
@@ -1467,7 +1467,7 @@ const PropertyDetails = () => {
                 ))} */}
               </div>
 
-               <Review/>
+              <Review />
             </div>
           </section>
 
@@ -1481,33 +1481,33 @@ const PropertyDetails = () => {
             </div>
 
             <Swiper
-            spaceBetween={24}
-            loop={true}
-            autoplay={{ delay: 2000 }}
-            modules={[Autoplay]}
-            breakpoints={{
-              320: { slidesPerView: 1 },
-              425: { slidesPerView: 1 },
-              768: { slidesPerView: 2 },
-              1024: { slidesPerView: 3 },
-              1440: { slidesPerView: 4 },
-            }}
-          >
-            {similar.filter(
+              spaceBetween={24}
+              loop={true}
+              autoplay={{ delay: 2000 }}
+              modules={[Autoplay]}
+              breakpoints={{
+                320: { slidesPerView: 1 },
+                425: { slidesPerView: 1 },
+                768: { slidesPerView: 2 },
+                1024: { slidesPerView: 3 },
+                1440: { slidesPerView: 4 },
+              }}
+            >
+              {similar.filter(
                 (similar) =>
                   (similar.subcategory_name === property?.basic?.property_subcategory_name && (similar.id !== property?.basic?.id))
               ).map((property, index) => (
-              <SwiperSlide>
-                <PropertyCard
-                  key={index}
-                  property={property}
-                  onViewDetails={(id) => window.open(`/details/${id}`, '_blank')}
-                  onImgClick={(id) => window.open(`/imgsec/${id}`, '_blank')}
-                />
-              </SwiperSlide>
+                <SwiperSlide>
+                  <PropertyCard
+                    key={index}
+                    property={property}
+                    onViewDetails={(id) => window.open(`/details/${id}`, '_blank')}
+                    onImgClick={(id) => window.open(`/imgsec/${id}`, '_blank')}
+                  />
+                </SwiperSlide>
 
-            ))}
-          </Swiper>
+              ))}
+            </Swiper>
           </div>
           {/* ------- Faq------ */}
           <div className="bg-[#F4EFE5]">
