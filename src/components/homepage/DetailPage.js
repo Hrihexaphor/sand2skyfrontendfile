@@ -31,7 +31,7 @@ import {
   FaBalanceScale,
   FaBuffer,
 } from "react-icons/fa";
-import { SiHomeadvisor } from "react-icons/si";
+import { SiHomeadvisor, SiTicktick } from "react-icons/si";
 import {RiCarouselView} from "react-icons/ri";
 import { HiMiniBuildingOffice2 } from "react-icons/hi2";
 import { LuBuilding2, LuReceiptIndianRupee } from "react-icons/lu";
@@ -56,6 +56,7 @@ import axios from 'axios';
 import * as FaIcons from "react-icons/fa";
 import * as MdIcons from "react-icons/md";
 import * as AiIcons from "react-icons/ai";
+import * as GiIcons from "react-icons/gi";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 // ------- slider -----------
@@ -1186,25 +1187,23 @@ const PropertyDetails = () => {
               </Slider> */}
               <div className="mb-3 container">
                 <h2 className="mb-2 ms-[-12px] text-2xl font-bold font-geometric-regular text-[#3C4142] ">
-                  Amenities Properties, Odisha
+                  Amenities {pjName}
                 </h2>
                 <div className="w-12 h-1 bg-yellow-500"></div>
               </div>
               {/* Amenities Properties, Odisha Section */}
               <div className="bg-white p-6 rounded-lg shadow-lg mb-4">
                 <div className="space-y-6">
-                  <div className="flex flex-wrap flex-col md:flex-row gap-5 items-center dtl-amenities-inner">
+                  {/* <div className="flex flex-wrap flex-col md:flex-row gap-2 items-center dtl-amenities-inner">
 
                     {property?.amenities?.map((category, index) => {
                       const allIcons = { ...FaIcons, ...MdIcons, ...AiIcons };
                       const Icon = allIcons[category.icon];
 
                       return (
-                        <div key={index} className="flex flex-col items-center space-y-1">
+                        <div key={index} className="flex flex-col items-center space-y-1 w-[151px] h-[80px] bg-red-300 p-[11px] rounded-[7px]">
                           {Icon ? (
-                            <div className="h-[50px] w-[50px] rounded-full bg-[#FFD700] flex items-center justify-center">
-                              <Icon className="text-[30px] text-white" />
-                            </div>
+                            <Icon className="text-[30px] text-[#367588]" />
                           ) : (
                             <span className="text-sm text-gray-400">No Icon</span>
                           )}
@@ -1212,7 +1211,30 @@ const PropertyDetails = () => {
                         </div>
                       );
                     })}
-                  </div>
+                  </div> */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 dtl-amenities-inner">
+  {property?.amenities?.map((category, index) => {
+    const allIcons = { ...FaIcons, ...MdIcons, ...AiIcons, ...GiIcons };
+    const Icon = allIcons[category.icon];
+
+    return (
+      <div
+        key={index}
+        className="flex flex-col items-center space-y-1 border-2 border-dashed border-[#367588] p-[11px] rounded-[7px]"
+      >
+        {Icon ? (
+          <Icon className="text-[30px] text-[#367588]" />
+        ) : (
+           <SiTicktick className="text-[30px] text-[#367588]" />
+        )}
+        <p className="text-sm text-gray-500 font-semibold text-center">
+          {category.name}
+        </p>
+      </div>
+    );
+  })}
+</div>
+
                 </div>
               </div>
 
