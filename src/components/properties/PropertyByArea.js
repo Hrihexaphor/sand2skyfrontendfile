@@ -5,8 +5,6 @@ import { FaSearch, FaMapMarkerAlt, FaRupeeSign, FaBath, FaHome, FaFilter, FaTime
 import { FaArrowsLeftRightToLine, FaBuildingCircleExclamation } from "react-icons/fa6";
 import { RiMoneyRupeeCircleLine } from "react-icons/ri";
 import { GiSofa } from "react-icons/gi";
-import { LuBedSingle } from "react-icons/lu";
-import { ChevronRightIcon, ChevronLeftIcon } from 'lucide-react';
 import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
 import AdCards from "../advertisement/AdvertiseCard";
 import axios from 'axios';
@@ -140,7 +138,7 @@ const NewProjects = () => {
   // );
 
   const handleDetailsClick = (id) => {
-    navigate(`/details/${id}`);
+    window.open(`/details/${id}`, '_blank');
   }
 
   return (

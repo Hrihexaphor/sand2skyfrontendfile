@@ -10,6 +10,7 @@ import { ChevronDown } from "lucide-react";
 import Review from "../review/Review";
 import AdCards from "../advertisement/AdvertiseCard";
 import PropertyCard from "./PropertyCard";
+import TestimonialCard from "../review/ReviewCard";
 
 import {
   FaCar,
@@ -32,6 +33,7 @@ import {
   FaBuffer,
 } from "react-icons/fa";
 import { SiHomeadvisor, SiTicktick } from "react-icons/si";
+import { Star } from 'lucide-react';
 import { RiCarouselView } from "react-icons/ri";
 import { HiMiniBuildingOffice2 } from "react-icons/hi2";
 import { LuBuilding2, LuReceiptIndianRupee } from "react-icons/lu";
@@ -42,6 +44,7 @@ import { GrStatusGood } from "react-icons/gr";
 import { GiModernCity } from "react-icons/gi";
 import { MdArrowForwardIos, MdBalcony } from "react-icons/md";
 import { PiBuildingOfficeBold, PiHospital } from "react-icons/pi";
+import { GoGear } from "react-icons/go";
 import { LiaSchoolSolid } from "react-icons/lia";
 import { IoBed } from "react-icons/io5";
 import { BiArea } from "react-icons/bi";
@@ -70,7 +73,6 @@ import { Navigation, Autoplay } from "swiper/modules";
 const PropertyDetails = () => {
   const [isContactSellerModalOpen, setIsContactSellerModalOpen] = useState(false);
   const [isShowContactModalOpen, setIsShowContactModalOpen] = useState(false);
-  const [isDownloadBrochureModalOpen, setIsDownloadBrochureModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const [formPurpose, setFormPurpose] = useState("contact");
@@ -157,20 +159,38 @@ const PropertyDetails = () => {
           );
 
           if (brochureDocs?.length > 0) {
-            brochureDocs.forEach((doc, index) => {
-              const link = document.createElement("a");
-              link.href = doc.file_url;
-              link.download = `Brochure-${index + 1}.pdf`; // You can customize this name
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
+            // brochureDocs.forEach((doc, index) => {
+            //   const link = document.createElement("a");
+            //   link.href = doc.file_url;
+            //   link.download = `Brochure-${index + 1}.pdf`; // You can customize this name
+            //   document.body.appendChild(link);
+            //   link.click();
+            //   document.body.removeChild(link);
+            // });
+            brochureDocs.forEach(async (doc, index) => {
+              try {
+                const res = await fetch(doc.file_url);
+                const blob = await res.blob();
+
+                const blobUrl = window.URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.href = blobUrl;
+                link.download = `Brochure-${index + 1}.pdf`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(blobUrl); // clean up
+              } catch (err) {
+                console.error("Failed to download brochure", err);
+                toast.error("Failed to download brochure.");
+              }
             });
 
             toast.success("Brochure(s) are downloading...");
           } else {
             toast.error("No brochure found to download.");
           }
-         
+
 
         }
       } catch (error) {
@@ -201,146 +221,6 @@ const PropertyDetails = () => {
     </div>
   );
 
-
-  const nearby = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    responsive: [
-      {
-        breakpoint: 1440,
-        settings: {
-          slidesToShow: 3,
-        },
-      },
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 2,
-        },
-      },
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 2,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-        },
-      },
-    ],
-  };
-
-  const propertiesnearby = [
-    {
-      id: 1,
-      type: "3bhk",
-      location: "Bhubaneswar",
-      area: "1500 sq.ft.",
-      builder: "DN Builder",
-      name: "Luxury Apartment",
-      price: "₹2.5 Cr",
-      featured: true,
-      img: "https://img.staticmb.com/mbphoto/property/cropped_images/2025/Feb/28/Photo_h180_w240/77495663_3_1740730784979-294_180_240.jpg",
-    },
-    {
-      id: 2,
-      flat: "3bhk",
-      location: "Bhubaneswar",
-      area: "1500 sq.ft.",
-      builder: "DN Builder",
-      name: "Modern Villa",
-      price: "₹3.8 Cr",
-      featured: false,
-      img: "https://img.staticmb.com/mbphoto/property/cropped_images/2025/Feb/28/Photo_h180_w240/77495663_3_1740730784979-294_180_240.jpg",
-    },
-    {
-      id: 3,
-      flat: "3bhk",
-      location: "Patia,Bhubaneswar",
-      area: "1500 sq.ft.",
-      builder: "DN Builder",
-      name: "Skyline Towers",
-      price: "₹1.2 Cr",
-      featured: true,
-      img: "https://img.staticmb.com/mbphoto/property/cropped_images/2025/Feb/28/Photo_h180_w240/77495663_3_1740730784979-294_180_240.jpg",
-    },
-    {
-      id: 4,
-      flat: "3bhk",
-      location: "Patia,Bhubaneswar",
-      area: "1500 sq.ft.",
-      builder: "DN Builder",
-      name: "Green Residency",
-      price: "₹90 Lakh",
-      featured: true,
-      img: "https://img.staticmb.com/mbphoto/property/cropped_images/2025/Feb/28/Photo_h180_w240/77495663_3_1740730784979-294_180_240.jpg",
-    },
-  ];
-
-  const properties = [
-    {
-      id: 1,
-      flat: "3bhk",
-      location: "Bhubaneswar",
-      area: "1500 sq.ft.",
-      builder: "DN Builder",
-      name: "Luxury Apartment",
-      price: "₹2.5 Cr",
-      featured: true,
-      img: "https://img.staticmb.com/mbphoto/property/cropped_images/2025/Feb/28/Photo_h180_w240/77495663_3_1740730784979-294_180_240.jpg",
-    },
-    {
-      id: 2,
-      flat: "3bhk",
-      location: "Bhubaneswar",
-      area: "1500 sq.ft.",
-      builder: "DN Builder",
-      name: "Modern Villa",
-      price: "₹3.8 Cr",
-      featured: true,
-      img: "https://img.staticmb.com/mbphoto/property/cropped_images/2025/Feb/28/Photo_h180_w240/77495663_3_1740730784979-294_180_240.jpg",
-    },
-    {
-      id: 3,
-      flat: "3bhk",
-      location: "Patia,Bhubaneswar",
-      area: "1500 sq.ft.",
-      builder: "DN Builder",
-      name: "Skyline Towers",
-      price: "₹1.2 Cr",
-      featured: false,
-      img: "https://img.staticmb.com/mbphoto/property/cropped_images/2025/Feb/28/Photo_h180_w240/77495663_3_1740730784979-294_180_240.jpg",
-    },
-    {
-      id: 4,
-      flat: "3bhk",
-      location: "Patia,Bhubaneswar",
-      area: "1500 sq.ft.",
-      builder: "DN Builder",
-      name: "Green Residency",
-      price: "₹90 Lakh",
-      featured: false,
-      img: "https://img.staticmb.com/mbphoto/property/cropped_images/2025/Feb/28/Photo_h180_w240/77495663_3_1740730784979-294_180_240.jpg",
-    },
-    {
-      id: 5,
-      flat: "3bhk",
-      location: "Patia,Bhubaneswar",
-      area: "1500 sq.ft.",
-      builder: "DN Builder",
-      name: "Sunrise Heights",
-      price: "₹1.5 Cr",
-      featured: false,
-      img: "https://img.staticmb.com/mbphoto/property/cropped_images/2025/Feb/28/Photo_h180_w240/77495663_3_1740730784979-294_180_240.jpg",
-    },
-  ];
-
   const settings = {
     dots: false,
     infinite: true,
@@ -359,6 +239,7 @@ const PropertyDetails = () => {
   const { id } = useParams();
   const [property, setProperty] = useState(null);
   const [pjName, setPjName] = useState("");
+  const [locality, setLocality] = useState("");
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_BASE_URL}/property/${id}`, {
       withCredentials: true, // replaces fetch's `credentials: 'include'`
@@ -366,6 +247,7 @@ const PropertyDetails = () => {
       .then((res) => {
         setProperty(res.data);
         setPjName(res.data.details.project_name);
+        setLocality(res.data.details.locality)
         console.log(res.data.details.project_name);
       })
       .catch((error) => {
@@ -381,24 +263,54 @@ const PropertyDetails = () => {
   ];
 
   const [activeTab, setActiveTab] = useState("");
+  const [selectedConfig, setSelectedConfig] = useState(null);
+
+  // useEffect(() => {
+  //   if (property) {
+  //     const isProjectType =
+  //       property?.basic?.property_category_name === "Project Apartment" && property?.basic?.property_category_name === "Project House/Villa"
+
+  //     if (isProjectType && Array.isArray(property.bhk_configurations) && property.bhk_configurations.length > 0) {
+  //       setActiveTab(property.bhk_configurations[0].bhk_type);
+  //     } else if (Array.isArray(property.documents)) {
+  //       const matchingDoc = property.documents.find(
+  //         (doc) => /BHK$/i.test(doc.type) || doc.type.toLowerCase() === "floorplan" || doc.type.toLowerCase() === "Masterplan"
+  //       );
+  //       if (matchingDoc) {
+  //         setActiveTab(matchingDoc.type);
+  //       }
+  //     }
+  //   }
+  // }, [property]);
 
   useEffect(() => {
-    if (property) {
-      const isProjectType =
-        property?.basic?.property_category_name === "Project Apartment"
+    if (!activeTab && property?.basic?.property_category_name) {
+      const category = property.basic.property_category_name;
 
-      if (isProjectType && Array.isArray(property.bhk_configurations) && property.bhk_configurations.length > 0) {
-        setActiveTab(property.bhk_configurations[0].bhk_type);
-      } else if (Array.isArray(property.documents)) {
-        const matchingDoc = property.documents.find(
-          (doc) => /BHK$/i.test(doc.type) || doc.type.toLowerCase() === "floorplan" || doc.type.toLowerCase() === "Masterplan"
+      if (
+        (category === "Project Apartment" || category === "Project House/Villa") &&
+        Array.isArray(property?.bhk_configurations)
+      ) {
+        const bhkTypes = [...new Set(property.bhk_configurations.map((c) => c.bhk_type))];
+        if (bhkTypes.length > 0) {
+          setActiveTab(bhkTypes[0]);
+        }
+      } else if (
+        (category === "Apartment" || category === "House/Villa") &&
+        Array.isArray(property?.documents)
+      ) {
+        const documentTabs = property.documents.filter(
+          (doc) =>
+            /BHK$/i.test(doc.type) ||
+            doc.type.toLowerCase() === "floorplan" ||
+            doc.type.toLowerCase() === "masterplan"
         );
-        if (matchingDoc) {
-          setActiveTab(matchingDoc.type);
+        if (documentTabs.length > 0) {
+          setActiveTab(documentTabs[0].type);
         }
       }
     }
-  }, [property]);
+  }, [property, activeTab]);
 
 
   // Convert price to Lac or Cr format
@@ -419,6 +331,23 @@ const PropertyDetails = () => {
     });
   }
 
+  // ------------ Near By project -------->
+  const [nearby, setNearby] = useState([]);
+  // <------------ API INTEGRATION START -------------->
+  // Fetch blog data
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_BASE_URL}/getminimumproperty`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        setNearby(res.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+  // <------------ API INTEGRATION END -------------->
   // ------------ Similar project -------->
   const [similar, setSimilar] = useState([]);
   // <------------ API INTEGRATION START -------------->
@@ -472,6 +401,23 @@ const PropertyDetails = () => {
       console.warn("Developer Name is undefined");
     }
   };
+
+  // --------------- API INTEGRATION --------->
+  const [reviews, setReviews] = useState([]);
+
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_BASE_URL}/review/approved/${id}`, {
+      withCredentials: true,
+    })
+      .then((res) => {
+        setReviews(res.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
+  // --------------- API INTEGRATION END ------->
+
 
   return (
     <>
@@ -831,34 +777,43 @@ const PropertyDetails = () => {
                   <p className="font-semibold mb-2">{property?.details?.project_area} sq.ft.</p>
                 </div>
               </div>
-              <div className="flex items-center space-x-3">
-                <LuBuilding2 className="text-[#367588] text-xl" />
-                <div>
-                  <p className="text-gray-500 font-bold text-sm mb-0">No. Of Towers</p>
-                  <p className="font-semibold mb-2">{property?.details?.no_of_tower}</p>
+              {property?.details?.no_of_tower && (
+                <div className="flex items-center space-x-3">
+                  <LuBuilding2 className="text-[#367588] text-xl" />
+                  <div>
+                    <p className="text-gray-500 font-bold text-sm mb-0">No. Of Towers</p>
+                    <p className="font-semibold mb-2">{property.details.no_of_tower}</p>
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-center space-x-3">
-                <HiMiniBuildingOffice2 className="text-[#367588] text-xl" />
-                <div>
-                  <p className="text-gray-500 font-bold text-sm mb-0">Total Floors</p>
-                  <p className="font-semibold mb-2">{property?.details?.total_floors}</p>
+              )}
+              {property?.details?.total_floors && (
+                <div className="flex items-center space-x-3">
+                  <HiMiniBuildingOffice2 className="text-[#367588] text-xl" />
+                  <div>
+                    <p className="text-gray-500 font-bold text-sm mb-0">Total Floors</p>
+                    <p className="font-semibold mb-2">{property?.details?.total_floors}</p>
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-center space-x-3">
-                <FaBuffer className="text-[#367588] text-xl" />
-                <div>
-                  <p className="text-gray-500 font-bold text-sm mb-0">Number of Flats</p>
-                  <p className="font-semibold mb-2">{property?.details?.no_of_flat}</p>
+              )}
+              {property?.details?.no_of_flat && (
+                <div className="flex items-center space-x-3">
+                  <FaBuffer className="text-[#367588] text-xl" />
+                  <div>
+                    <p className="text-gray-500 font-bold text-sm mb-0">Number of Flats</p>
+                    <p className="font-semibold mb-2">{property?.details?.no_of_flat}</p>
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-center space-x-3">
-                <SiHomeadvisor className="text-[#367588] text-xl" />
-                <div>
-                  <p className="text-gray-500 font-bold text-sm mb-0">Property in Floor</p>
-                  <p className="font-semibold mb-2">{property?.details?.floor}</p>
+              )}
+              {property?.details?.floor && (
+                <div className="flex items-center space-x-3">
+                  <SiHomeadvisor className="text-[#367588] text-xl" />
+                  <div>
+                    <p className="text-gray-500 font-bold text-sm mb-0">Property in Floor</p>
+                    <p className="font-semibold mb-2">{property?.details?.floor}</p>
+                  </div>
                 </div>
-              </div>
+              )}
+
               <div className="flex items-center space-x-3">
                 <RiCarouselView className="text-[#367588] text-xl" />
                 <div>
@@ -866,13 +821,15 @@ const PropertyDetails = () => {
                   <p className="font-semibold mb-2">{property?.details?.facing}</p>
                 </div>
               </div>
-              <div className="flex items-center space-x-3">
-                <BiArea className="text-[#367588] text-xl" />
-                <div>
-                  <p className="text-gray-500 font-bold text-sm mb-0">Built-up Area</p>
-                  <p className="font-semibold mb-2">{property?.details?.built_up_area}</p>
+              {property?.details?.built_up_area && (
+                <div className="flex items-center space-x-3">
+                  <BiArea className="text-[#367588] text-xl" />
+                  <div>
+                    <p className="text-gray-500 font-bold text-sm mb-0">Built-up Area</p>
+                    <p className="font-semibold mb-2">{property?.details?.built_up_area}</p>
+                  </div>
                 </div>
-              </div>
+              )}
               <div className="flex items-center space-x-3">
                 <FaArrowsLeftRightToLine className="text-[#367588] text-xl" />
                 <div>
@@ -990,104 +947,65 @@ const PropertyDetails = () => {
 
           <section className="grid grid-cols-1 md:grid-cols-12 gap-8 mt-5 items-start dtl-other-box">
             <div className="md:col-span-8">
-              {/* <div className="mb-3 container">
-                <h2 className="mb-2 ms-[-12px] text-2xl font-bold font-geometric-regular text-[#3C4142] ">
-                  Other Properties in this Project and Nearby
-                </h2>
-                <div className="w-12 h-1 bg-yellow-500"></div>
-              </div>
-              <Slider {...nearby}>
-                {propertiesnearby.map((property) => (
-                  <div key={property.id} className="p-2">
-                    <div className="w-full bg-white rounded-lg cursor-pointer tranding-card">
-                      <div className="h-[200px] w-[100%] img-box relative">
-                        <img src={property.img} className="h-[100%] w-[100%]" />
-                        {property.featured === true && (
-                          <p className="text-white flex gap-1 items-center font-bold mt-2 absolute top-[1px] left-[3%] bg-yellow-500 text-[#fff] py-[5px] px-[10px] rounded-[5px]">
-                            Featured
-                          </p>
-                        )}
-                      </div>
-                      <div className="p-3">
-                        <h3 className="text-lg text-[#3C4142] bold mb-2 mt-[-2px]">{property.name}</h3>
-                        <div className="flex flex-wrap justify-between items-center">
-                          <div className="flex gap-2 items-center w-[50%] mb-2">
-                            <FaRupeeSign className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
-                            <div>
-                              <p className="text-[#3C4142] text-[13px] font-bold mb-0">Price</p>
-                              <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">{property.price}</p>
-                            </div>
+              {/* ------- Nearby Properties ------ */}
+             {(() => {
+  // 1. Filter “nearby” properties by locality and exclude the current property
+  const filteredNearby = nearby.filter(
+    (item) =>
+      item.locality === property?.details?.locality &&
+      item.id !== property?.basic?.id
+  );
 
-                          </div>
-                          <div className="flex gap-2 items-center w-[50%]  mb-2">
-                            <IoBedOutline className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
-                            <div>
-                              <p className="text-[#3C4142] text-[13px] font-bold mb-0">Type</p>
-                              <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">{property.type}</p>
-                            </div>
+  // 2. Only render if there is at least one matching “nearby” property
+  if (filteredNearby.length === 0) {
+    return null;
+  }
 
-                          </div>
-                          <div className="flex gap-2 items-center w-[50%] mb-2">
-                            <FaArrowsLeftRightToLine className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
-                            <div>
-                              <p className="text-[#3C4142] text-[13px] font-bold mb-0">SBA</p>
-                              <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">{property.area}</p>
-                            </div>
-                          </div>
-                          <div className="flex gap-2 items-center w-[50%]">
-                            <FaBuildingUser className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
-                            <div>
-                              <p className="text-[#3C4142] text-[13px] font-bold mb-0">Builder</p>
-                              <p className="text-gray-600 text-[13px] mb-0 mt-[0px]" onClick={() => handleDeveloper(property.developer_name)}>{property.builder}</p>
-                            </div>
+  return (
+    <>
+      <div className="mb-3 container">
+        <h2 className="mb-2 ms-[-12px] text-2xl font-bold font-geometric-regular text-[#3C4142]">
+          Nearby Properties
+        </h2>
+        <div className="w-12 h-1 bg-yellow-500"></div>
+      </div>
 
-                          </div>
-                        </div>
-                        <div className="flex gap-2 items-center mb-2">
-                          <FaMapMarkerAlt className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
-                          <div>
-                            <p className="text-[#3C4142] text-[13px] font-bold mb-0">Location</p>
-                            <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">{property.location}</p>
-                          </div>
-                        </div>
-                        <button
-                          className="px-3 py-1 bg-[#367588] w-full text-white text-base rounded-md hover:bg-[#1386a8]"
-                          onClick={() => handleDetailsClick(property.id)}
-                        >
-                          View Details
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </Slider> */}
-              <div className="mb-3 container">
+      <Swiper
+        spaceBetween={24}
+        loop={true}
+        autoplay={{ delay: 2000 }}
+        modules={[Autoplay]}
+        breakpoints={{
+          320: { slidesPerView: 1 },
+          425: { slidesPerView: 1 },
+          768: { slidesPerView: 2 },
+          1024: { slidesPerView: 2 },
+          1440: { slidesPerView: 2 },
+        }}
+      >
+        {filteredNearby.map((item, index) => (
+          <SwiperSlide key={item.id || index}>
+            <PropertyCard
+              property={item}
+              onViewDetails={(id) => window.open(`/details/${id}`, "_blank")}
+              onImgClick={(id) => window.open(`/imgsec/${id}`, "_blank")}
+            />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </>
+  );
+})()}
+
+              {/* ------- Amenities ------ */}
+              <div className="mb-3 mt-3 container">
                 <h2 className="mb-2 ms-[-12px] text-2xl font-bold font-geometric-regular text-[#3C4142] ">
                   Amenities {pjName}
                 </h2>
                 <div className="w-12 h-1 bg-yellow-500"></div>
               </div>
-              {/* Amenities Properties, Odisha Section */}
               <div className="bg-white p-6 rounded-lg shadow-lg mb-4">
                 <div className="space-y-6">
-                  {/* <div className="flex flex-wrap flex-col md:flex-row gap-2 items-center dtl-amenities-inner">
-
-                    {property?.amenities?.map((category, index) => {
-                      const allIcons = { ...FaIcons, ...MdIcons, ...AiIcons };
-                      const Icon = allIcons[category.icon];
-
-                      return (
-                        <div key={index} className="flex flex-col items-center space-y-1 w-[151px] h-[80px] bg-red-300 p-[11px] rounded-[7px]">
-                          {Icon ? (
-                            <Icon className="text-[30px] text-[#367588]" />
-                          ) : (
-                            <span className="text-sm text-gray-400">No Icon</span>
-                          )}
-                          <p className="text-base text-gray-500 font-semibold">{category.name}</p>
-                        </div>
-                      );
-                    })}
-                  </div> */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 dtl-amenities-inner">
                     {property?.amenities?.map((category, index) => {
                       const allIcons = { ...FaIcons, ...MdIcons, ...AiIcons, ...GiIcons };
@@ -1113,6 +1031,59 @@ const PropertyDetails = () => {
 
                 </div>
               </div>
+              {/* ------- Key Features -------- */}
+              <div className="mb-3 container">
+                <h2 className="mb-2 ms-[-12px] text-2xl font-bold font-geometric-regular text-[#3C4142] ">
+                  Key Features {pjName}
+                </h2>
+                <div className="w-12 h-1 bg-yellow-500"></div>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-lg mb-4">
+                <div className="space-y-6">
+                  <div className="flex items-center flex-wrap gap-2 dtl-amenities-inner">
+                    {property?.keyfeature?.map((category, index) => {
+                      return (
+                        <div
+                          key={index}
+                          className="flex gap-2 items-center text-white space-y-1 border-2 font-semibold bg-[#367588] p-[11px] rounded-[7px]"
+                        >
+                          <Star className="font-semibold" />{category.name}
+                        </div>
+                      );
+                    })}
+                  </div>
+                  {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                    {property?.keyfeature?.map((category, index) => {
+                      return (
+                        <div
+                          key={index}
+                          className="group relative overflow-hidden"
+                        >
+                          <div className="flex flex-col items-center justify-center text-white p-6 rounded-xl bg-gradient-to-br from-[#367588] to-[#2a5c6b] border border-[#4a8fa3]/20 min-h-[120px]">
+                           
+                            <div className="absolute top-0 right-0 w-16 h-16 bg-white/10 rounded-full transform translate-x-6 -translate-y-6"></div>
+                            <div className="absolute bottom-0 left-0 w-8 h-8 bg-white/5 rounded-full transform -translate-x-2 translate-y-2"></div>
+
+                         
+                            <div className="relative z-10 mb-3 p-2 bg-white/20 rounded-full group-hover:bg-white/30 transition-colors duration-300">
+                              <Star className="w-6 h-6 text-white" />
+                            </div>
+
+                           
+                            <span className="relative z-10 text-sm font-semibold text-center leading-tight">
+                              {category.name}
+                            </span>
+
+                            
+                            <div className="absolute inset-0 bg-gradient-to-br from-[#4a9bb8] to-[#367588] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div> */}
+
+                </div>
+              </div>
 
               {/* Floor Plans & Pricing Section - Takes 2/3 Width */}
               <div className="mb-3 container">
@@ -1125,42 +1096,33 @@ const PropertyDetails = () => {
                 <div className="w-full">
                   {/* Tab Buttons */}
                   <div className="flex flex-wrap border-b">
-                    {/* {(property?.basic?.property_category_name === "Project Apartment" ||
-                      property?.basic?.property_category_name === "Project Villa") &&
-                      Array.isArray(property?.bhk_configurations) &&
-                      property.bhk_configurations.map((config) => (
-                        <button
-                          key={config.id}
-                          onClick={() => setActiveTab(config.bhk_type)}
-                          className={`px-4 py-2 border-b-2 transition-colors duration-200 ${activeTab === config.bhk_type
-                            ? "border-blue-600 text-blue-600 font-semibold"
-                            : "border-transparent text-gray-600"
-                            }`}
-                        >
-                          {config.bhk_type}
-                        </button>
-                      ))} */}
+                    {/* For Project Apartment and Project House/Villa - Show BHK Configurations */}
                     {(property?.basic?.property_category_name === "Project Apartment" ||
-                      property?.basic?.property_category_name === "Project/Villa") &&
+                      property?.basic?.property_category_name === "Project House/Villa") &&
                       Array.isArray(property?.bhk_configurations) &&
-                      property.bhk_configurations.map((config) => (
+                      // Group by bhk_type to avoid duplicate tabs
+                      [...new Set(property.bhk_configurations.map(config => config.bhk_type))].map((bhkType) => (
                         <button
-                          key={config.id}
-                          onClick={() => setActiveTab(config.bhk_type)}
-                          className={`px-4 py-2 border-b-2 transition-colors duration-200 ${activeTab === config.bhk_type
+                          key={bhkType}
+                          onClick={() => setActiveTab(bhkType)}
+                          className={`px-4 py-2 border-b-2 transition-colors duration-200 ${activeTab === bhkType
                             ? "border-blue-600 text-blue-600 font-semibold"
                             : "border-transparent text-gray-600"
                             }`}
                         >
-                          {config.bhk_type}
+                          {bhkType}
                         </button>
                       ))}
 
-                    {property?.basic?.property_category_name !== "Project Apartment" &&
-                      property?.basic?.property_category_name !== "Project/Villa" &&
+                    {/* For Apartment and House/Villa - Show Document Types */}
+                    {(property?.basic?.property_category_name === "Apartment" ||
+                      property?.basic?.property_category_name === "House/Villa") &&
                       property?.documents
                         ?.filter(
-                          (doc) => /BHK$/i.test(doc.type) || doc.type.toLowerCase() === "floorplan" || doc.type.toLowerCase() === "Masterplan"
+                          (doc) =>
+                            /BHK$/i.test(doc.type) ||
+                            doc.type.toLowerCase() === "floorplan" ||
+                            doc.type.toLowerCase() === "masterplan"
                         )
                         .map((doc) => (
                           <button
@@ -1174,56 +1136,144 @@ const PropertyDetails = () => {
                             {doc.type}
                           </button>
                         ))}
-
                   </div>
 
                   {/* Tab Content */}
                   <div className="mt-2 p-4">
+                    {/* Content for Project Apartment and Project House/Villa */}
                     {(property?.basic?.property_category_name === "Project Apartment" ||
-                      property?.basic?.property_category_name === "Project/Villa") &&
+                      property?.basic?.property_category_name === "Project House/Villa") &&
+                      activeTab && (
+                        <div>
+                          {/* Show carpet area buttons for selected BHK type */}
+                          <div className="mb-4">
+                            <h3 className="text-lg font-semibold mb-3">{activeTab} Configurations</h3>
+                            <div className="flex flex-wrap gap-2">
+                              {property.bhk_configurations
+                                ?.filter((config) => config.bhk_type === activeTab)
+                                .map((config) => (
+                                  <button
+                                    key={config.id}
+                                    onClick={() => setSelectedConfig(config.id)}
+                                    className={`px-4 py-2 border rounded-lg transition-colors duration-200 ${selectedConfig === config.id
+                                      ? "bg-blue-600 text-white border-blue-600"
+                                      : "bg-white text-gray-700 border-gray-300 hover:border-blue-400"
+                                      }`}
+                                  >
+                                    {config.carpet_area} sqft
+                                  </button>
+                                ))}
+                            </div>
+                          </div>
 
-                      property?.bhk_configurations
-                        ?.filter((config) => config.bhk_type === activeTab)
-                        .map((config) => (
-                          <div key={config.id}>
-                            <img
-                              src={config.file_url}
-                              alt={config.bhk_type}
-                              className="w-full max-h-[500px] object-contain border rounded-lg"
-                            />
-                            <a
-                              href={config.file_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-black-600 underline mt-2 block"
-                            >
-                              View File URL
-                            </a>
-                          </div>
-                        ))}
-                    {property?.basic?.property_category_name !== "Project Apartment" &&
-                      property?.basic?.property_category_name !== "Project/Villa" &&
-                      property?.documents
-                        ?.filter(
-                          (doc) => /BHK$/i.test(doc.type) || doc.type.toLowerCase() === "floorplan" || doc.type.toLowerCase() === "Masterplan"
-                        )
-                        .map((doc) => (
-                          <div key={doc.id} className="mt-4">
-                            <img
-                              src={doc.file_url}
-                              alt={doc.type}
-                              className="w-full max-h-[500px] object-contain border rounded-lg"
-                            />
-                            <a
-                              href={doc.file_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-blue-600 underline mt-2 block"
-                            >
-                              View {doc.type}
-                            </a>
-                          </div>
-                        ))}
+                          {/* Show selected configuration details and floor plan */}
+                          {selectedConfig &&
+                            property.bhk_configurations
+                              ?.filter((config) => config.id === selectedConfig)
+                              .map((config) => (
+                                <div key={config.id}>
+                                  {/* BHK Configuration Details */}
+                                  <div className="mb-4 p-4 bg-gray-50 rounded-lg">
+                                    <h4 className="text-md font-semibold mb-2">
+                                      {config.bhk_type} - {config.carpet_area} sqft Configuration
+                                    </h4>
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                                      <div>
+                                        <span className="font-medium">Bedrooms:</span> {config.bedrooms}
+                                      </div>
+                                      <div>
+                                        <span className="font-medium">Bathrooms:</span> {config.bathrooms}
+                                      </div>
+                                      <div>
+                                        <span className="font-medium">Balconies:</span> {config.balconies}
+                                      </div>
+                                      <div>
+                                        <span className="font-medium">Super Built-up:</span> {config.super_built_up_area} sqft
+                                      </div>
+                                      <div>
+                                        <span className="font-medium">Carpet Area:</span> {config.carpet_area} sqft
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  {/* Floor Plan Image */}
+                                  <img
+                                    src={config.file_url}
+                                    alt={`${config.bhk_type} - ${config.carpet_area} sqft`}
+                                    className="w-full max-h-[500px] object-contain border rounded-lg"
+                                  />
+                                  <a
+                                    href={config.file_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-blue-600 underline mt-2 block"
+                                  >
+                                    View {config.bhk_type} Floor Plan ({config.carpet_area} sqft)
+                                  </a>
+                                </div>
+                              ))}
+                        </div>
+                      )}
+
+                    {/* Content for Apartment and House/Villa - Show all tabs content or active tab */}
+                    {(property?.basic?.property_category_name === "Apartment" ||
+                      property?.basic?.property_category_name === "House/Villa") && (
+                        <>
+                          {/* If no active tab is set, show all documents */}
+                          {!activeTab && property?.documents
+                            ?.filter(
+                              (doc) =>
+                                /BHK$/i.test(doc.type) ||
+                                doc.type.toLowerCase() === "floorplan" ||
+                                doc.type.toLowerCase() === "masterplan"
+                            )
+                            .map((doc, index) => (
+                              <div key={doc.id} className={index > 0 ? "mt-6 pt-6 border-t border-gray-200" : ""}>
+                                <h3 className="text-lg font-semibold mb-3 capitalize">{doc.type}</h3>
+                                <img
+                                  src={doc.file_url}
+                                  alt={doc.type}
+                                  className="w-full max-h-[500px] object-contain border rounded-lg"
+                                />
+                                <a
+                                  href={doc.file_url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-blue-600 underline mt-2 block"
+                                >
+                                  View {doc.type}
+                                </a>
+                              </div>
+                            ))}
+
+                          {/* If active tab is set, show specific document */}
+                          {activeTab && property?.documents
+                            ?.filter(
+                              (doc) =>
+                                /BHK$/i.test(doc.type) ||
+                                doc.type.toLowerCase() === "floorplan" ||
+                                doc.type.toLowerCase() === "masterplan"
+                            )
+                            ?.filter((doc) => doc.type === activeTab)
+                            .map((doc) => (
+                              <div key={doc.id}>
+                                <img
+                                  src={doc.file_url}
+                                  alt={doc.type}
+                                  className="w-full max-h-[500px] object-contain border rounded-lg"
+                                />
+                                <a
+                                  href={doc.file_url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-blue-600 underline mt-2 block"
+                                >
+                                  View {doc.type}
+                                </a>
+                              </div>
+                            ))}
+                        </>
+                      )}
                   </div>
                 </div>
               </div>
@@ -1278,70 +1328,6 @@ const PropertyDetails = () => {
                     <span className="text-[#367588] font-semibold">{place.distance_km}</span>
                   </div>
                 ))}
-                {/* {[
-                  {
-                    icon: <LiaSchoolSolid />,
-                    name: "School",
-                    places: [
-                      "S M Shetty School",
-                      "Bombay Scottish School",
-                      "Podar Int'l School",
-                      "Hiranandani Foundation School",
-                    ],
-                  },
-                  {
-                    icon: <PiHospital />,
-                    name: "Hospital",
-                    places: [
-                      "Nahar Medical Centre",
-                      "Seven Hills Hospital",
-                      "Hiranandani Hospital",
-                      "Dr L H Hiranandani Hospital",
-                    ],
-                  },
-                  {
-                    icon: <FiShoppingCart />,
-                    name: "Shopping",
-                    places: [
-                      "Dmart",
-                      "Haiko Supermarket",
-                      "High Street Hiranandani",
-                      "R City Mall",
-                    ],
-                  },
-                  {
-                    icon: <IoRestaurantOutline />,
-                    name: "Restaurant",
-                    places: [
-                      "1441 Pizzeria",
-                      "Chaayos",
-                      "Domino's Pizza",
-                      "True Tramm Trunk",
-                    ],
-                  },
-                ].map((category, index) => (
-                  <div key={index} className="border-b pb-4">
-                    
-                    <div className="flex items-center gap-2 mb-2 text-[#367588]">
-                      <span className="text-3xl">{category.icon}</span>
-                      <h3 className="text-lg font-semibold ml-2">
-                        {category.name}
-                      </h3>
-                    </div>
-                    <div className="flex items-center justify-between">
-                     
-                      <div className="grid grid-cols-2 gap-x-8 gap-y-2 w-full dtl-localities">
-                        {category.places.map((place, i) => (
-                          <p key={i} className="text-gray-600 dtl-local-property">
-                            • {place}
-                          </p>
-                        ))}
-                      </div>
-                    </div>
-
-
-                  </div>
-                ))} */}
               </div>
 
               <Review propertyId={id} />
@@ -1395,7 +1381,7 @@ const PropertyDetails = () => {
               </div>
 
               {/* FAQ Content */}
-              <div className="w-full mx-auto flex flex-col lg:flex-row justify-between pb-5 faq gap-4">
+              <div className="w-full mx-auto flex flex-col lg:flex-row justify-between pb-1 faq gap-4">
                 {/* Left - Image Section */}
                 <div className="w-full lg:w-[30%]">
                   <img
@@ -1431,6 +1417,42 @@ const PropertyDetails = () => {
 
             </div>
           </div>
+          {/* ------- Review ----- */}
+          {reviews.length > 0 && (
+            <div className="mt-2 pb-5">
+              <div className="mb-5 container">
+                <h2 className="mb-2 ms-[-12px] text-2xl font-bold font-geometric-regular text-[#3C4142]">
+                  Testimonial
+                </h2>
+                <div className="w-12 h-1 bg-yellow-500"></div>
+              </div>
+
+              <Swiper
+                spaceBetween={24}
+                loop={true}
+                autoplay={{ delay: 2000 }}
+                modules={[Autoplay]}
+                breakpoints={{
+                  320: { slidesPerView: 1 },
+                  425: { slidesPerView: 1 },
+                  768: { slidesPerView: 2 },
+                  1024: { slidesPerView: 3 },
+                  1440: { slidesPerView: 3 },
+                }}
+              >
+                {reviews.map((review, index) => (
+                  <SwiperSlide key={index}>
+                    <TestimonialCard
+                      name={review.name}
+                      review={review.review}
+                      rating={review.rating}
+                    />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+          )}
+
         </div>
       </div>
       <Footer />

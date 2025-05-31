@@ -53,11 +53,21 @@ const AboutPage = () => {
             // Odd index layout: Text Left, Image Right
             <div
               key={index}
-              className="w-full mt-[50px] pb-[20px] px-6 lg:px-16 lg:h-[50vh] flex bg-cover bg-center items-center justify-between pl-8 text-black pt-10"
+              className="w-full mt-[50px] pb-[20px] px-6 lg:px-16 lg:h-[50vh] flex bg-cover bg-center justify-between pl-8 text-black pt-10"
             >
               <div className="about-left w-1/2 pr-6">
-                <h2 className="text-[#3C4142] font-bold text-2xl mb-4">{item.title}</h2>
-                <p className="text-base text-gray-700">{item.description}</p>
+                <div className="text-[#3C4142] font-bold text-2xl mb-2"
+                  dangerouslySetInnerHTML={{
+                    __html: item.title || '',
+                  }}
+                />
+                <div className="text-base text-gray-700"
+                  dangerouslySetInnerHTML={{
+                    __html: item.description || '',
+                  }}
+                />
+                {/* <h2 className="text-[#3C4142] font-bold text-2xl mb-2">{item.title}</h2>
+                <p className="text-base text-gray-700">{item.description}</p> */}
               </div>
               <div className="about-right w-1/2">
                 <div className="about-img-box">
@@ -73,7 +83,7 @@ const AboutPage = () => {
             // Even index layout: Image Left, Text Right (Responsive stacked layout)
             <div
               key={index}
-              className="flex flex-col md:flex-row items-center justify-between px-6 lg:px-16 w-full mx-auto py-10"
+              className="flex flex-col md:flex-row justify-between px-6 lg:px-16 w-full mx-auto py-10"
             >
               <img
                 src={item.image_url}
@@ -81,8 +91,18 @@ const AboutPage = () => {
                 className="w-full md:w-2/5 max-w-sm rounded-lg abt-profile-img mb-4 md:mb-0"
               />
               <div className="w-full md:w-3/5 md:pl-8">
-                <h2 className="text-2xl font-bold mb-4">{item.title}</h2>
-                <p className="text-gray-700 text-justify">{item.description}</p>
+              <div className="text-[#3C4142] font-bold text-2xl mb-2"
+                  dangerouslySetInnerHTML={{
+                    __html: item.title || '',
+                  }}
+                />
+                <div className="text-gray-700 text-justify"
+                  dangerouslySetInnerHTML={{
+                    __html: item.description || '',
+                  }}
+                />
+                {/* <h2 className="text-2xl font-bold mb-2">{item.title}</h2>
+                <p className="text-gray-700 text-justify">{item.description}</p> */}
               </div>
             </div>
           )

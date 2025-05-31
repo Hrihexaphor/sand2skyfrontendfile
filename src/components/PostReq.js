@@ -26,6 +26,7 @@ const PostReq = () => {
   };
   const [formData, setFormData] = useState(initialForm);
   const [formErrors, setFormErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -83,6 +84,7 @@ const PostReq = () => {
     setFormErrors(errors);
     if (Object.keys(errors).length === 0) {
       try {
+        setLoading(true);
         const payload = convertToApiPayload();
         const res = await axios.post("https://realestatesand2sky.onrender.com/api/inquiryleads", payload);
         // alert("Inquiry submitted successfully!");
@@ -92,6 +94,8 @@ const PostReq = () => {
         // alert("Submission failed. Please try again.");
         toast.error('Submission failed. Please try again!');
         console.error(error);
+      }finally {
+        setLoading(false);
       }
     }
   };
@@ -166,9 +170,16 @@ const PostReq = () => {
                 <SelectField name="payBrokerage" label="Ready to Pay Brokerage?" options={["Yes", "No"]} value={formData.payBrokerage} onChange={handleChange} error={formErrors.payBrokerage} />
 
                 <div className="col-span-1 sm:col-span-2">
-                  <button type="submit" className="w-full bg-[#005F6B] hover:bg-green-700 text-white py-3 rounded transition">
+                  {/* <button type="submit" className="w-full bg-[#005F6B] hover:bg-green-700 text-white py-3 rounded transition">
                     Submit Requirement
-                  </button>
+                  </button> */}
+                  <button
+                      type="submit"
+                      className={`w-full bg-[#367588] text-white py-2 px-4 rounded-md transition ${loading ? "opacity-50 cursor-not-allowed" : "hover:bg-[#1386a8]"
+                        }`}
+                    >
+                      {loading ? "Submitting..." : "Submit Requirement"}
+                    </button>
                 </div>
               </form>
             </div>
