@@ -616,3 +616,6 @@ body{
   margin-left: -50px;
   background-color: #b80000;
 }
+.text-shadow-white{
+  text-shadow: 2px 2px 5px white;
+}

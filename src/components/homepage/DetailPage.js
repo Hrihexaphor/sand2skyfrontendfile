@@ -40,8 +40,8 @@ import { LuBuilding2, LuReceiptIndianRupee } from "react-icons/lu";
 import { BsHouseGearFill } from "react-icons/bs";
 import { GiSofa } from "react-icons/gi";
 import { FaArrowsLeftRightToLine, FaUserGraduate } from "react-icons/fa6";
-import { GrStatusGood } from "react-icons/gr";
-import { GiModernCity } from "react-icons/gi";
+import { GrStatusGood} from "react-icons/gr";
+import { GiModernCity, GiPoolTableCorner, GiHouse} from "react-icons/gi";
 import { MdArrowForwardIos, MdBalcony } from "react-icons/md";
 import { PiBuildingOfficeBold, PiHospital } from "react-icons/pi";
 import { GoGear } from "react-icons/go";
@@ -257,10 +257,12 @@ const PropertyDetails = () => {
   // --------------- API INTEGRATION END -------> 
 
 
-  const images = [
-    ...(property?.images?.map(img => img.image_url) || []),
-    // ...defaultImages
-  ];
+  // const images = [
+  //   ...(property?.images?.map(img => img.image_url) || []),
+  //   // ...defaultImages
+  // ];
+
+  const images = property?.images || [];
 
   const [activeTab, setActiveTab] = useState("");
   const [selectedConfig, setSelectedConfig] = useState(null);
@@ -333,6 +335,9 @@ const PropertyDetails = () => {
 
   // ------------ Near By project -------->
   const [nearby, setNearby] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+      const [modalImages, setModalImages] = useState([]);
+       const [pname, setPname] = useState("");
   // <------------ API INTEGRATION START -------------->
   // Fetch blog data
   useEffect(() => {
@@ -417,6 +422,54 @@ const PropertyDetails = () => {
       });
   }, []);
   // --------------- API INTEGRATION END ------->
+// const handledtlImageClick = async (img) => {
+//   try {
+//     const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/${img.id}/images`, {
+//       withCredentials: true,
+//     });
+//     setModalImages(res.data.images);
+//     setPname(img.project_name || "Property Name");
+//     setShowModal(true);
+//   } catch (error) {
+//     console.error("Error fetching image data:", error);
+//   }
+// };
+   const handleImageClick = async (property) => {
+      try {
+        const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/${property.id}/images`, {
+          withCredentials: true,
+        });
+        setModalImages(res.data.images);
+        setPname(property.project_name || "Property Name");
+        setShowModal(true);
+      } catch (error) {
+        console.error("Error fetching image data:", error);
+      }
+    };
+     const handlenearImageClick = async (item) => {
+        try {
+          const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/${item.id}/images`, {
+            withCredentials: true,
+          });
+          setModalImages(res.data.images);
+          setPname(item.project_name || "Property Name");
+          setShowModal(true);
+        } catch (error) {
+          console.error("Error fetching image data:", error);
+        }
+      };
+       const handlesimilarImageClick = async (similar) => {
+          try {
+            const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/${similar.id}/images`, {
+              withCredentials: true,
+            });
+            setModalImages(res.data.images);
+            setPname(similar.project_name || "Property Name");
+            setShowModal(true);
+          } catch (error) {
+            console.error("Error fetching image data:", error);
+          }
+        };
 
 
   return (
@@ -433,9 +486,10 @@ const PropertyDetails = () => {
               {images.map((img, index) => (
                 <img
                   key={index}
-                  src={img}
+                  src={img.image_url}
                   alt={`Property ${index}`}
                   className="w-full h-full object-cover rounded-lg"
+                  // onClick={() => handledtlImageClick(img)}
                 />
               ))}
             </Slider>
@@ -544,9 +598,9 @@ const PropertyDetails = () => {
                     <FaTimes size={20} />
                   </button>
                   <h3 className="text-lg text-[#3C4142] font-bold text-center mb-4">
-                    Please fill The Details to{" "}
+                    Please Fill The Details to{" "}
                     {formPurpose === "contact"
-                      ? "get the Contact Number."
+                      ? "Get The Contact Number."
                       : formPurpose === "brochure"
                         ? "Download Brochure."
                         : ""}
@@ -689,74 +743,34 @@ const PropertyDetails = () => {
                     <div className="w-12 h-1 ms-[-12px] bg-yellow-500"></div>
                   </div>
                   <div className="bg-[#F4EFE5] p-3">
-                    <Slider {...nearby}>
+                    <Swiper
+                      spaceBetween={24}
+                      loop={true}
+                      autoplay={{ delay: 2000 }}
+                      modules={[Autoplay]}
+                      breakpoints={{
+                        320: { slidesPerView: 1 },
+                        425: { slidesPerView: 1 },
+                        768: { slidesPerView: 2 },
+                        1024: { slidesPerView: 2 },
+                        1440: { slidesPerView: 2 },
+                      }}
+                    >
                       {similar.filter(
                         (similar) =>
                           (similar.subcategory_name === property?.basic?.property_subcategory_name) && (similar.id !== property?.basic?.id)
-                      ).map((similar) => (
-                        <div key={similar.id} className="p-2">
-                          <div className="w-full bg-white rounded-lg cursor-pointer tranding-card">
-                            <div className="h-[200px] w-[100%] img-box relative">
-                              <img src={similar.primary_image} className="h-[100%] w-[100%]" />
-                              {similar.featured === true && (
-                                <p className="text-white flex gap-1 items-center font-bold mt-2 absolute top-[1px] left-[3%] bg-yellow-500 text-[#fff] py-[5px] px-[10px] rounded-[5px]">
-                                  Featured
-                                </p>
-                              )}
-                            </div>
-                            <div className="p-3">
-                              <h3 className="text-lg text-[#3C4142] bold mb-2 mt-[-2px]">{similar.project_name}</h3>
-                              <div className="flex flex-wrap justify-between items-center">
-                                <div className="flex gap-2 items-center w-[50%] mb-2">
-                                  <FaRupeeSign className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
-                                  <div>
-                                    <p className="text-[#3C4142] text-[13px] font-bold mb-0">Price</p>
-                                    <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">{formatPrice(similar.expected_price)}</p>
-                                  </div>
+                      ).map((similar, index) => (
+                        <SwiperSlide>
+                          <PropertyCard
+                            key={index}
+                            property={similar}
+                            onViewDetails={(id) => window.open(`/details/${id}`, '_blank')}
+                            onImgClick={() => handlesimilarImageClick(similar)}
+                          />
+                        </SwiperSlide>
 
-                                </div>
-                                <div className="flex gap-2 items-center w-[50%]  mb-2">
-                                  <IoBedOutline className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
-                                  <div>
-                                    <p className="text-[#3C4142] text-[13px] font-bold mb-0">Type</p>
-                                    <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">{similar.subcategory_name}</p>
-                                  </div>
-
-                                </div>
-                                <div className="flex gap-2 items-center w-[50%] mb-2">
-                                  <FaArrowsLeftRightToLine className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
-                                  <div>
-                                    <p className="text-[#3C4142] text-[13px] font-bold mb-0">SBA</p>
-                                    <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">{similar.built_up_area} sq.ft.</p>
-                                  </div>
-                                </div>
-                                <div className="flex gap-2 items-center w-[50%]">
-                                  <FaBuildingUser className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
-                                  <div>
-                                    <p className="text-[#3C4142] text-[13px] font-bold mb-0">Builder</p>
-                                    <p className="text-gray-600 text-[13px] mb-0 mt-[0px] w-[72px] overflow-hidden text-ellipsis whitespace-nowrap cursor-pointer">{similar.developer_name}</p>
-                                  </div>
-
-                                </div>
-                              </div>
-                              <div className="flex gap-2 items-center mb-2">
-                                <FaMapMarkerAlt className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
-                                <div>
-                                  <p className="text-[#3C4142] text-[13px] font-bold mb-0">Location</p>
-                                  <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">{similar.locality}, {similar.city}</p>
-                                </div>
-                              </div>
-                              <button
-                                className="px-3 py-1 bg-[#367588] w-full text-white text-base rounded-md hover:bg-[#1386a8]"
-                                onClick={() => navigate(`/details`)}
-                              >
-                                View Details
-                              </button>
-                            </div>
-                          </div>
-                        </div>
                       ))}
-                    </Slider>
+                    </Swiper>
                   </div>
                 </div>
               </div>
@@ -769,169 +783,310 @@ const PropertyDetails = () => {
             <h2 className="text-xl font-bold text-[#3C4142] mb-4">
               Project Overview
             </h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-5">
-              <div className="flex items-center space-x-3">
-                <FaVectorSquare className="text-[#367588] text-xl" />
-                <div>
-                  <p className="text-gray-500 font-bold text-sm mb-0">Project Area</p>
-                  <p className="font-semibold mb-2">{property?.details?.project_area} sq.ft.</p>
-                </div>
-              </div>
-              {property?.details?.no_of_tower && (
-                <div className="flex items-center space-x-3">
-                  <LuBuilding2 className="text-[#367588] text-xl" />
-                  <div>
-                    <p className="text-gray-500 font-bold text-sm mb-0">No. Of Towers</p>
-                    <p className="font-semibold mb-2">{property.details.no_of_tower}</p>
+            {property?.basic?.property_category_name === "House/Villa" ?
+              (
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-5">
+                  <div className="flex items-center space-x-3">
+                    <FaVectorSquare className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Project Area</p>
+                      <p className="font-semibold mb-2">{property?.details?.project_area} sq.ft.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <GiHouse  className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">No. Of House/Villa</p>
+                      <p className="font-semibold mb-2">{property?.details?.no_of_house}</p>
+                    </div>
+                  </div>
+                  {property?.details?.total_floors && (
+                    <div className="flex items-center space-x-3">
+                      <HiMiniBuildingOffice2 className="text-[#367588] text-xl" />
+                      <div>
+                        <p className="text-gray-500 font-bold text-sm mb-0">Total Floors</p>
+                        <p className="font-semibold mb-2">{property?.details?.total_floors}</p>
+                      </div>
+                    </div>
+                  )}
+                  <div className="flex items-center space-x-3">
+                    <GiPoolTableCorner className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Is this a Corner Plot</p>
+                      <p className="font-semibold mb-2">{property?.details?.corner_plot}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <FaArrowsLeftRightToLine className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Plot Area</p>
+                      <p className="font-semibold mb-2">{property?.details?.plot_area} sq.ft.</p>
+                    </div>
+                  </div>
+                  {property?.details?.super_built_up_area && (
+                    <div className="flex items-center space-x-3">
+                      <BiArea className="text-[#367588] text-xl" />
+                      <div>
+                        <p className="text-gray-500 font-bold text-sm mb-0">Super Built-up Area</p>
+                        <p className="font-semibold mb-2">{property?.details?.super_built_up_area} sq.ft.</p>
+                      </div>
+                    </div>
+                  )}
+                  <div className="flex items-center space-x-3">
+                    <FaArrowsLeftRightToLine className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Plot Length</p>
+                      <p className="font-semibold mb-2">{property?.details?.plot_length} sq.ft.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <FaArrowsLeftRightToLine className="text-[#367588] text-xl rotate-90" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Plot Width</p>
+                      <p className="font-semibold mb-2">{property?.details?.plot_breadth} sq.ft.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <IoBed className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Bedrooms</p>
+                      {/* <p className="font-semibold mb-2">{property?.details?.bathrooms}</p> */}
+                      {property?.basic?.property_category_name !== 'Project Apartment' &&
+                        property?.basic?.property_category_name !== 'Project Flat' ? (
+                        <p className="font-semibold mb-2">{property?.details?.bedrooms ?? 0}</p>
+                      ) : (
+                        <p className="font-semibold mb-2">
+                          {property?.bhk_configurations?.map((bedroom) => bedroom.bedrooms).join(', ') || '0'}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <FaBath className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Bathrooms</p>
+                      {/* <p className="font-semibold mb-2">{property?.details?.bathrooms}</p> */}
+                      {property?.basic?.property_category_name !== 'Project Apartment' &&
+                        property?.basic?.property_category_name !== 'Project Flat' ? (
+                        <p className="font-semibold mb-2">{property?.details?.bathrooms ?? 0}</p>
+                      ) : (
+                        <p className="font-semibold mb-2">
+                          {property?.bhk_configurations?.map((bathroom) => bathroom.bathrooms).join(', ') || '0'}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <MdBalcony className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Balcony</p>
+                      {/* <p className="font-semibold mb-2">{property?.details?.balconies}</p> */}
+                      {property?.basic?.property_category_name !== 'Project Apartment' &&
+                        property?.basic?.property_category_name !== 'Project Flat' ? (
+                        <p className="font-semibold mb-2">{property?.details?.balconies ?? 0}</p>
+                      ) : (
+                        <p className="font-semibold mb-2">
+                          {property?.bhk_configurations?.map((balconie) => balconie.balconies).join(', ') || '0'}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <FaCar className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Parking</p>
+                      <p className="font-semibold mb-2">{property?.details?.covered_parking}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <FaKey className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Transaction Type</p>
+                      <p className="font-semibold mb-2">{property?.details?.transaction_types}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <FaEye className="text-[#367588] text-2xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Property Overlooking</p>
+                      <p className="font-semibold mb-2">{property?.details?.overlooking.join(', ') ?? 'N/A'}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <BsHouseGearFill className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Maintainance Charge</p>
+                      <p className="font-semibold mb-2">₹ {property?.details?.maintenance_charge}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <GiModernCity className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">ROI</p>
+                      <p className="font-semibold mb-2">{property?.details?.rental_return}</p>
+                    </div>
                   </div>
                 </div>
-              )}
-              {property?.details?.total_floors && (
-                <div className="flex items-center space-x-3">
-                  <HiMiniBuildingOffice2 className="text-[#367588] text-xl" />
-                  <div>
-                    <p className="text-gray-500 font-bold text-sm mb-0">Total Floors</p>
-                    <p className="font-semibold mb-2">{property?.details?.total_floors}</p>
+              ) : (
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-5">
+                  <div className="flex items-center space-x-3">
+                    <FaVectorSquare className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Project Area</p>
+                      <p className="font-semibold mb-2">{property?.details?.project_area} sq.ft.</p>
+                    </div>
                   </div>
-                </div>
-              )}
-              {property?.details?.no_of_flat && (
-                <div className="flex items-center space-x-3">
-                  <FaBuffer className="text-[#367588] text-xl" />
-                  <div>
-                    <p className="text-gray-500 font-bold text-sm mb-0">Number of Flats</p>
-                    <p className="font-semibold mb-2">{property?.details?.no_of_flat}</p>
-                  </div>
-                </div>
-              )}
-              {property?.details?.floor && (
-                <div className="flex items-center space-x-3">
-                  <SiHomeadvisor className="text-[#367588] text-xl" />
-                  <div>
-                    <p className="text-gray-500 font-bold text-sm mb-0">Property in Floor</p>
-                    <p className="font-semibold mb-2">{property?.details?.floor}</p>
-                  </div>
-                </div>
-              )}
+                  {property?.details?.no_of_tower && (
+                    <div className="flex items-center space-x-3">
+                      <LuBuilding2 className="text-[#367588] text-xl" />
+                      <div>
+                        <p className="text-gray-500 font-bold text-sm mb-0">No. Of Towers</p>
+                        <p className="font-semibold mb-2">{property.details.no_of_tower}</p>
+                      </div>
+                    </div>
+                  )}
+                  {property?.details?.total_floors && (
+                    <div className="flex items-center space-x-3">
+                      <HiMiniBuildingOffice2 className="text-[#367588] text-xl" />
+                      <div>
+                        <p className="text-gray-500 font-bold text-sm mb-0">Total Floors</p>
+                        <p className="font-semibold mb-2">{property?.details?.total_floors}</p>
+                      </div>
+                    </div>
+                  )}
+                  {property?.details?.no_of_flat && (
+                    <div className="flex items-center space-x-3">
+                      <FaBuffer className="text-[#367588] text-xl" />
+                      <div>
+                        <p className="text-gray-500 font-bold text-sm mb-0">Number of Flats</p>
+                        <p className="font-semibold mb-2">{property?.details?.no_of_flat}</p>
+                      </div>
+                    </div>
+                  )}
+                  {property?.details?.floor && (
+                    <div className="flex items-center space-x-3">
+                      <SiHomeadvisor className="text-[#367588] text-xl" />
+                      <div>
+                        <p className="text-gray-500 font-bold text-sm mb-0">Property in Floor</p>
+                        <p className="font-semibold mb-2">{property?.details?.floor}</p>
+                      </div>
+                    </div>
+                  )}
 
-              <div className="flex items-center space-x-3">
-                <RiCarouselView className="text-[#367588] text-xl" />
-                <div>
-                  <p className="text-gray-500 font-bold text-sm mb-0">Facing</p>
-                  <p className="font-semibold mb-2">{property?.details?.facing}</p>
-                </div>
-              </div>
-              {property?.details?.built_up_area && (
-                <div className="flex items-center space-x-3">
-                  <BiArea className="text-[#367588] text-xl" />
-                  <div>
-                    <p className="text-gray-500 font-bold text-sm mb-0">Built-up Area</p>
-                    <p className="font-semibold mb-2">{property?.details?.built_up_area}</p>
+                  <div className="flex items-center space-x-3">
+                    <RiCarouselView className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Facing</p>
+                      <p className="font-semibold mb-2">{property?.details?.facing}</p>
+                    </div>
+                  </div>
+                  {property?.details?.built_up_area && (
+                    <div className="flex items-center space-x-3">
+                      <BiArea className="text-[#367588] text-xl" />
+                      <div>
+                        <p className="text-gray-500 font-bold text-sm mb-0">Built-up Area</p>
+                        <p className="font-semibold mb-2">{property?.details?.built_up_area}</p>
+                      </div>
+                    </div>
+                  )}
+                  <div className="flex items-center space-x-3">
+                    <FaArrowsLeftRightToLine className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Carpet Area</p>
+                      <p className="font-semibold mb-2">{property?.details?.carpet_area} sq.ft.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <IoBed className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Bedrooms</p>
+                      {/* <p className="font-semibold mb-2">{property?.details?.bathrooms}</p> */}
+                      {property?.basic?.property_category_name !== 'Project Apartment' &&
+                        property?.basic?.property_category_name !== 'Project Flat' ? (
+                        <p className="font-semibold mb-2">{property?.details?.bedrooms ?? 0}</p>
+                      ) : (
+                        <p className="font-semibold mb-2">
+                          {property?.bhk_configurations?.map((bedroom) => bedroom.bedrooms).join(', ') || '0'}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <FaBath className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Bathrooms</p>
+                      {/* <p className="font-semibold mb-2">{property?.details?.bathrooms}</p> */}
+                      {property?.basic?.property_category_name !== 'Project Apartment' &&
+                        property?.basic?.property_category_name !== 'Project Flat' ? (
+                        <p className="font-semibold mb-2">{property?.details?.bathrooms ?? 0}</p>
+                      ) : (
+                        <p className="font-semibold mb-2">
+                          {property?.bhk_configurations?.map((bathroom) => bathroom.bathrooms).join(', ') || '0'}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <MdBalcony className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">No. Of Balcony</p>
+                      {/* <p className="font-semibold mb-2">{property?.details?.balconies}</p> */}
+                      {property?.basic?.property_category_name !== 'Project Apartment' &&
+                        property?.basic?.property_category_name !== 'Project Flat' ? (
+                        <p className="font-semibold mb-2">{property?.details?.balconies ?? 0}</p>
+                      ) : (
+                        <p className="font-semibold mb-2">
+                          {property?.bhk_configurations?.map((balconie) => balconie.balconies).join(', ') || '0'}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <FaCar className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Parking</p>
+                      <p className="font-semibold mb-2">{property?.details?.covered_parking}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <FaKey className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Transaction Type</p>
+                      <p className="font-semibold mb-2">{property?.basic?.transaction_type}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <FaEye className="text-[#367588] text-2xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Property Overlooking</p>
+                      <p className="font-semibold mb-2">{property?.details?.overlooking.join(', ') ?? 'N/A'}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <BsHouseGearFill className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Maintainance Charge</p>
+                      <p className="font-semibold mb-2">₹ {property?.details?.maintenance_charge}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <GiModernCity className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">ROI</p>
+                      <p className="font-semibold mb-2">{property?.details?.rental_return}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <FaBalanceScale className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">No. of Unit</p>
+                      <p className="font-semibold mb-2">{property?.details?.num_of_units ?? 0}</p>
+                    </div>
                   </div>
                 </div>
-              )}
-              <div className="flex items-center space-x-3">
-                <FaArrowsLeftRightToLine className="text-[#367588] text-xl" />
-                <div>
-                  <p className="text-gray-500 font-bold text-sm mb-0">Carpet Area</p>
-                  <p className="font-semibold mb-2">{property?.details?.carpet_area} sq.ft.</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-3">
-                <IoBed className="text-[#367588] text-xl" />
-                <div>
-                  <p className="text-gray-500 font-bold text-sm mb-0">Bedrooms</p>
-                  {/* <p className="font-semibold mb-2">{property?.details?.bathrooms}</p> */}
-                  {property?.basic?.property_category_name !== 'Project Apartment' &&
-                    property?.basic?.property_category_name !== 'Project Flat' ? (
-                    <p className="font-semibold mb-2">{property?.details?.bedrooms ?? 0}</p>
-                  ) : (
-                    <p className="font-semibold mb-2">
-                      {property?.bhk_configurations?.map((bedroom) => bedroom.bedrooms).join(', ') || '0'}
-                    </p>
-                  )}
-                </div>
-              </div>
-              <div className="flex items-center space-x-3">
-                <FaBath className="text-[#367588] text-xl" />
-                <div>
-                  <p className="text-gray-500 font-bold text-sm mb-0">Bathrooms</p>
-                  {/* <p className="font-semibold mb-2">{property?.details?.bathrooms}</p> */}
-                  {property?.basic?.property_category_name !== 'Project Apartment' &&
-                    property?.basic?.property_category_name !== 'Project Flat' ? (
-                    <p className="font-semibold mb-2">{property?.details?.bathrooms ?? 0}</p>
-                  ) : (
-                    <p className="font-semibold mb-2">
-                      {property?.bhk_configurations?.map((bathroom) => bathroom.bathrooms).join(', ') || '0'}
-                    </p>
-                  )}
-                </div>
-              </div>
-              <div className="flex items-center space-x-3">
-                <MdBalcony className="text-[#367588] text-xl" />
-                <div>
-                  <p className="text-gray-500 font-bold text-sm mb-0">No. Of Balcony</p>
-                  {/* <p className="font-semibold mb-2">{property?.details?.balconies}</p> */}
-                  {property?.basic?.property_category_name !== 'Project Apartment' &&
-                    property?.basic?.property_category_name !== 'Project Flat' ? (
-                    <p className="font-semibold mb-2">{property?.details?.balconies ?? 0}</p>
-                  ) : (
-                    <p className="font-semibold mb-2">
-                      {property?.bhk_configurations?.map((balconie) => balconie.balconies).join(', ') || '0'}
-                    </p>
-                  )}
-                </div>
-              </div>
-              <div className="flex items-center space-x-3">
-                <FaCar className="text-[#367588] text-xl" />
-                <div>
-                  <p className="text-gray-500 font-bold text-sm mb-0">Parking</p>
-                  <p className="font-semibold mb-2">{property?.details?.covered_parking}</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-3">
-                <FaKey className="text-[#367588] text-xl" />
-                <div>
-                  <p className="text-gray-500 font-bold text-sm mb-0">Transaction Type</p>
-                  <p className="font-semibold mb-2">{property?.basic?.transaction_type}</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-3">
-                <FaEye className="text-[#367588] text-2xl" />
-                <div>
-                  <p className="text-gray-500 font-bold text-sm mb-0">Property Overlooking</p>
-                  <p className="font-semibold mb-2">{property?.details?.overlooking.join(', ') ?? 'N/A'}</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-3">
-                <BsHouseGearFill className="text-[#367588] text-xl" />
-                <div>
-                  <p className="text-gray-500 font-bold text-sm mb-0">Maintainance Charge</p>
-                  <p className="font-semibold mb-2">₹ {property?.details?.maintenance_charge}</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-3">
-                <GiModernCity className="text-[#367588] text-xl" />
-                <div>
-                  <p className="text-gray-500 font-bold text-sm mb-0">City</p>
-                  <p className="font-semibold mb-2">{property?.details?.city}</p>
-                </div>
-              </div>
-              {/* <div className="flex items-center space-x-3">
-                <FaBuilding className="text-purple-600 text-xl" />
-                <div>
-                  <p className="text-gray-500 font-bold text-sm mb-2">Project Type</p>
-                  <p className="font-semibold mb-0">{property?.basic?.property_subcategory_name}</p>
-                </div>
-              </div> */}
-              <div className="flex items-center space-x-3">
-                <FaBalanceScale className="text-[#367588] text-xl" />
-                <div>
-                  <p className="text-gray-500 font-bold text-sm mb-0">No. of Unit</p>
-                  <p className="font-semibold mb-2">{property?.details?.num_of_units ?? 0}</p>
-                </div>
-              </div>
-            </div>
+              )
+            }
+
             <div className="text-gray-700 mt-5"
               dangerouslySetInnerHTML={{
                 __html: property?.details?.description || '',
@@ -948,54 +1103,54 @@ const PropertyDetails = () => {
           <section className="grid grid-cols-1 md:grid-cols-12 gap-8 mt-5 items-start dtl-other-box">
             <div className="md:col-span-8">
               {/* ------- Nearby Properties ------ */}
-             {(() => {
-  // 1. Filter “nearby” properties by locality and exclude the current property
-  const filteredNearby = nearby.filter(
-    (item) =>
-      item.locality === property?.details?.locality &&
-      item.id !== property?.basic?.id
-  );
+              {(() => {
+                // 1. Filter “nearby” properties by locality and exclude the current property
+                const filteredNearby = nearby.filter(
+                  (item) =>
+                    item.locality === property?.details?.locality &&
+                    item.id !== property?.basic?.id
+                );
 
-  // 2. Only render if there is at least one matching “nearby” property
-  if (filteredNearby.length === 0) {
-    return null;
-  }
+                // 2. Only render if there is at least one matching “nearby” property
+                if (filteredNearby.length === 0) {
+                  return null;
+                }
 
-  return (
-    <>
-      <div className="mb-3 container">
-        <h2 className="mb-2 ms-[-12px] text-2xl font-bold font-geometric-regular text-[#3C4142]">
-          Nearby Properties
-        </h2>
-        <div className="w-12 h-1 bg-yellow-500"></div>
-      </div>
+                return (
+                  <>
+                    <div className="mb-3 container">
+                      <h2 className="mb-2 ms-[-12px] text-2xl font-bold font-geometric-regular text-[#3C4142]">
+                        Nearby Properties
+                      </h2>
+                      <div className="w-12 h-1 bg-yellow-500"></div>
+                    </div>
 
-      <Swiper
-        spaceBetween={24}
-        loop={true}
-        autoplay={{ delay: 2000 }}
-        modules={[Autoplay]}
-        breakpoints={{
-          320: { slidesPerView: 1 },
-          425: { slidesPerView: 1 },
-          768: { slidesPerView: 2 },
-          1024: { slidesPerView: 2 },
-          1440: { slidesPerView: 2 },
-        }}
-      >
-        {filteredNearby.map((item, index) => (
-          <SwiperSlide key={item.id || index}>
-            <PropertyCard
-              property={item}
-              onViewDetails={(id) => window.open(`/details/${id}`, "_blank")}
-              onImgClick={(id) => window.open(`/imgsec/${id}`, "_blank")}
-            />
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </>
-  );
-})()}
+                    <Swiper
+                      spaceBetween={24}
+                      loop={true}
+                      autoplay={{ delay: 2000 }}
+                      modules={[Autoplay]}
+                      breakpoints={{
+                        320: { slidesPerView: 1 },
+                        425: { slidesPerView: 1 },
+                        768: { slidesPerView: 2 },
+                        1024: { slidesPerView: 2 },
+                        1440: { slidesPerView: 2 },
+                      }}
+                    >
+                      {filteredNearby.map((item, index) => (
+                        <SwiperSlide key={item.id || index}>
+                          <PropertyCard
+                            property={item}
+                            onViewDetails={(id) => window.open(`/details/${id}`, "_blank")}
+                            onImgClick={() => handlenearImageClick(item)}
+                          />
+                        </SwiperSlide>
+                      ))}
+                    </Swiper>
+                  </>
+                );
+              })()}
 
               {/* ------- Amenities ------ */}
               <div className="mb-3 mt-3 container">
@@ -1278,7 +1433,7 @@ const PropertyDetails = () => {
                 </div>
               </div>
 
-              <div className=" md:flex-row gap-6 mt-10">
+              <div className="md:flex-row gap-6 mt-10">
                 {/* Video Section - Takes 2/3 Width */}
                 <div className=" bg-white shadow-sm rounded-lg p-6">
                   <h2 className="text-lg text-[#3C4142] font-semibold mb-4">
@@ -1309,28 +1464,147 @@ const PropertyDetails = () => {
                   )}
                 </div>
               </div>
+
+              <div className="bg-white mt-5 p-4 rounded-lg shadow-md">
+                <h2 className="text-lg text-[#3C4142] font-bold mb-4">
+                  Explore Neighbourhood - {property?.details?.project_name}
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-3">
+                  {property?.nearest_to?.map((place) => (
+                    <div className="bg-[#367588] mb-3 p-2 rounded-lg">
+                      <div
+                        key={place.id}
+                        className="flex items-center justify-between border-2 p-3 border-dashed border-[#fff] rounded-lg"
+                      >
+                        <span className="text-white text-sm font-medium">{place.name}</span>
+                        <span className="text-white text-xs font-semibold">{place.distance_km}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
             {/* Neighbourhood Section - Takes 1/3 Width */}
             <div className="md:col-span-4  dtl-neibourhood">
               <AdCards />
-
-              <h2 className="text-lg text-[#3C4142] font-semibold mt-5 mb-4">
-                Explore Neighbourhood - {property?.details?.project_name}
-              </h2>
-
-              <div className="space-y-6 mb-4">
-                {property?.nearest_to?.map((place) => (
-                  <div
-                    key={place.id}
-                    className="flex items-center justify-between bg-white p-4 rounded-lg shadow-md"
-                  >
-                    <span className="text-gray-700 font-medium">{place.name}</span>
-                    <span className="text-[#367588] font-semibold">{place.distance_km}</span>
-                  </div>
-                ))}
-              </div>
-
               <Review propertyId={id} />
+              <div className="max-w-md mx-auto mt-4">
+                <div className="bg-white rounded-lg p-6">
+                  <button
+                    className="absolute top-3 right-3 text-gray-500"
+                    onClick={() => setIsContactSellerModalOpen(false)}
+                  >
+                    <FaTimes size={20} />
+                  </button>
+                  <h3 className="text-lg text-[#3C4142] font-bold text-center mb-4">
+                    Please Fill The Details to{" "}
+                    {formPurpose === "contact"
+                      ? "Get The Contact Number."
+                      : formPurpose === "brochure"
+                        ? "Download Brochure."
+                        : ""}
+                  </h3>
+                  <form onSubmit={handleContactSeller}>
+                    <div className="mb-2">
+                      <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value={form.name}
+                        onChange={(e) => setForm({ ...form, name: e.target.value })}
+                        className={`w-full px-3 py-2 border ${errors.name ? "border-red-500 bg-red-100" : "border-gray-300"
+                          } rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                        placeholder="Enter your name"
+                      />
+                      {errors.name && <p className="text-sm text-red-600 mt-1">{errors.name}</p>}
+                    </div>
+
+                    <div className="mb-2">
+                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                        Email
+                      </label>
+                      <input
+                        type="type"
+                        id="email"
+                        name="email"
+                        value={form.email}
+                        onChange={(e) => setForm({ ...form, email: e.target.value })}
+                        className={`w-full px-3 py-2 border ${errors.email ? "border-red-500 bg-red-100" : "border-gray-300"
+                          } rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                        placeholder="Enter your email"
+                      />
+                      {errors.email && <p className="text-sm text-red-600 mt-1">{errors.email}</p>}
+                    </div>
+
+                    <div className="mb-2">
+                      <label htmlFor="contact" className="block text-sm font-medium text-gray-700 mb-1">
+                        Mobile
+                      </label>
+                      <input
+                        type="tel"
+                        id="contact"
+                        name="contact"
+                        maxLength="10"
+                        value={form.contact}
+                        onChange={(e) =>
+                          setForm({ ...form, contact: e.target.value.replace(/\D/, "") })
+                        }
+                        className={`w-full px-3 py-2 border ${errors.contact ? "border-red-500 bg-red-100" : "border-gray-300"
+                          } rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                        placeholder="Enter your contact number"
+                      />
+                      {errors.contact && <p className="text-sm text-red-600 mt-1">{errors.contact}</p>}
+                    </div>
+                    <div className="mb-2">
+                      <label htmlFor="captcha" className="block text-sm font-medium text-gray-700 mb-1">
+                        Captcha
+                      </label>
+                      <div className="flex items-center justify-between">
+                        <div
+                          className="bg-gray-100 border border-gray-300 px-3 py-2 text-center text-lg font-bold text-[#367588]"
+                          aria-hidden="true" // Hide from screen readers as it's purely visual
+                        >
+                          {captchaText}
+                        </div>
+                        <button
+                          type="button"
+                          className="bg-[#367588] text-white py-2 px-4 rounded-md hover:bg-[#1386a8] transition"
+                          onClick={generateCaptcha}
+                        >
+                          Refresh
+                        </button>
+                      </div>
+                    </div>
+                    <div className="mb-4">
+                      <label htmlFor="captcha" className="block text-sm font-medium text-gray-700 mb-1">
+                        Enter Captcha
+                      </label>
+                      <input
+                        type="text"
+                        id="captcha"
+                        name="captcha"
+                        value={form.captcha}
+                        onChange={(e) => setForm({ ...form, captcha: e.target.value })}
+                        className={`w-full px-3 py-2 border ${errors.captcha ? "border-red-500 bg-red-100" : "border-gray-300"
+                          } rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                        placeholder="Enter the text"
+                      />
+                      {errors.captcha && <p className="text-sm text-red-600 mt-1">{errors.captcha}</p>}
+                    </div>
+
+                    <button
+                      type="submit"
+                      className={`w-full bg-[#367588] text-white py-2 px-4 rounded-md transition ${loading ? "opacity-50 cursor-not-allowed" : "hover:bg-[#1386a8]"
+                        }`}
+                    >
+                      {loading ? "Submitting..." : "Submit"}
+                    </button>
+                  </form>
+                </div>
+              </div>
             </div>
           </section>
 
@@ -1365,7 +1639,7 @@ const PropertyDetails = () => {
                     key={index}
                     property={property}
                     onViewDetails={(id) => window.open(`/details/${id}`, '_blank')}
-                    onImgClick={(id) => window.open(`/imgsec/${id}`, '_blank')}
+                   onImgClick={() => handleImageClick(property)}
                   />
                 </SwiperSlide>
 
@@ -1457,6 +1731,34 @@ const PropertyDetails = () => {
       </div>
       <Footer />
       <ToastContainer />
+      {showModal && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                <div className="bg-white w-full mx-5 max-w-4xl rounded shadow-lg p-6 relative">
+                  <div className="flex items-center justify-between mb-2">
+                    <h1 className="text-xl font-semibold">{pname}</h1>
+                    <button
+                      className="text-gray-500 hover:text-gray-700"
+                      onClick={() => setShowModal(false)}
+                    >
+                      <FaTimes size={20} />
+                    </button>
+                  </div>
+                  <div className="flex flex-wrap -mx-1 max-h-[80vh] overflow-y-auto">
+                    {modalImages.map((img) => (
+                      <div key={img.image_id} className="w-full sm:w-1/2 px-1 mb-2">
+                        <img
+                          src={img.image_url}
+                          alt=""
+                          className="md:h-[300px] lg:h-[300px] w-full object-cover rounded"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+      
+            )}
+
     </>
   );
 };

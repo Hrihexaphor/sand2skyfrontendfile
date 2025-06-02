@@ -17,6 +17,9 @@ const BuilderProject = () => {
 
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+        const [modalImages, setModalImages] = useState([]);
+         const [pname, setPname] = useState("");
 
   // <------------ API INTEGRATION START -------------->
   // Fetch blog data
@@ -120,6 +123,23 @@ const BuilderProject = () => {
     if (num >= 100000) return `${(num / 100000).toFixed(2)} Lac`;
     return num.toLocaleString(); // fallback
   }
+
+   const handleDetailsClick = (id) => {
+    window.open(`/details/${id}`, '_blank');
+  }
+  
+  const handleImageClick = async (project) => {
+        try {
+          const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/${project.id}/images`, {
+            withCredentials: true,
+          });
+          setModalImages(res.data.images);
+          setPname(project.project_name || "Property Name");
+          setShowModal(true);
+        } catch (error) {
+          console.error("Error fetching image data:", error);
+        }
+      };
 
   return (
     <>
@@ -319,7 +339,7 @@ const BuilderProject = () => {
                   key={index}
                   className="bg-[#fff] rounded-lg mb-4 flex md:flex-row flex-col shadow-[0_4px_20px_rgba(0,95,107,0.2)]"
                 >
-                  <Link to={`/imgsec`} className="md:w-[40%] relative list-imgbox">
+                  <div onClick={() => handleImageClick(project)} className="md:w-[40%] relative list-imgbox cursor-pointer">
                     <img
                       src={project.primary_image}
                       alt={project.title}
@@ -330,7 +350,7 @@ const BuilderProject = () => {
                         Featured
                       </p>
                     )}
-                  </Link>
+                  </div>
                   <div className="flex-1 p-4 md:w-[60%]">
                     <h3 className="text-sm text-gray-500 semibold mb-0">
                       {project.title}
@@ -406,7 +426,7 @@ const BuilderProject = () => {
                     <div className="flex float-right mt-2">
                       <button
                         className=" px-4 py-2 bg-[#367588] text-white rounded-md hover:bg-[#1386a8]"
-                      // onClick={() => handleDetailsClick(project.id)}
+                      onClick={() => handleDetailsClick(project.id)}
                       >
                         View Details
                       </button>
@@ -426,6 +446,34 @@ const BuilderProject = () => {
 
         </div>
       </section>
+       {/* ----------- Modal ------------- */}
+                           {showModal && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                <div className="bg-white w-full mx-5 max-w-4xl rounded shadow-lg p-6 relative">
+                  <div className="flex items-center justify-between mb-2">
+                    <h1 className="text-xl font-semibold">{pname}</h1>
+                    <button
+                      className="text-gray-500 hover:text-gray-700"
+                      onClick={() => setShowModal(false)}
+                    >
+                      <FaTimes size={20} />
+                    </button>
+                  </div>
+                  <div className="flex flex-wrap -mx-1 max-h-[80vh] overflow-y-auto">
+                    {modalImages.map((img) => (
+                      <div key={img.image_id} className="w-full sm:w-1/2 px-1 mb-2">
+                        <img
+                          src={img.image_url}
+                          alt=""
+                          className="md:h-[300px] lg:h-[300px] w-full object-cover rounded"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+      
+            )}
       <Footer />
     </>
   );

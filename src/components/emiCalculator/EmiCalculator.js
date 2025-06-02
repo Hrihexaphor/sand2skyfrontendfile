@@ -122,6 +122,9 @@ const EmaiCalculator = () => {
                     <option value="5">5 Yrs</option>
                     <option value="10">10 Yrs</option>
                     <option value="15">15 Yrs</option>
+                    <option value="20">20 Yrs</option>
+                    <option value="25">25 Yrs</option>
+                    <option value="30">30 Yrs</option>
                   </select>
                 </div>
 

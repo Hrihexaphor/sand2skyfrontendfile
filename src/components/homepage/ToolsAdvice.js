@@ -14,11 +14,11 @@ const ToolsAdvice = () => {
 
   const cards = [
     {
-      title: "Rates & Trends",
-      bgColor: "bg-yellow-200",
-      iconBg: "bg-yellow-400",
+      title: "Property Legal Services ",
+      bgColor: "bg-teal-200",
+      iconBg: "bg-teal-400",
       textColor: "text-gray-800",
-      icon: "🏠",
+      icon: "🔑",
       value: "28",
       unit: "min",
       message: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
@@ -29,25 +29,24 @@ const ToolsAdvice = () => {
       iconBg: "bg-green-400",
       textColor: "text-gray-800",
       icon: "📜",
-
       value: "32",
       unit: "+",
       message:
-        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab beatae consequuntur dolore doloribus eius fugit, porro quidem repellat temporibus unde?",
+        "Calculate your monthly housing loan EMIs effortlessly with our Housing Loan EMI Calculator. Enter loan amount, interest rate, and tenure to get instant results.",
     },
     {
-      title: "Investment Hotspot",
-      bgColor: "bg-teal-200",
-      iconBg: "bg-teal-400",
+      title: "Home Interior ",
+       bgColor: "bg-yellow-200",
+      iconBg: "bg-yellow-400",
       textColor: "text-gray-800",
-      icon: "🔑",
+      icon: "🏠",
       value: "25",
       unit: "%",
       message:
         "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis, labore, voluptatem. Deserunt illum laborum maxime?",
     },
     {
-      title: "Research Insights",
+      title: "Property Investment",
       bgColor: "bg-red-200",
       iconBg: "bg-red-600",
       textColor: "text-black opacity-75",
@@ -93,7 +92,7 @@ const ToolsAdvice = () => {
   return (
     <div className="bg-[#F4EFE5]">
       <div className="container mx-auto pt-4">
-        <div className="mb-3">
+        <div className="mb-5">
           <h2 className="mb-2 text-2xl text-[#3C4142] font-bold font-geometric-regular">Advice and Tools</h2>
           <div className="w-12 h-1 bg-yellow-500"></div>
         </div>
@@ -108,12 +107,13 @@ const ToolsAdvice = () => {
                 <CardContent card={card} />
               </Link>
             ) : (
-              <div
+              <Link
+                to="/commingsoon"
                 key={index}
-                className={`flex ${card.bgColor} p-4 rounded-lg shadow-md w-full`}
+                className={`flex ${card.bgColor} p-4 rounded-lg shadow-md w-full cursor-pointer no-underline`}
               >
                 <CardContent card={card} />
-              </div>
+              </Link>
             )
           )}
         </div>

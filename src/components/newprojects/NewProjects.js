@@ -47,6 +47,9 @@ const NewProjects = () => {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
+  const [showModal, setShowModal] = useState(false);
+        const [modalImages, setModalImages] = useState([]);
+         const [pname, setPname] = useState("");
   const listRef = useRef();
 
   const [filter, setFilter] = useState({
@@ -191,6 +194,19 @@ const NewProjects = () => {
   const handleDetailsClick = (id) => {
     navigate(`/details/${id}`);
   }
+
+  const handleImageClick = async (property) => {
+        try {
+          const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/${property.id}/images`, {
+            withCredentials: true,
+          });
+          setModalImages(res.data.images);
+          setPname(property.project_name || "Property Name");
+          setShowModal(true);
+        } catch (error) {
+          console.error("Error fetching image data:", error);
+        }
+      };
 
   return (
     <>
@@ -399,7 +415,7 @@ const NewProjects = () => {
                   .map((property, index) => (
                     <React.Fragment key={index}>
                       <div className="bg-[#fff] rounded-lg mb-4 flex md:flex-row flex-col shadow-[0_4px_20px_rgba(0,95,107,0.2)]">
-                        <Link to={`/imgsec`} className="md:w-[40%] relative list-imgbox">
+                        <div onClick={() => handleImageClick(property)} className="md:w-[40%] relative list-imgbox cursor-pointer">
                           <img
                             src={property.primary_image}
                             alt={property.project_name}
@@ -410,7 +426,7 @@ const NewProjects = () => {
                               Featured
                             </p>
                           )}
-                        </Link>
+                        </div>
                         <div className="flex-1 p-4 md:w-[60%]">
                           <h3 className="text-sm text-gray-500 semibold mb-0">{property.title}</h3>
                           <h3 className="text-lg text-[#3C4142] bold mb-3">{property.project_name}</h3>
@@ -515,6 +531,34 @@ const NewProjects = () => {
 
         </div>
       </section>
+       {/* ----------- Modal ------------- */}
+                           {showModal && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                <div className="bg-white w-full mx-5 max-w-4xl rounded shadow-lg p-6 relative">
+                  <div className="flex items-center justify-between mb-2">
+                    <h1 className="text-xl font-semibold">{pname}</h1>
+                    <button
+                      className="text-gray-500 hover:text-gray-700"
+                      onClick={() => setShowModal(false)}
+                    >
+                      <FaTimes size={20} />
+                    </button>
+                  </div>
+                  <div className="flex flex-wrap -mx-1 max-h-[80vh] overflow-y-auto">
+                    {modalImages.map((img) => (
+                      <div key={img.image_id} className="w-full sm:w-1/2 px-1 mb-2">
+                        <img
+                          src={img.image_url}
+                          alt=""
+                          className="md:h-[300px] lg:h-[300px] w-full object-cover rounded"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+      
+            )}
       <Footer />
     </>
   );

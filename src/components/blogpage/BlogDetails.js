@@ -190,7 +190,7 @@ const handleDetailsClick = (id) => {
             </div>
             {/* Sidebar */}
             <aside className="hidden lg:block lg:w-1/3 p-4">
-              <AdCards/>
+              <AdCards location="blog" />
             </aside>
           </div>
         </div>

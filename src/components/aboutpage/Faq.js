@@ -19,26 +19,6 @@ export default function FAQSection() {
     setOpenFAQ(openFAQ === index ? null : index);
   };
 
-  // const faqs = [
-  //   {
-  //     question_number: "01",
-  //     question: "How does the property alert work?",
-  //     answer:
-  //       "Once you verify your phone number, you will receive instant alerts about new properties matching your criteria.",
-  //   },
-  //   {
-  //     question_number: "02",
-  //     question: "Is my phone number secure?",
-  //     answer:
-  //       "Yes, we ensure that your phone number is protected and used only for alerts you opt-in for.",
-  //   },
-  //   {
-  //     question_number: "03",
-  //     question: "Can I unsubscribe from alerts?",
-  //     answer: "Yes, you can unsubscribe anytime from your profile settings.",
-  //   },
-  // ];
-
    // --------------- API INTEGRATION --------->
     const [faqs, setFaqs] = useState([]);
   

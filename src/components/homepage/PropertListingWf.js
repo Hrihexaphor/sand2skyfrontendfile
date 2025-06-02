@@ -11,7 +11,8 @@ import {
   FaRupeeSign,
   FaCar,
   FaDumbbell,
-  FaMapMarkerAlt
+  FaMapMarkerAlt,
+  FaTimes
 } from "react-icons/fa";
 import PropertyCard from "./PropertyCard";
 // ------- slider -----------
@@ -37,6 +38,9 @@ const PropertyListing = () => {
   // --------------- API INTEGRATION --------->
       const [properties, setProperties] = useState([]);
       const [loading, setLoading] = useState(true);
+       const [showModal, setShowModal] = useState(false);
+        const [modalImages, setModalImages] = useState([]);
+        const [pname, setPname] = useState("");
     
       useEffect(() => {
         axios
@@ -53,29 +57,18 @@ const PropertyListing = () => {
           });
       }, []);
       // --------------- API INTEGRATION END ------->
-  
-      // Convert price to Lac or Cr format
-    // function formatPrice(price) {
-    //   const num = parseInt(price, 10);
-    //   if (num >= 10000000) return `${(num / 10000000).toFixed(2)} Cr`;
-    //   if (num >= 100000) return `${(num / 100000).toFixed(2)} Lac`;
-    //   return num.toLocaleString(); // fallback
-    // }
-
-  //   const handleDetailsClick = (id) => {
-  //   navigate(`/details/${id}`);
-  // };
-
-  // const handleDeveloper = (developer_name) => {
-  //   if (developer_name) {
-  //     navigate(
-  //       `/builderProject?developer_name=${encodeURIComponent(developer_name)}`
-  //     );
-  //   } else {
-  //     console.warn("Developer Name is undefined");
-  //   }
-  // };
-
+   const handleImageClick = async (property) => {
+    try {
+      const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/${property.id}/images`, {
+        withCredentials: true,
+      });
+      setModalImages(res.data.images);
+      setPname(property.project_name || "Property Name");
+      setShowModal(true);
+    } catch (error) {
+      console.error("Error fetching image data:", error);
+    }
+  };
   return (
     <>
       <div className="bg-[#F4EFE5]" id="project-section">
@@ -107,36 +100,13 @@ const PropertyListing = () => {
                   key={index}
                   property={property}
                   onViewDetails={(id) => window.open(`/details/${id}`, '_blank')}
-                  onImgClick={(id) => window.open(`/imgsec/${id}`, '_blank')}
+                  onImgClick={() => handleImageClick(property)}
                 />
               </SwiperSlide>
 
             ))}
           </Swiper>
             </div>
-
-            {/* Property Categories */}
-            {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {properties.map((property) => (
-            <div
-              key={property.id}
-              className="bg-white shadow-lg rounded-lg overflow-hidden"
-            >
-              <img
-                src={property.img}
-                alt={property.name}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-4">
-                <h3 className="text-lg font-semibold">{property.name}</h3>
-                <p className="text-gray-600">{property.price}</p>
-                <button className="mt-2 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
-                  Contact Agent
-                </button>
-              </div>
-            </div>
-          ))}
-        </div> */}
           </div>
 
           {/* Right Sidebar - Special Offers */}
@@ -162,17 +132,34 @@ const PropertyListing = () => {
             </div>
           </div>
         </div>
-        {/* <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4  container mx-auto">
-          {amenities.map((amenity, index) => (
-            <div
-              key={index}
-              className="flex items-center space-x-3 bg-gray-800 text-white p-3 rounded-lg"
-            >
-              <span className="text-2xl text-red-500">{amenity.icon}</span>
-              <span className="text-lg">{amenity.label}</span>
-            </div>
-          ))}
-        </div> */}
+       {/* ----------- Modal ----------- */}
+            {showModal && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                <div className="bg-white w-full mx-5 max-w-4xl rounded shadow-lg p-6 relative">
+                  <div className="flex items-center justify-between mb-2">
+                    <h1 className="text-xl font-semibold">{pname}</h1>
+                    <button
+                      className="text-gray-500 hover:text-gray-700"
+                      onClick={() => setShowModal(false)}
+                    >
+                      <FaTimes size={20} />
+                    </button>
+                  </div>
+                  <div className="flex flex-wrap -mx-1 max-h-[80vh] overflow-y-auto">
+                    {modalImages.map((img) => (
+                      <div key={img.image_id} className="w-full sm:w-1/2 px-1 mb-2">
+                        <img
+                          src={img.image_url}
+                          alt=""
+                          className="md:h-[300px] lg:h-[300px] w-full object-cover rounded"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+      
+            )}
       </div>
     </>
   );

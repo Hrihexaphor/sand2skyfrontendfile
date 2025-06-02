@@ -24,7 +24,7 @@ import Projects from "./components/projects/Projects";
 import ScrollToTop from "./utills/ScrollToTop";
 import ProperyByArea from "./components/properties/PropertyByArea";
 import EmaiCalculator from "./components/emiCalculator/EmiCalculator";
-import BlogCard from "./components/homepage/BlogCard";
+import CommingSoon from "./components/homepage/CommingSoon";
 import SearchBar from "./components/searchbar/searchbar";
 import ReadyToMove from "./components/readytomove/ReadytoMoveProperty";
 import ResaleProperty from "./components/resaleproperty/ResaleProperty";
@@ -73,7 +73,7 @@ const App = () => {
           <Route path="/projects" element={<Projects/>} />
           <Route path="/propertyByArea" element={<ProperyByArea/>} />
           <Route path="/emiCalculator" element={<EmaiCalculator/>} />
-          <Route path="/blogCard" element={<BlogCard/>} />
+          <Route path="/commingsoon" element={<CommingSoon/>} />
           <Route path="/searchbar" element={<SearchBar/>}/>
           <Route path="/readytomoveproperties" element={<ReadyToMove/>}/>
           <Route path="/resaleproperty" element={<ResaleProperty/>}/>
