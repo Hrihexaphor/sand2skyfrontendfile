@@ -619,3 +619,8 @@ body{
 .text-shadow-white{
   text-shadow: 2px 2px 5px white;
 }
+@media screen and (width: 425px){
+   .smallsizes {
+    width: 95%;
+   }
+}

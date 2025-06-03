@@ -99,7 +99,7 @@ const ContactPage = () => {
                         <IoCall className="text-[47px] text-[#367588]" />
                       </div>
                       <div>
-                        <p className="mb-0">+91 9114942292</p>
+                        <p className="mb-0">+91 91156 98292</p>
                         <p className="mb-0">+91 70300 66666</p>
                       </div>
                     </div>

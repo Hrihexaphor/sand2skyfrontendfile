@@ -15,9 +15,9 @@ const BudgetRangeProperties = () => {
   const [filteredProperty, setFilteredProperty] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
-        const [modalImages, setModalImages] = useState([]);
-         const [pname, setPname] = useState("");
-  
+  const [modalImages, setModalImages] = useState([]);
+  const [pname, setPname] = useState("");
+
 
   const title = searchParams.get("title");
 
@@ -53,7 +53,7 @@ const BudgetRangeProperties = () => {
       const price = parseFloat(property.expected_price);
       return price >= min && price < max;
     });
-console.log(filtered)
+    console.log(filtered)
     setFilteredProperty(filtered);
   }, [title, properties]);
 
@@ -85,33 +85,33 @@ console.log(filtered)
   const maxBudget = parseBudget(filter.maxBudget);
 
   const filteredProperties = filteredProperty.filter((p) => {
-  const propertyPrice = parseBudget(p.expected_price);
+    const propertyPrice = parseBudget(p.expected_price);
 
-  const matchesBudget =
-    (!minBudget && !maxBudget) ||
-    (propertyPrice != null &&
-      (!minBudget || propertyPrice >= minBudget) &&
-      (!maxBudget || propertyPrice <= maxBudget));
+    const matchesBudget =
+      (!minBudget && !maxBudget) ||
+      (propertyPrice != null &&
+        (!minBudget || propertyPrice >= minBudget) &&
+        (!maxBudget || propertyPrice <= maxBudget));
 
-  const matchesSearch = !searchQuery || p.project_name?.toLowerCase().includes(searchQuery.toLowerCase());
-  const matchesPurpose = !filter.purpose || p.purpose?.toLowerCase() === filter.purpose.toLowerCase();
-  const matchesBHK = !filter.bhk || String(p.bedrooms) === filter.bhk.split(" ")[0];
-  const matchesPropertyType = !filter.propertyType || p.property_type?.toLowerCase() === filter.propertyType.toLowerCase();
-  const matchesHouseType = !filter.houseType || p.apartment_type?.toLowerCase() === filter.houseType.toLowerCase();
-  const matchesPossession = !filter.possession || p.possession_status?.toLowerCase() === filter.possession.toLowerCase();
-  const matchesLocality = !filter.locality || (p.locality?.toLowerCase() || '').includes(filter.locality.toLowerCase());
+    const matchesSearch = !searchQuery || p.project_name?.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesPurpose = !filter.purpose || p.purpose?.toLowerCase() === filter.purpose.toLowerCase();
+    const matchesBHK = !filter.bhk || String(p.bedrooms) === filter.bhk.split(" ")[0];
+    const matchesPropertyType = !filter.propertyType || p.property_type?.toLowerCase() === filter.propertyType.toLowerCase();
+    const matchesHouseType = !filter.houseType || p.apartment_type?.toLowerCase() === filter.houseType.toLowerCase();
+    const matchesPossession = !filter.possession || p.possession_status?.toLowerCase() === filter.possession.toLowerCase();
+    const matchesLocality = !filter.locality || (p.locality?.toLowerCase() || '').includes(filter.locality.toLowerCase());
 
-  return (
-    matchesSearch &&
-    matchesPurpose &&
-    matchesBHK &&
-    matchesPropertyType &&
-    matchesHouseType &&
-    matchesPossession &&
-    matchesLocality &&
-    matchesBudget
-  );
-});
+    return (
+      matchesSearch &&
+      matchesPurpose &&
+      matchesBHK &&
+      matchesPropertyType &&
+      matchesHouseType &&
+      matchesPossession &&
+      matchesLocality &&
+      matchesBudget
+    );
+  });
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -129,18 +129,22 @@ console.log(filtered)
     return num.toLocaleString();
   };
 
-   const handleImageClick = async (project) => {
-        try {
-          const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/${project.id}/images`, {
-            withCredentials: true,
-          });
-          setModalImages(res.data.images);
-          setPname(project.project_name || "Property Name");
-          setShowModal(true);
-        } catch (error) {
-          console.error("Error fetching image data:", error);
-        }
-      };
+  const handleImageClick = async (project) => {
+    try {
+      const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/${project.id}/images`, {
+        withCredentials: true,
+      });
+      setModalImages(res.data.images);
+      setPname(project.project_name || "Property Name");
+      setShowModal(true);
+    } catch (error) {
+      console.error("Error fetching image data:", error);
+    }
+  };
+
+  const handleDetailsClick = (id) => {
+    window.open(`/details/${id}`, '_blank');
+  }
 
   return (
     <>
@@ -424,7 +428,7 @@ console.log(filtered)
                     <div className="flex float-right mt-2">
                       <button
                         className=" px-4 py-2 bg-[#367588] text-white rounded-md hover:bg-[#1386a8]"
-                      // onClick={() => handleDetailsClick(project.id)}
+                        onClick={() => handleDetailsClick(project.id)}
                       >
                         View Details
                       </button>
@@ -444,34 +448,34 @@ console.log(filtered)
 
         </div>
       </section>
-       {/* ----------- Modal ------------- */}
-                           {showModal && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                <div className="bg-white w-full mx-5 max-w-4xl rounded shadow-lg p-6 relative">
-                  <div className="flex items-center justify-between mb-2">
-                    <h1 className="text-xl font-semibold">{pname}</h1>
-                    <button
-                      className="text-gray-500 hover:text-gray-700"
-                      onClick={() => setShowModal(false)}
-                    >
-                      <FaTimes size={20} />
-                    </button>
-                  </div>
-                  <div className="flex flex-wrap -mx-1 max-h-[80vh] overflow-y-auto">
-                    {modalImages.map((img) => (
-                      <div key={img.image_id} className="w-full sm:w-1/2 px-1 mb-2">
-                        <img
-                          src={img.image_url}
-                          alt=""
-                          className="md:h-[300px] lg:h-[300px] w-full object-cover rounded"
-                        />
-                      </div>
-                    ))}
-                  </div>
+      {/* ----------- Modal ------------- */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white w-full mx-2 md:mx-5 max-w-4xl rounded shadow-lg p-6 relative">
+            <div className="flex items-center justify-between mb-2">
+              <h1 className="text-xl font-semibold">{pname}</h1>
+              <button
+                className="text-gray-500 hover:text-gray-700"
+                onClick={() => setShowModal(false)}
+              >
+                <FaTimes size={20} />
+              </button>
+            </div>
+            <div className="flex flex-wrap -mx-1 max-h-[80vh] overflow-y-auto">
+              {modalImages.map((img) => (
+                <div key={img.image_id} className="w-full sm:w-1/2 px-1 mb-2">
+                  <img
+                    src={img.image_url}
+                    alt=""
+                    className="md:h-[300px] lg:h-[300px] w-full object-cover rounded"
+                  />
                 </div>
-              </div>
-      
-            )}
+              ))}
+            </div>
+          </div>
+        </div>
+
+      )}
       <Footer />
     </>
   );

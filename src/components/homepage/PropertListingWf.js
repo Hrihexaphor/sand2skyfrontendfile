@@ -72,9 +72,9 @@ const PropertyListing = () => {
   return (
     <>
       <div className="bg-[#F4EFE5]" id="project-section">
-        <div className="container mx-auto p-6 grid grid-cols-1 lg:grid-cols-4 gap-6 ">
+        <div className="container mx-auto p-6 grid grid-cols-1 lg:grid-cols-4 ">
           {/* Left Side - Property Listings */}
-          <div className="lg:col-span-3 space-y-6 pt-5">
+          <div className="lg:col-span-4 pt-5">
             {/* Featured Property Carousel */}
             <div>
               <div className="mb-5">
@@ -90,8 +90,8 @@ const PropertyListing = () => {
               320: { slidesPerView: 1 },
               425: { slidesPerView: 1 },
               768: { slidesPerView: 3 },
-              1024: { slidesPerView: 2 },
-              1440: { slidesPerView: 3 },
+              1024: { slidesPerView: 3 },
+              1440: { slidesPerView: 4 },
             }}
           >
             {properties.map((property, index) => (
@@ -110,7 +110,7 @@ const PropertyListing = () => {
           </div>
 
           {/* Right Sidebar - Special Offers */}
-          <div className="bg-gray-100 p-6 rounded-lg shadow-lg sticky top-10 h-fit mt-5">
+          {/* <div className="bg-gray-100 p-6 rounded-lg shadow-lg sticky top-10 h-fit mt-5">
             <h2 className="text-xl font-bold mb-4">Special Offers</h2>
             <div className="bg-white p-4 rounded-lg shadow-md mb-4">
               <h3 className="text-lg font-semibold">Limited-Time Discount</h3>
@@ -130,12 +130,12 @@ const PropertyListing = () => {
                 View Deals
               </button>
             </div>
-          </div>
+          </div> */}
         </div>
        {/* ----------- Modal ----------- */}
             {showModal && (
               <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                <div className="bg-white w-full mx-5 max-w-4xl rounded shadow-lg p-6 relative">
+                <div className="bg-white w-full mx-2 md:mx-5 max-w-4xl rounded shadow-lg p-6 relative">
                   <div className="flex items-center justify-between mb-2">
                     <h1 className="text-xl font-semibold">{pname}</h1>
                     <button

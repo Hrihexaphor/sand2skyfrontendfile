@@ -64,9 +64,9 @@ const PostReq = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const requiredFields = ["name", "email", "whatsapp", "city", "budget", "payBrokerage"];
+    const requiredFields = ["name", "email", "whatsapp", "city", "payBrokerage"];
     if (activeTab === "Buy") {
-      requiredFields.push("professionTp", "intrestHloan", "knowCreditScore", "property", "constructionStatus", "onsiteExpl");
+      requiredFields.push("budget", "professionTp", "intrestHloan", "knowCreditScore", "property", "constructionStatus", "onsiteExpl");
     }
 
     const errors = {};
@@ -94,7 +94,7 @@ const PostReq = () => {
         // alert("Submission failed. Please try again.");
         toast.error('Submission failed. Please try again!');
         console.error(error);
-      }finally {
+      } finally {
         setLoading(false);
       }
     }
@@ -140,7 +140,7 @@ const PostReq = () => {
                 </div>
               </div>
               <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {["name", "email", "whatsapp", "city", "budget"].map((field) => (
+                {["name", "email", "whatsapp", "city"].map((field) => (
                   <div key={field}>
                     <label className="block font-medium capitalize">{field.replace("_", " ")}:<span className="text-red-500">*</span></label>
                     <input
@@ -159,6 +159,22 @@ const PostReq = () => {
 
                 {activeTab === "Buy" && (
                   <>
+                    <div>
+                      <label className="block font-medium capitalize">
+                        Budget:<span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        name="budget"
+                        value={formData.budget}
+                        onChange={handleChange}
+                        className={`w-full border focus:outline-none focus:ring-2 focus:ring-red-500 rounded p-2 ${formErrors.budget ? "border-red-500" : ""}`}
+                        required
+                      />
+                      {formErrors.budget && (
+                        <p className="text-red-500 text-sm mt-1">{formErrors.budget}</p>
+                      )}
+                    </div>
                     <SelectField name="property" label="Property Category" options={["Apartment", "Pent House", "Villa", "House", "Residential Plot", "Commercial Plot"]} value={formData.property} onChange={handleChange} error={formErrors.property} />
                     <SelectField name="constructionStatus" label="Construction Status" options={["Ready to Move", "Pre-Launch", "New Launch", "Possession within 2 Year", "Possession Above 2 Year"]} value={formData.constructionStatus} onChange={handleChange} error={formErrors.constructionStatus} />
                     <SelectField name="professionTp" label="Profession Type" options={["Salaried", "Self-Employed", "Business"]} value={formData.professionTp} onChange={handleChange} error={formErrors.professionTp} />
@@ -174,12 +190,12 @@ const PostReq = () => {
                     Submit Requirement
                   </button> */}
                   <button
-                      type="submit"
-                      className={`w-full bg-[#367588] text-white py-2 px-4 rounded-md transition ${loading ? "opacity-50 cursor-not-allowed" : "hover:bg-[#1386a8]"
-                        }`}
-                    >
-                      {loading ? "Submitting..." : "Submit Requirement"}
-                    </button>
+                    type="submit"
+                    className={`w-full bg-[#367588] text-white py-2 px-4 rounded-md transition ${loading ? "opacity-50 cursor-not-allowed" : "hover:bg-[#1386a8]"
+                      }`}
+                  >
+                    {loading ? "Submitting..." : "Submit Requirement"}
+                  </button>
                 </div>
               </form>
             </div>

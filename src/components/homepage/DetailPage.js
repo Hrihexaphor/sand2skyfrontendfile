@@ -11,6 +11,7 @@ import Review from "../review/Review";
 import AdCards from "../advertisement/AdvertiseCard";
 import PropertyCard from "./PropertyCard";
 import TestimonialCard from "../review/ReviewCard";
+import LocationMap from "./LocationMap";
 
 import {
   FaCar,
@@ -40,8 +41,8 @@ import { LuBuilding2, LuReceiptIndianRupee } from "react-icons/lu";
 import { BsHouseGearFill } from "react-icons/bs";
 import { GiSofa } from "react-icons/gi";
 import { FaArrowsLeftRightToLine, FaUserGraduate } from "react-icons/fa6";
-import { GrStatusGood} from "react-icons/gr";
-import { GiModernCity, GiPoolTableCorner, GiHouse} from "react-icons/gi";
+import { GrStatusGood } from "react-icons/gr";
+import { GiModernCity, GiPoolTableCorner, GiHouse } from "react-icons/gi";
 import { MdArrowForwardIos, MdBalcony } from "react-icons/md";
 import { PiBuildingOfficeBold, PiHospital } from "react-icons/pi";
 import { GoGear } from "react-icons/go";
@@ -239,6 +240,7 @@ const PropertyDetails = () => {
   const { id } = useParams();
   const [property, setProperty] = useState(null);
   const [pjName, setPjName] = useState("");
+  const [dtlId, setDtlId] = useState("");
   const [locality, setLocality] = useState("");
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_BASE_URL}/property/${id}`, {
@@ -247,7 +249,8 @@ const PropertyDetails = () => {
       .then((res) => {
         setProperty(res.data);
         setPjName(res.data.details.project_name);
-        setLocality(res.data.details.locality)
+        setDtlId(res.data.details.id);
+        setLocality(res.data.details.locality);
         console.log(res.data.details.project_name);
       })
       .catch((error) => {
@@ -336,8 +339,8 @@ const PropertyDetails = () => {
   // ------------ Near By project -------->
   const [nearby, setNearby] = useState([]);
   const [showModal, setShowModal] = useState(false);
-      const [modalImages, setModalImages] = useState([]);
-       const [pname, setPname] = useState("");
+  const [modalImages, setModalImages] = useState([]);
+  const [pname, setPname] = useState("");
   // <------------ API INTEGRATION START -------------->
   // Fetch blog data
   useEffect(() => {
@@ -422,60 +425,73 @@ const PropertyDetails = () => {
       });
   }, []);
   // --------------- API INTEGRATION END ------->
-// const handledtlImageClick = async (img) => {
-//   try {
-//     const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/${img.id}/images`, {
-//       withCredentials: true,
-//     });
-//     setModalImages(res.data.images);
-//     setPname(img.project_name || "Property Name");
-//     setShowModal(true);
-//   } catch (error) {
-//     console.error("Error fetching image data:", error);
-//   }
-// };
-   const handleImageClick = async (property) => {
-      try {
-        const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/${property.id}/images`, {
-          withCredentials: true,
-        });
-        setModalImages(res.data.images);
-        setPname(property.project_name || "Property Name");
-        setShowModal(true);
-      } catch (error) {
-        console.error("Error fetching image data:", error);
-      }
-    };
-     const handlenearImageClick = async (item) => {
-        try {
-          const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/${item.id}/images`, {
-            withCredentials: true,
-          });
-          setModalImages(res.data.images);
-          setPname(item.project_name || "Property Name");
-          setShowModal(true);
-        } catch (error) {
-          console.error("Error fetching image data:", error);
-        }
-      };
-       const handlesimilarImageClick = async (similar) => {
-          try {
-            const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/${similar.id}/images`, {
-              withCredentials: true,
-            });
-            setModalImages(res.data.images);
-            setPname(similar.project_name || "Property Name");
-            setShowModal(true);
-          } catch (error) {
-            console.error("Error fetching image data:", error);
-          }
-        };
+  // const handledtlImageClick = async (img) => {
+  //   try {
+  //     const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/${img.id}/images`, {
+  //       withCredentials: true,
+  //     });
+  //     setModalImages(res.data.images);
+  //     setPname(img.project_name || "Property Name");
+  //     setShowModal(true);
+  //   } catch (error) {
+  //     console.error("Error fetching image data:", error);
+  //   }
+  // };
+  const handledtlImageClick = async () => {
+    // alert(dtlId);
+    try {
+      const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/${dtlId}/images`, {
+        withCredentials: true,
+      });
+      setModalImages(res.data.images);
+      setPname(pjName || "Property Name");
+      setShowModal(true);
+    } catch (error) {
+      console.error("Error fetching image data:", error);
+    }
+  };
+  const handleImageClick = async (property) => {
+    try {
+      const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/${property.id}/images`, {
+        withCredentials: true,
+      });
+      setModalImages(res.data.images);
+      setPname(property.project_name || "Property Name");
+      setShowModal(true);
+    } catch (error) {
+      console.error("Error fetching image data:", error);
+    }
+  };
+  const handlenearImageClick = async (item) => {
+    try {
+      const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/${item.id}/images`, {
+        withCredentials: true,
+      });
+      setModalImages(res.data.images);
+      setPname(item.project_name || "Property Name");
+      setShowModal(true);
+    } catch (error) {
+      console.error("Error fetching image data:", error);
+    }
+  };
+  const handlesimilarImageClick = async (similar) => {
+    try {
+      const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/${similar.id}/images`, {
+        withCredentials: true,
+      });
+      setModalImages(res.data.images);
+      setPname(similar.project_name || "Property Name");
+      setShowModal(true);
+    } catch (error) {
+      console.error("Error fetching image data:", error);
+    }
+  };
 
 
   return (
     <>
       <NewNav />
-      <div className="bg-[#F4EFE5] pt-28">
+      <div className="bg-[#F4EFE5] pt-[82px] md:pt-28">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
             {/* Image Carousel */}
@@ -484,16 +500,17 @@ const PropertyDetails = () => {
             </div> */}
             <Slider {...settings} className="md:col-span-12 lg:col-span-8 bg-white lg:p-6 p-2 h-[230px] md:h-[400px] xl:h-[572px] rounded-lg shadow-lg dtl-slider ">
               {images.map((img, index) => (
-                <img
-                  key={index}
-                  src={img.image_url}
-                  alt={`Property ${index}`}
-                  className="w-full h-full object-cover rounded-lg"
-                  // onClick={() => handledtlImageClick(img)}
-                />
+                dtlId && (
+                  <div key={index} onClick={() => handledtlImageClick()} className="cursor-pointer">
+                    <img
+                      src={img.image_url}
+                      alt={`Property ${index}`}
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                  </div>
+                )
               ))}
             </Slider>
-
 
             {/* Property Info */}
             <div className="md:col-span-12 lg:col-span-4 bg-white p-6 rounded-lg shadow-lg">
@@ -722,7 +739,7 @@ const PropertyDetails = () => {
                   <div className="flex items-center flex-col md:flex-row justify-between bg-[#F4EFE5] p-3 mt-2">
                     <div>
                       <h4 className="text-lg font-bold">Posted By Dealer</h4>
-                      <p className="text-base font-semibold mb-0">Name : <span className="text-[#367588] text-sm">Soubhagya Sai Das</span></p>
+                      <p className="text-base font-semibold mb-0">Name : <span className="text-[#367588] text-sm">TK Swain</span></p>
                       <p className="text-base font-semibold mb-0">Contact Details : <span className="text-[#367588] text-sm me-2">+91 8956231478</span><span className="text-[#367588] text-sm">|</span><span className="text-[#367588] text-sm ms-2">abc@gmail.com</span></p>
                     </div>
                     <div className="sellerdtl-right">
@@ -794,7 +811,7 @@ const PropertyDetails = () => {
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <GiHouse  className="text-[#367588] text-xl" />
+                    <GiHouse className="text-[#367588] text-xl" />
                     <div>
                       <p className="text-gray-500 font-bold text-sm mb-0">No. Of House/Villa</p>
                       <p className="font-semibold mb-2">{property?.details?.no_of_house}</p>
@@ -1159,7 +1176,7 @@ const PropertyDetails = () => {
                 </h2>
                 <div className="w-12 h-1 bg-yellow-500"></div>
               </div>
-              <div className="bg-white p-6 rounded-lg shadow-lg mb-4">
+              <div className="bg-white p-6 rounded-lg shadow-lg mb-4 smallsizes">
                 <div className="space-y-6">
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 dtl-amenities-inner">
                     {property?.amenities?.map((category, index) => {
@@ -1193,7 +1210,7 @@ const PropertyDetails = () => {
                 </h2>
                 <div className="w-12 h-1 bg-yellow-500"></div>
               </div>
-              <div className="bg-white p-6 rounded-lg shadow-lg mb-4">
+              <div className="bg-white p-6 rounded-lg shadow-lg mb-4 smallsizes">
                 <div className="space-y-6">
                   <div className="flex items-center flex-wrap gap-2 dtl-amenities-inner">
                     {property?.keyfeature?.map((category, index) => {
@@ -1207,36 +1224,6 @@ const PropertyDetails = () => {
                       );
                     })}
                   </div>
-                  {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                    {property?.keyfeature?.map((category, index) => {
-                      return (
-                        <div
-                          key={index}
-                          className="group relative overflow-hidden"
-                        >
-                          <div className="flex flex-col items-center justify-center text-white p-6 rounded-xl bg-gradient-to-br from-[#367588] to-[#2a5c6b] border border-[#4a8fa3]/20 min-h-[120px]">
-                           
-                            <div className="absolute top-0 right-0 w-16 h-16 bg-white/10 rounded-full transform translate-x-6 -translate-y-6"></div>
-                            <div className="absolute bottom-0 left-0 w-8 h-8 bg-white/5 rounded-full transform -translate-x-2 translate-y-2"></div>
-
-                         
-                            <div className="relative z-10 mb-3 p-2 bg-white/20 rounded-full group-hover:bg-white/30 transition-colors duration-300">
-                              <Star className="w-6 h-6 text-white" />
-                            </div>
-
-                           
-                            <span className="relative z-10 text-sm font-semibold text-center leading-tight">
-                              {category.name}
-                            </span>
-
-                            
-                            <div className="absolute inset-0 bg-gradient-to-br from-[#4a9bb8] to-[#367588] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div> */}
-
                 </div>
               </div>
 
@@ -1247,7 +1234,7 @@ const PropertyDetails = () => {
                 </h2>
                 <div className="w-12 h-1 bg-yellow-500"></div>
               </div>
-              <div className="shadow-sm bg-white rounded-lg">
+              <div className="shadow-sm bg-white rounded-lg smallsizes">
                 <div className="w-full">
                   {/* Tab Buttons */}
                   <div className="flex flex-wrap border-b">
@@ -1435,7 +1422,7 @@ const PropertyDetails = () => {
 
               <div className="md:flex-row gap-6 mt-10">
                 {/* Video Section - Takes 2/3 Width */}
-                <div className=" bg-white shadow-sm rounded-lg p-6">
+                <div className=" bg-white shadow-sm rounded-lg p-6 smallsizes">
                   <h2 className="text-lg text-[#3C4142] font-semibold mb-4">
                     Walkthrough video Of {property?.details?.project_name}
                   </h2>
@@ -1465,19 +1452,21 @@ const PropertyDetails = () => {
                 </div>
               </div>
 
-              <div className="bg-white mt-5 p-4 rounded-lg shadow-md">
+              <div className="bg-white mt-5 p-4 rounded-lg shadow-md smallsizes">
                 <h2 className="text-lg text-[#3C4142] font-bold mb-4">
                   Explore Neighbourhood - {property?.details?.project_name}
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-3">
                   {property?.nearest_to?.map((place) => (
-                    <div className="bg-[#367588] mb-3 p-2 rounded-lg">
+                    <div className="bg-[#367588] mb-3 p-2 rounded-lg flex flex-col">
                       <div
                         key={place.id}
-                        className="flex items-center justify-between border-2 p-3 border-dashed border-[#fff] rounded-lg"
+                        className="border-2 p-3 border-dashed border-[#fff] rounded-lg flex-1"
                       >
-                        <span className="text-white text-sm font-medium">{place.name}</span>
-                        <span className="text-white text-xs font-semibold">{place.distance_km}</span>
+                        <div className="flex flex-col items-center justify-between">
+                          <span className="text-white text-sm font-medium mb-1">{place.name}</span>
+                          <span className="text-white text-xs font-semibold">{place.distance_km}</span>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -1607,45 +1596,54 @@ const PropertyDetails = () => {
               </div>
             </div>
           </section>
-
+          {/* -------- Location Map ----- */}
+          {property?.location && <LocationMap location={property.location} />}
           {/* Property in Similar Project */}
-          <div className="mt-5">
-            <div className="mb-5 container">
-              <h2 className="mb-2 ms-[-12px] text-2xl font-bold font-geometric-regular text-[#3C4142] ">
-                Property in Similar Project
-              </h2>
-              <div className="w-12 h-1 bg-yellow-500"></div>
-            </div>
+          {similar.filter(
+            (similar) =>
+              similar.subcategory_name === property?.basic?.property_subcategory_name &&
+              similar.id !== property?.basic?.id
+          ).length > 0 && (
+              <div className="mt-5">
+                <div className="mb-5 container">
+                  <h2 className="mb-2 ms-[-12px] text-2xl font-bold font-geometric-regular text-[#3C4142]">
+                    Property in Similar Project
+                  </h2>
+                  <div className="w-12 h-1 bg-yellow-500"></div>
+                </div>
 
-            <Swiper
-              spaceBetween={24}
-              loop={true}
-              autoplay={{ delay: 2000 }}
-              modules={[Autoplay]}
-              breakpoints={{
-                320: { slidesPerView: 1 },
-                425: { slidesPerView: 1 },
-                768: { slidesPerView: 2 },
-                1024: { slidesPerView: 3 },
-                1440: { slidesPerView: 4 },
-              }}
-            >
-              {similar.filter(
-                (similar) =>
-                  (similar.subcategory_name === property?.basic?.property_subcategory_name && (similar.id !== property?.basic?.id))
-              ).map((property, index) => (
-                <SwiperSlide>
-                  <PropertyCard
-                    key={index}
-                    property={property}
-                    onViewDetails={(id) => window.open(`/details/${id}`, '_blank')}
-                   onImgClick={() => handleImageClick(property)}
-                  />
-                </SwiperSlide>
+                <Swiper
+                  spaceBetween={24}
+                  loop={true}
+                  autoplay={{ delay: 2000 }}
+                  modules={[Autoplay]}
+                  breakpoints={{
+                    320: { slidesPerView: 1 },
+                    425: { slidesPerView: 1 },
+                    768: { slidesPerView: 2 },
+                    1024: { slidesPerView: 3 },
+                    1440: { slidesPerView: 4 },
+                  }}
+                >
+                  {similar
+                    .filter(
+                      (similar) =>
+                        similar.subcategory_name === property?.basic?.property_subcategory_name &&
+                        similar.id !== property?.basic?.id
+                    )
+                    .map((property, index) => (
+                      <SwiperSlide key={property.id || index}>
+                        <PropertyCard
+                          property={property}
+                          onViewDetails={(id) => window.open(`/details/${id}`, '_blank')}
+                          onImgClick={() => handleImageClick(property)}
+                        />
+                      </SwiperSlide>
+                    ))}
+                </Swiper>
+              </div>
+            )}
 
-              ))}
-            </Swiper>
-          </div>
           {/* ------- Faq------ */}
           <div className="bg-[#F4EFE5]">
             <div className="container mx-auto sm:p-10 md:p-16 pt-5">
@@ -1674,15 +1672,15 @@ const PropertyDetails = () => {
                         onClick={() => toggleFAQ(index)}
                       >
                         <div className="flex gap-2 items-center">
-                          <span className="faq_count">{index + 1}</span>
-                          {faq.question} {" ("}{pjName}{") "}
+                          <span className="faq_count text-sm">{index + 1}</span>
+                          <span className="text-base">{faq.question}</span>
                         </div>
                         <ChevronDown
                           className={`transition-transform ${openFAQ === index ? "rotate-180" : "rotate-0"}`}
                         />
                       </button>
                       {openFAQ === index && (
-                        <p className="mt-2 text-gray-600">{faq.answer}</p>
+                        <p className="mt-2 text-sm text-gray-600">{faq.answer}</p>
                       )}
                     </div>
                   ))}
@@ -1732,32 +1730,32 @@ const PropertyDetails = () => {
       <Footer />
       <ToastContainer />
       {showModal && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                <div className="bg-white w-full mx-5 max-w-4xl rounded shadow-lg p-6 relative">
-                  <div className="flex items-center justify-between mb-2">
-                    <h1 className="text-xl font-semibold">{pname}</h1>
-                    <button
-                      className="text-gray-500 hover:text-gray-700"
-                      onClick={() => setShowModal(false)}
-                    >
-                      <FaTimes size={20} />
-                    </button>
-                  </div>
-                  <div className="flex flex-wrap -mx-1 max-h-[80vh] overflow-y-auto">
-                    {modalImages.map((img) => (
-                      <div key={img.image_id} className="w-full sm:w-1/2 px-1 mb-2">
-                        <img
-                          src={img.image_url}
-                          alt=""
-                          className="md:h-[300px] lg:h-[300px] w-full object-cover rounded"
-                        />
-                      </div>
-                    ))}
-                  </div>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white w-full mx-2 md:mx-5 max-w-4xl rounded shadow-lg p-6 relative">
+            <div className="flex items-center justify-between mb-2">
+              <h1 className="text-xl font-semibold">{pname}</h1>
+              <button
+                className="text-gray-500 hover:text-gray-700"
+                onClick={() => setShowModal(false)}
+              >
+                <FaTimes size={20} />
+              </button>
+            </div>
+            <div className="flex flex-wrap -mx-1 max-h-[80vh] overflow-y-auto">
+              {modalImages.map((img) => (
+                <div key={img.image_id} className="w-full sm:w-1/2 px-1 mb-2">
+                  <img
+                    src={img.image_url}
+                    alt=""
+                    className="md:h-[300px] lg:h-[300px] w-full object-cover rounded"
+                  />
                 </div>
-              </div>
-      
-            )}
+              ))}
+            </div>
+          </div>
+        </div>
+
+      )}
 
     </>
   );

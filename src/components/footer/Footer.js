@@ -117,7 +117,7 @@ export default function Footer() {
           <h3 className="text-xl font-semibold">Contact</h3>
           <p className="mt-1 mb-0 text-gray-300 flex items-center gap-2">
           <span><FaPhoneAlt/></span> 
-          <a href="tel:+919114942292" className="no-underline text-white">+91 9114942292</a>
+          <a href="tel:+919114942292" className="no-underline text-white">+91 91189 56222</a>
           </p>
           <p className="mt-0 mb-0 text-gray-300 flex items-center gap-2">
           <span><FaPhoneAlt/></span>

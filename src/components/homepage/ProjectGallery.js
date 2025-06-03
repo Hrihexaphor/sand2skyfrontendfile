@@ -107,7 +107,7 @@ function formatPrice(price) {
                         </h2>
                       </div>
                       <p className="text-white text-base mb-2">{project.title}</p>
-                      <h5 className="font-bold text-lg">Starting from ₹ {formatPrice(project.price)}</h5>
+                      <h5 className="font-bold text-lg">Starting from ₹ {formatPrice(project.expected_price)}</h5>
                       <div className="flex items-center gap-2">
                         <FaMapMarkerAlt className="text-white text-base"/>
                         <p className="text-white text-base mb-0">{project.locality}, {project.city}</p>
@@ -118,7 +118,7 @@ function formatPrice(price) {
                       </div> */}
                       
                     <button className="absolute bottom-3 right-3 bg-[#367588] hover:bg-[#1386a8] text-white text-base px-4 py-2 rounded-xl transition duration-300"
-                    onClick={() => handleDetailsClick(project.id)}>
+                    onClick={() => handleDetailsClick(project.property_id)}>
                       See Details
                     </button>
                   </div>

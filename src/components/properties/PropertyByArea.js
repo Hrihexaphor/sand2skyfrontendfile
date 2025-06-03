@@ -44,9 +44,9 @@ const NewProjects = () => {
 
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
-   const [showModal, setShowModal] = useState(false);
-        const [modalImages, setModalImages] = useState([]);
-         const [pname, setPname] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [modalImages, setModalImages] = useState([]);
+  const [pname, setPname] = useState("");
 
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_BASE_URL}/getminimumproperty`, {
@@ -66,18 +66,18 @@ const NewProjects = () => {
       });
   }, [locality]);
   // --------------- API INTEGRATION END -------> 
-const handleImageClick = async (property) => {
-      try {
-        const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/${property.id}/images`, {
-          withCredentials: true,
-        });
-        setModalImages(res.data.images);
-        setPname(property.project_name || "Property Name");
-        setShowModal(true);
-      } catch (error) {
-        console.error("Error fetching image data:", error);
-      }
-    };
+  const handleImageClick = async (property) => {
+    try {
+      const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/${property.id}/images`, {
+        withCredentials: true,
+      });
+      setModalImages(res.data.images);
+      setPname(property.project_name || "Property Name");
+      setShowModal(true);
+    } catch (error) {
+      console.error("Error fetching image data:", error);
+    }
+  };
 
   // ======================== main filter ===================>
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
@@ -469,34 +469,34 @@ const handleImageClick = async (property) => {
 
         </div>
       </section>
-       {/* ----------- Modal ------------- */}
-                           {showModal && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                <div className="bg-white w-full mx-5 max-w-4xl rounded shadow-lg p-6 relative">
-                  <div className="flex items-center justify-between mb-2">
-                    <h1 className="text-xl font-semibold">{pname}</h1>
-                    <button
-                      className="text-gray-500 hover:text-gray-700"
-                      onClick={() => setShowModal(false)}
-                    >
-                      <FaTimes size={20} />
-                    </button>
-                  </div>
-                  <div className="flex flex-wrap -mx-1 max-h-[80vh] overflow-y-auto">
-                    {modalImages.map((img) => (
-                      <div key={img.image_id} className="w-full sm:w-1/2 px-1 mb-2">
-                        <img
-                          src={img.image_url}
-                          alt=""
-                          className="md:h-[300px] lg:h-[300px] w-full object-cover rounded"
-                        />
-                      </div>
-                    ))}
-                  </div>
+      {/* ----------- Modal ------------- */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white w-full mx-2 md:mx-5 max-w-4xl rounded shadow-lg p-6 relative">
+            <div className="flex items-center justify-between mb-2">
+              <h1 className="text-xl font-semibold">{pname}</h1>
+              <button
+                className="text-gray-500 hover:text-gray-700"
+                onClick={() => setShowModal(false)}
+              >
+                <FaTimes size={20} />
+              </button>
+            </div>
+            <div className="flex flex-wrap -mx-1 max-h-[80vh] overflow-y-auto">
+              {modalImages.map((img) => (
+                <div key={img.image_id} className="w-full sm:w-1/2 px-1 mb-2">
+                  <img
+                    src={img.image_url}
+                    alt=""
+                    className="md:h-[300px] lg:h-[300px] w-full object-cover rounded"
+                  />
                 </div>
-              </div>
-      
-            )}
+              ))}
+            </div>
+          </div>
+        </div>
+
+      )}
       <Footer />
     </>
   );

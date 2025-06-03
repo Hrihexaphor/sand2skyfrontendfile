@@ -1,16 +1,6 @@
 import { useState, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
-import { FaSwimmingPool, FaWifi, FaCar, FaDumbbell, FaUtensils } from "react-icons/fa";
 import axios from 'axios';
-
-
-const amenities = [
-  { icon: <FaSwimmingPool />, label: "Swimming Pool" },
-  { icon: <FaWifi />, label: "Free WiFi" },
-  { icon: <FaCar />, label: "Parking" },
-  { icon: <FaDumbbell />, label: "Gym" },
-  // { icon: <FaUtensils />, label: "Restaurant" },
-];
 
 export default function FAQSection() {
   const [openFAQ, setOpenFAQ] = useState(0);
@@ -37,14 +27,6 @@ export default function FAQSection() {
 
   return (
     <>
-      {/* <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-      {amenities.map((amenity, index) => (
-        <div key={index} className="flex items-center space-x-3 bg-gray-800 text-white p-3 rounded-lg">
-          <span className="text-2xl text-red-500">{amenity.icon}</span>
-          <span className="text-lg">{amenity.label}</span>
-        </div>
-      ))}
-    </div> */}
       <div className="bg-[#F4EFE5]">
         <div className="container mx-auto sm:p-10 md:p-16 pt-5">
           <div className="mb-5">

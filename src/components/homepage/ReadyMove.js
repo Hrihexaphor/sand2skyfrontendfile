@@ -224,7 +224,7 @@ const ReadyToMove = () => {
         {/* ----------- Modal ------------- */}
                      {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white w-full mx-5 max-w-4xl rounded shadow-lg p-6 relative">
+          <div className="bg-white w-full mx-2 md:mx-5 max-w-4xl rounded shadow-lg p-6 relative">
             <div className="flex items-center justify-between mb-2">
               <h1 className="text-xl font-semibold">{pname}</h1>
               <button

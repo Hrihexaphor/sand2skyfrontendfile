@@ -128,15 +128,12 @@ const handleDetailsClick = (id) => {
                     </div>
                     <a
                       href="#"
-                      className="no-underline font-medium text-center text-lg text-[#3C4142] transition duration-500 ease-in-out block mb-2"
+                      className="no-underline font-medium text-center text-base text-[#3C4142] transition duration-500 ease-in-out block mb-2"
+                      title={blog.title}
                     >
-                      {blog.title}
+                      {blog.title.split(" ").slice(0, 7).join(" ")}{blog.title.split(" ").length > 7 ? "..." : ""}
                     </a>
                     <p className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-sm text-[#367588] font-bold">Read More..</p>
-                    {/* <div
-                        className="w-full text-gray-500 text-sm"
-                        dangerouslySetInnerHTML={{ __html: blog.description }}
-                      /> */}
                   </div>
                 </div>
               );

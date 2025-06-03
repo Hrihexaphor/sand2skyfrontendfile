@@ -96,7 +96,7 @@ const handleDetailsClick = (id) => {
             <div className="w-full lg:w-2/3">
               <div className="w-full bg-white rounded-lg p-4">
                 {/* <img className="w-full" src={blogs.image_url} alt="blog dtl image" /> */}
-                 <div className="h-[500px] w-full">
+                 <div className="h-[180px] md:h-[500px] w-full">
 {blogs.image_url ? (
                       <img className="w-full h-[100%] cover" src={blogs.image_url} alt={blogs.title} />
                     ) : blogs.youtube_link ? (
@@ -171,15 +171,12 @@ const handleDetailsClick = (id) => {
                           </p>
                         </div>
                         <h3
-                          className="font-lg text-center text-lg text-[#3C4142] transition duration-500 ease-in-out block mb-2"
+                          className="font-lg text-center text-base text-[#3C4142] transition duration-500 ease-in-out block mb-2"
+                          title={post.title}
                         >
-                          {post.title}
+                          {post.title.split(" ").slice(0, 7).join(" ")}{post.title.split(" ").length > 7 ? "..." : ""}
                         </h3>
                         <p className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-sm text-[#367588] font-bold">Read More..</p>
-                         {/* <div
-                        className="w-full text-gray-500 text-sm"
-                        dangerouslySetInnerHTML={{ __html: post.description }}
-                      /> */}
                       </div>
                     </div>
                   </div>
