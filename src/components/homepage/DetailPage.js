@@ -228,7 +228,7 @@ const PropertyDetails = () => {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: true,
+    autoplay: false,
     autoplaySpeed: 3000,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
@@ -498,15 +498,15 @@ const PropertyDetails = () => {
             {/* <div className="md:col-span-12 lg:col-span-8 bg-white lg:p-6 p-2 h-[230px] md:h-[400px] xl:h-[506px] relative rounded-lg shadow-lg">
               
             </div> */}
-            <Slider {...settings} className="md:col-span-12 lg:col-span-8 bg-white lg:p-6 p-2 h-[230px] md:h-[400px] xl:h-[572px] rounded-lg shadow-lg dtl-slider ">
+            <Slider {...settings} className="md:col-span-12 lg:col-span-8 bg-white lg:p-6 p-2 h-[230px] md:h-[400px] xl:h-[572px] rounded-lg shadow-lg dtl-slider">
               {images.map((img, index) => (
                 dtlId && (
-                  <div key={index} onClick={() => handledtlImageClick()} className="cursor-pointer">
+                  <div key={index} onClick={() => handledtlImageClick()} className="cursor-pointer w-full h-[230px] md:h-[400px] xl:h-[572px] object-cover">
                     <img
-                      src={img.image_url}
-                      alt={`Property ${index}`}
-                      className="w-full h-full object-cover rounded-lg"
-                    />
+                        src={img.image_url}
+                        alt={`Property ${index}`}
+                        className="w-full h-[100%] object-cover rounded-lg"
+                      />
                   </div>
                 )
               ))}
@@ -552,7 +552,7 @@ const PropertyDetails = () => {
                     <LuReceiptIndianRupee className="bold" />
                     <p className="font-semibold mb-0">Booking Amount</p>
                   </div>
-                  <p className="dtl-body">₹ {property?.details?.booking_amount}</p>
+                  <p className="dtl-body">₹ {formatPrice(property?.details?.booking_amount)}</p>
                 </div>
               </div>
               <div className=" grid grid-cols-2 gap-2 dtl-flex2">
@@ -1456,9 +1456,9 @@ const PropertyDetails = () => {
                 <h2 className="text-lg text-[#3C4142] font-bold mb-4">
                   Explore Neighbourhood - {property?.details?.project_name}
                 </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-2">
                   {property?.nearest_to?.map((place) => (
-                    <div className="bg-[#367588] mb-3 p-2 rounded-lg flex flex-col">
+                    <div className="bg-[#367588] mb-1 p-2 rounded-lg flex flex-col">
                       <div
                         key={place.id}
                         className="border-2 p-3 border-dashed border-[#fff] rounded-lg flex-1"

@@ -213,7 +213,7 @@ const ReadyToMove = () => {
 
             <div className="bg-white shadow-lg p-4 rounded-lg">
               <p className="text-sm font-bold font-sans">
-                Property Owner or Dev ? Sell your property fast with us!
+                Property Owner or Developer ? Sell your property fast with us!
               </p>
               <button onClick={handleNavigate} className="bg-purple-500 text-white px-4 py-2 rounded mt-2 w-full font-sans">
                 Post your property for FREE

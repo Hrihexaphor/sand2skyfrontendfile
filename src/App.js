@@ -29,6 +29,7 @@ import SearchBar from "./components/searchbar/searchbar";
 import ReadyToMove from "./components/readytomove/ReadytoMoveProperty";
 import ResaleProperty from "./components/resaleproperty/ResaleProperty";
 import BudgetRangeProperties from "./components/budgetRangeProperties/BudgetRangeProperties";
+import Filtertest from "./components/homepage/Filtertest";
 import { FaSpinner } from "react-icons/fa";
 
 const App = () => {
@@ -78,6 +79,7 @@ const App = () => {
           <Route path="/readytomoveproperties" element={<ReadyToMove/>}/>
           <Route path="/resaleproperty" element={<ResaleProperty/>}/>
           <Route path="/budgetrangeproperties" element={<BudgetRangeProperties/>}/>
+          <Route path="/filtertest" element={<Filtertest/>}/>
           <Route path="/*" element={<Error />} />
         </Routes>
     </Router>
