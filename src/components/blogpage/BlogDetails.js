@@ -20,50 +20,50 @@ const BlogDetails = () => {
   const navigate = useNavigate();
   const [blogs, setBlogs] = useState([]);
   // <------------ API INTEGRATION START -------------->
-    // Fetch blog data
-    useEffect(() => {
-      axios
-        .get(`https://realestatesand2sky.onrender.com/api/blog/${id}`, {
-          withCredentials: true,
-        })
-        .then((res) => {
-          setBlogs(res.data);
-        })
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-        });
-    }, [id]);
-    // <------------ API INTEGRATION END -------------->
-    // <------------ API INTEGRATION START -------------->
-    const [similar, setSimilar] = useState([]);
-      // Fetch blog data
-      useEffect(() => {
-        axios
-          .get(`${process.env.REACT_APP_BASE_URL}/blogs`, {
-            withCredentials: true,
-          })
-          .then((res) => {
-            setSimilar(res.data.blogs);
-          })
-          .catch((error) => {
-            console.error("Error fetching data:", error);
-          });
-      }, []);
-      // <------------ API INTEGRATION END -------------->
+  // Fetch blog data
+  useEffect(() => {
+    axios
+      .get(`https://realestatesand2sky.onrender.com/api/blog/${id}`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        setBlogs(res.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, [id]);
+  // <------------ API INTEGRATION END -------------->
+  // <------------ API INTEGRATION START -------------->
+  const [similar, setSimilar] = useState([]);
+  // Fetch blog data
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_BASE_URL}/blogs`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        setSimilar(res.data.blogs);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+  // <------------ API INTEGRATION END -------------->
 
-     // Format date string to "DD MMM YYYY"
-function formatDate(dateString) {
+  // Format date string to "DD MMM YYYY"
+  function formatDate(dateString) {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-IN", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric"
+      day: "2-digit",
+      month: "short",
+      year: "numeric"
     });
-}
+  }
 
-const handleDetailsClick = (id) => {
+  const handleDetailsClick = (id) => {
     navigate(`/blogDetails/${id}`);
-}
+  }
 
   return (
     <>
@@ -96,16 +96,16 @@ const handleDetailsClick = (id) => {
             <div className="w-full lg:w-2/3">
               <div className="w-full bg-white rounded-lg p-4">
                 {/* <img className="w-full" src={blogs.image_url} alt="blog dtl image" /> */}
-                 <div className="h-[180px] md:h-[500px] w-full">
-{blogs.image_url ? (
-                      <img className="w-full h-[100%] cover" src={blogs.image_url} alt={blogs.title} />
-                    ) : blogs.youtube_link ? (
-                      <div
-                        className="w-full h-[200px] w-full"
-                        dangerouslySetInnerHTML={{ __html: blogs.youtube_link }}
-                      />
-                    ) : null}
-                 </div>
+                <div className="h-[180px] md:h-[500px] w-full">
+                  {blogs.image_url ? (
+                    <img className="w-full h-[100%] cover" src={blogs.image_url} alt={blogs.title} />
+                  ) : blogs.youtube_link ? (
+                    <div
+                      className="w-full h-[200px] w-full"
+                      dangerouslySetInnerHTML={{ __html: blogs.youtube_link }}
+                    />
+                  ) : null}
+                </div>
                 <div className="flex justify-between items-center my-2">
                   <div className="bg-[#367588] inline-block text-white text-sm py-[5px] px-[15px] rounded-lg">{blogs.category_name}</div>
                   <div className="flex gap-2 items-center">
@@ -114,76 +114,102 @@ const handleDetailsClick = (id) => {
                   </div>
                 </div>
                 <h2 className="my-2 text-[#3C4142] text-2xl">{blogs.title}</h2>
-                 <div
-                      className="w-full text-gray-500 text-sm"
-                      dangerouslySetInnerHTML={{ __html: blogs.description }}
-                  />
-               </div>
-              <div className="my-5">
-                <h2 className="mb-2 text-2xl text-[#3C4142] font-bold font-geometric-regular">
-                  Other Related Blogs
-                </h2>
-                <div className="w-12 h-1 bg-yellow-500"></div>
+                <div
+                  className="w-full text-gray-500 text-sm"
+                  dangerouslySetInnerHTML={{ __html: blogs.description }}
+                />
               </div>
-              <Swiper
-            spaceBetween={24}
-            loop={true}
-            autoplay={{ delay: 2000 }}
-            modules={[Autoplay]}
-            breakpoints={{
-              320: { slidesPerView: 1 },
-              425: { slidesPerView: 1 },
-              768: { slidesPerView: 2 },
-              1024: { slidesPerView: 2 },
-              1440: { slidesPerView: 3 },
-            }}
-          >
-            {similar.filter(
-                (similar) =>
-                  (similar.category_name === blogs.category_name) && (similar.id !== blogs.id)
-              ).map((post, index) => {
-                const category = post.category_name?.trim()
-              ? post.category_name
-              : post.category?.trim()
-                ? post.category
-                : "Uncategorized";
-                return (
-              <SwiperSlide>
-                <div key={post.id} className="p-2">
-                    <div
-                      className="rounded overflow-hidden flex flex-col cursor-pointer border bg-[#e6e6e6]"
-                    onClick={() => handleDetailsClick(post.id)}>
-                      <a href="#" className=" h-[200px]">
-                        {post.image_url ? (
-                      <img className="w-full h-[100%] cover" src={post.image_url} alt={post.title} />
-                    ) : post.youtube_link ? (
-                      <div
-                        className="w-full h-[200px] w-full"
-                        dangerouslySetInnerHTML={{ __html: post.youtube_link }}
-                      />
-                    ) : null}
-                      </a>
-                      <div className="p-4 pb-6 bg-[#e6e6e6] relative h-[150px]">
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="bg-[#367588] text-white text-xs py-[5px] px-[10px] rounded-lg">{category}</div>
-                          <p className="mb-0 text-[#367588] text-xs font-semibold">
-                           {formatDate(post.created_at)}
-                          </p>
-                        </div>
-                        <h3
-                          className="font-lg text-center text-base text-[#3C4142] transition duration-500 ease-in-out block mb-2"
-                          title={post.title}
-                        >
-                          {post.title.split(" ").slice(0, 7).join(" ")}{post.title.split(" ").length > 7 ? "..." : ""}
-                        </h3>
-                        <p className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-sm text-[#367588] font-bold">Read More..</p>
-                      </div>
+              {similar.filter(
+                (similarItem) =>
+                  similarItem.category_name === blogs.category_name &&
+                  similarItem.id !== blogs.id
+              ).length > 0 && (
+                  <>
+                    <div className="my-5">
+                      <h2 className="mb-2 text-2xl text-[#3C4142] font-bold font-geometric-regular">
+                        Other Related Blogs
+                      </h2>
+                      <div className="w-12 h-1 bg-yellow-500"></div>
                     </div>
-                  </div>
-              </SwiperSlide>
 
-            )})}
-          </Swiper>
+                    <Swiper
+                      spaceBetween={24}
+                      loop={true}
+                      autoplay={{ delay: 2000 }}
+                      modules={[Autoplay]}
+                      breakpoints={{
+                        320: { slidesPerView: 1 },
+                        425: { slidesPerView: 1 },
+                        768: { slidesPerView: 2 },
+                        1024: { slidesPerView: 2 },
+                        1440: { slidesPerView: 3 },
+                      }}
+                    >
+                      {similar
+                        .filter(
+                          (similarItem) =>
+                            similarItem.category_name === blogs.category_name &&
+                            similarItem.id !== blogs.id
+                        )
+                        .map((post, index) => {
+                          const category = post.category_name?.trim()
+                            ? post.category_name
+                            : post.category?.trim()
+                              ? post.category
+                              : "Uncategorized";
+
+                          return (
+                            <SwiperSlide key={post.id}>
+                              <div className="p-2">
+                                <div
+                                  className="rounded overflow-hidden flex flex-col cursor-pointer border bg-[#e6e6e6]"
+                                  onClick={() => handleDetailsClick(post.id)}
+                                >
+                                  <a href="#" className="h-[200px] block">
+                                    {post.image_url ? (
+                                      <img
+                                        className="w-full h-full object-cover"
+                                        src={post.image_url}
+                                        alt={post.title}
+                                      />
+                                    ) : post.youtube_link ? (
+                                      <div
+                                        className="w-full h-full"
+                                        dangerouslySetInnerHTML={{
+                                          __html: post.youtube_link,
+                                        }}
+                                      />
+                                    ) : null}
+                                  </a>
+                                  <div className="p-4 pb-6 bg-[#e6e6e6] relative h-[150px]">
+                                    <div className="flex items-center justify-between mb-3">
+                                      <div className="bg-[#367588] text-white text-xs py-[5px] px-[10px] rounded-lg">
+                                        {category}
+                                      </div>
+                                      <p className="mb-0 text-[#367588] text-xs font-semibold">
+                                        {formatDate(post.created_at)}
+                                      </p>
+                                    </div>
+                                    <h3
+                                      className="font-lg text-center text-base text-[#3C4142] transition duration-500 ease-in-out block mb-2"
+                                      title={post.title}
+                                    >
+                                      {post.title.split(" ").slice(0, 7).join(" ")}
+                                      {post.title.split(" ").length > 7 ? "..." : ""}
+                                    </h3>
+                                    <p className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-sm text-[#367588] font-bold">
+                                      Read More..
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            </SwiperSlide>
+                          );
+                        })}
+                    </Swiper>
+                  </>
+                )}
+
             </div>
             {/* Sidebar */}
             <aside className="hidden lg:block lg:w-1/3 p-4">
