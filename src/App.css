@@ -150,10 +150,14 @@ body{
 }
 /* ===================== Listing Page =================== */
 .pl-heading{
-  margin-top: 20px;
+  margin-top: 10px;
+}
+.pl-heading1{
+    margin-top:7% !important;
 }
 .list-imgbox{
-   height: 358px;
+   /* height: 302px; */
+    height: 359px;
 }
 .list-imgbox-small{
   height: 257px;
@@ -172,8 +176,12 @@ body{
   .pl-heading{
     margin-top:7% !important;
   }
+  .pl-heading1{
+    margin-top:11% !important;
+  }
   .list-imgbox{
-    height: 397px;
+    /* height: 365px; */
+    height: 357px;
  }
  .list-imgbox-small{
   height: 289px;
@@ -184,10 +192,14 @@ body{
 }
 @media (max-width: 768px){
   .pl-heading{
-    margin-top:10% !important;
+    margin-top:9% !important;
+  }
+  .pl-heading1{
+    margin-top:15% !important;
   }
   .list-imgbox{
-    height: 378px;
+    /* height: 365px; */
+    height: 376px;
  }
  .list-imgbox-other{
   height: 358px;
@@ -198,7 +210,10 @@ body{
     top: 57px;
   }
   .pl-heading{
-    margin-top:25% !important;
+    margin-top:32% !important;
+  }
+  .pl-heading1{
+    margin-top:33% !important;
   }
   .list-imgbox{
     height: 200px;
@@ -220,8 +235,11 @@ body{
   }
 }
 @media (max-width: 375px){
-  .pl-heading{
-    margin-top:30% !important;
+   .pl-heading{
+    margin-top:48% !important;
+  }
+  .pl-heading1{
+    margin-top:48% !important;
   }
 }
 /* ---------------- Details page --------------------> */
@@ -248,11 +266,17 @@ body{
     margin-top: -2px !important;
   }
   .dtl-price{
-    margin-top: 2px !important;
+   margin-top: 2px !important;
+   margin-bottom: 13px;
+}
+  .dtl-price-dt{
     font-size: 15px;
   }
+  .small-fs{
+    font-size: 11px;
+  }
   .dtl-pricesq{
-    font-size: 15px;
+    font-size: 12px;
   }
   .dtl-flex1{
     margin-top: -10px;
@@ -316,6 +340,9 @@ body{
 @media screen and (max-width: 768px){
   .dtl-location{
     margin-top: 5px !important;
+  }
+  .small-fs{
+    font-size: 14px;
   }
   .dtl-flex1{
     margin-top: 10px;

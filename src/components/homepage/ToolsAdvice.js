@@ -21,7 +21,7 @@ const ToolsAdvice = () => {
       icon: "🔑",
       value: "28",
       unit: "min",
-      message: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+      message: "Ensure every step of your real estate journey is legally secure. Our expert legal advisors assist with property verification, documentation, title checks, and due diligence for a hassle-free buying experience.",
     },
     {
       title: "EMI Calculator",
@@ -43,7 +43,7 @@ const ToolsAdvice = () => {
       value: "25",
       unit: "%",
       message:
-        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis, labore, voluptatem. Deserunt illum laborum maxime?",
+        "Transform your space with expert interior design advice. From layout planning to material selection, our consultants help you create stylish, functional, and personalized living environments.",
     },
     {
       title: "Property Investment",
@@ -54,7 +54,7 @@ const ToolsAdvice = () => {
       value: "89",
       unit: "m²",
       message:
-        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam, nemo!",
+        "Unlock high-growth opportunities in Bhubaneswar & Cuttack with our personalized real estate advisory. Whether you're an NRI, HNI, or first-time investor, our team helps you make smart, profitable decisions with confidence.",
     },
   ];
 

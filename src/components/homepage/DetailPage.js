@@ -498,15 +498,15 @@ const PropertyDetails = () => {
             {/* <div className="md:col-span-12 lg:col-span-8 bg-white lg:p-6 p-2 h-[230px] md:h-[400px] xl:h-[506px] relative rounded-lg shadow-lg">
               
             </div> */}
-            <Slider {...settings} className="md:col-span-12 lg:col-span-8 bg-white lg:p-6 p-2 h-[230px] md:h-[400px] xl:h-[572px] rounded-lg shadow-lg dtl-slider">
+            <Slider {...settings} className="md:col-span-12 lg:col-span-8 bg-white lg:p-6 p-2 h-[230px] md:h-[473px] xl:h-[549px] rounded-lg shadow-lg dtl-slider">
               {images.map((img, index) => (
                 dtlId && (
-                  <div key={index} onClick={() => handledtlImageClick()} className="cursor-pointer w-full h-[230px] md:h-[400px] xl:h-[572px] object-cover">
+                  <div key={index} onClick={() => handledtlImageClick()} className="cursor-pointer w-full h-[230px] md:h-[473px] xl:h-[549px] object-cover">
                     <img
-                        src={img.image_url}
-                        alt={`Property ${index}`}
-                        className="w-full h-[100%] object-cover rounded-lg"
-                      />
+                      src={img.image_url}
+                      alt={`Property ${index}`}
+                      className="w-full h-[100%] object-cover rounded-lg"
+                    />
                   </div>
                 )
               ))}
@@ -534,23 +534,25 @@ const PropertyDetails = () => {
                   <p className="text-sm font-semibold mb-0">{property?.basic?.developer_name}</p>
                 </div>
               </div>
-              <div className=" text-xl font-bold text-gray-900 dtl-price">
-                ₹{formatPrice(property?.basic?.expected_price)}
+              <div className="flex items-center justify-between dtl-price">
+                <div className="text-xl font-bold text-gray-900 dtl-price-dt">
+                  ₹{formatPrice(property?.basic?.expected_price)}
+                </div>
+                <p className="text-gray-500 dtl-pricesq font-semibold mb-0">₹{formatPrice(property?.basic?.price_per_sqft)} / Sqft</p>
               </div>
-              <p className="text-gray-500 dtl-pricesq mb-0">Price per sqft: ₹{formatPrice(property?.basic?.price_per_sqft)}</p>
 
               <div className=" grid grid-cols-2 gap-2 dtl-flex1">
                 <div>
                   <div className="flex gap-2 items-center dtl-head">
                     <PiBuildingOfficeBold className="bold" />
-                    <p className="font-semibold mb-0">Type</p>
+                    <p className="font-semibold mb-0 small-fs">Type</p>
                   </div>
                   <p className="dtl-body">{property?.basic?.property_subcategory_name}</p>
                 </div>
                 <div>
                   <div className="flex gap-2 items-center dtl-head">
                     <LuReceiptIndianRupee className="bold" />
-                    <p className="font-semibold mb-0">Booking Amount</p>
+                    <p className="font-semibold mb-0 small-fs">Booking Amount</p>
                   </div>
                   <p className="dtl-body">₹ {formatPrice(property?.details?.booking_amount)}</p>
                 </div>
@@ -559,14 +561,14 @@ const PropertyDetails = () => {
                 <div>
                   <div className="flex gap-2 items-center dtl-head">
                     <GiSofa className="bold" />
-                    <p className="font-semibold mb-0">Furnishing</p>
+                    <p className="font-semibold mb-0 small-fs">Furnishing</p>
                   </div>
                   <p className="dtl-body">{property?.details?.furnished_status}</p>
                 </div>
                 <div>
                   <div className="flex gap-2 items-center dtl-head">
                     <FaArrowsLeftRightToLine />
-                    <p className="font-semibold mb-0">SBA</p>
+                    <p className="font-semibold mb-0 small-fs">SBA</p>
                   </div>
                   <p className="dtl-body">{property?.details?.super_built_up_area} sq.ft.</p>
                 </div>
@@ -575,14 +577,14 @@ const PropertyDetails = () => {
                 <div>
                   <div className="flex gap-2 items-center dtl-head">
                     <FaRegCalendarAlt className="bold" />
-                    <p className="font-semibold mb-0">Availabled From</p>
+                    <p className="font-semibold mb-0 small-fs">Availabled From</p>
                   </div>
                   <p className="dtl-body">{formatDate(property?.details?.available_from)}</p>
                 </div>
                 <div>
                   <div className="flex gap-2 items-center dtl-head">
                     <GrStatusGood />
-                    <p className="font-semibold mb-0">Status</p>
+                    <p className="font-semibold mb-0 small-fs">Status</p>
                   </div>
                   <p className="dtl-body">{property?.basic?.possession_status}</p>
                 </div>
@@ -1104,16 +1106,42 @@ const PropertyDetails = () => {
               )
             }
 
-            <div className="text-gray-700 mt-5"
+            {property?.details?.description && (
+              <div className="text-gray-700 mt-5">
+                <h2 className="mb-2 text-xl font-bold font-geometric-regular text-[#3C4142]">
+                        Description
+                      </h2>
+                      <div className="w-12 h-1 bg-yellow-500 mb-3"></div>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: property.details.description,
+                  }}
+                />
+              </div>
+            )}
+            {property?.details?.about_location && (
+              <div className="text-gray-700 mt-3">
+                <h2 className="mb-2 text-xl font-bold font-geometric-regular text-[#3C4142]">
+                        Location
+                      </h2>
+                      <div className="w-12 h-1 bg-yellow-500 mb-3"></div>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: property?.details?.about_location || '',
+                  }}
+                />
+              </div>
+            )}
+            {/* <div className="text-gray-700 mt-5"
               dangerouslySetInnerHTML={{
                 __html: property?.details?.description || '',
               }}
-            />
-            <div className="text-gray-700 mt-5"
+            /> */}
+            {/* <div className="text-gray-700 mt-5"
               dangerouslySetInnerHTML={{
                 __html: property?.details?.about_location || '',
               }}
-            />
+            /> */}
 
           </div>
 

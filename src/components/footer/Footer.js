@@ -27,11 +27,29 @@ export default function Footer() {
           <div className="flex flex-col lg:flex-row gap-2 items-center">
             <p className="text-base font-semibold text-white mb-0">Social Media :</p>
             <div className="flex space-x-4 mt-0">
-              <FaFacebookF className="text-white bg-gray-600 p-2 rounded-full text-3xl cursor-pointer" />
-              <FaInstagram className="text-white bg-gray-600 p-2 rounded-full text-3xl cursor-pointer" />
+              <a
+                href="https://www.facebook.com/profile.php?id=61574525036300  "
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaFacebookF className="text-white bg-gray-600 p-2 rounded-full text-3xl cursor-pointer" />
+              </a>
+              <a
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaInstagram className="text-white bg-gray-600 p-2 rounded-full text-3xl cursor-pointer" />
+              </a>
+              <a
+                href="https://www.youtube.com/@sand2sky-c5p"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaYoutube className="text-white bg-gray-600 p-2 rounded-full text-3xl cursor-pointer" />
+              </a>
               {/* <FaLinkedinIn className="text-white bg-gray-600 p-2 rounded-full text-3xl cursor-pointer" />
               <FaXTwitter className="text-white bg-gray-600 p-2 rounded-full text-3xl cursor-pointer" /> */}
-              <FaYoutube className="text-white bg-gray-600 p-2 rounded-full text-3xl cursor-pointer" />
             </div>
           </div>
         </div>
@@ -116,20 +134,20 @@ export default function Footer() {
         <div>
           <h3 className="text-xl font-semibold">Contact</h3>
           <p className="mt-1 mb-0 text-gray-300 flex items-center gap-2">
-          <span><FaPhoneAlt/></span> 
-          <a href="tel:+919114942292" className="no-underline text-white">+91 91189 56222</a>
+            <span><FaPhoneAlt /></span>
+            <a href="tel:+919114942292" className="no-underline text-white">+91 91189 56222</a>
           </p>
           <p className="mt-0 mb-0 text-gray-300 flex items-center gap-2">
-          <span><FaPhoneAlt/></span>
-          <a href="tel:+917030066666" className="no-underline text-white">+91 70300 66666</a>
+            <span><FaPhoneAlt /></span>
+            <a href="tel:+917030066666" className="no-underline text-white">+91 70300 66666</a>
           </p>
           <p className="mt-2 mb-0 text-gray-300 flex items-center gap-2">
-          <span><FaRegEnvelope/></span>
-          <a href="mailto:info@houssed.com" className="no-underline text-white">info@houssed.com</a>
+            <span><FaRegEnvelope /></span>
+            <a href="mailto:info@houssed.com" className="no-underline text-white">info@houssed.com</a>
           </p>
           <p className="mt-0 mb-0 text-gray-300 flex items-center gap-2">
-          <span><FaRegEnvelope/></span>
-          <a href="mailto:info@houssed.com" className="no-underline text-white">info@houssed.com</a>
+            <span><FaRegEnvelope /></span>
+            <a href="mailto:info@houssed.com" className="no-underline text-white">info@houssed.com</a>
           </p>
         </div>
       </div>

@@ -7,6 +7,7 @@ import { RiMoneyRupeeCircleLine } from "react-icons/ri";
 import { GiSofa } from "react-icons/gi";
 import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
 import AdCards from "../advertisement/AdvertiseCard";
+import FilterBar from "../homepage/FilterBar";
 import axios from 'axios';
 
 
@@ -48,6 +49,11 @@ const NewProjects = () => {
   const [modalImages, setModalImages] = useState([]);
   const [pname, setPname] = useState("");
 
+  const [selectedFilters, setSelectedFilters] = useState({ type: "Buy" });
+    const [localities, setLocalities] = useState([]);
+    const [propertyTypes, setPropertyTypes] = useState([]);
+    const [cities, setCities] = useState([]);
+
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_BASE_URL}/getminimumproperty`, {
       withCredentials: true, // replaces fetch's `credentials: 'include'`
@@ -57,6 +63,9 @@ const NewProjects = () => {
           (property) => property.locality === locality
         );
         setProperties(filtered);
+        setLocalities([...new Set(filtered.map(p => p.locality).filter(Boolean))]);
+                setPropertyTypes([...new Set(filtered.map(p => p.subcategory_name).filter(Boolean))]);
+                setCities([...new Set(filtered.map(p => p.city).filter(Boolean))]);
         // setProperties(res.data);
         setLoading(false);
       })
@@ -79,77 +88,60 @@ const NewProjects = () => {
     }
   };
 
-  // ======================== main filter ===================>
-  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-  const [filter, setFilter] = useState({
-    // purpose: "",  
-    bhk: "",
-    minBudget: "",
-    maxBudget: "",
-    locality: "",
-    propertyType: "",
-    houseType: "",
-    possession: ""
-  });
   const [page, setPage] = useState(1);
   const listRef = useRef();
   useEffect(() => {
     listRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [page]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const propertiesPerPage = 5;
+  // ======================== main filter ===================>
+ const budgetRange = {
+        "< 1 Cr": { min: 0, max: 10000000 },
+        "1Cr-2Cr": { min: 10000000, max: 20000000 },
+        "2Cr-3Cr": { min: 20000000, max: 30000000 },
+        "3Cr-4Cr": { min: 30000000, max: 40000000 },
+        "> 4Cr": { min: 40000000, max: Infinity },
+    };
 
-  const parseCr = (value) => {
-    if (!value) return null;
-    return parseFloat(value.replace(/[^\d.]/g, '')) * 10000000;
-  };
+    const filteredProperties = properties.filter((property) => {
+        const expectedPrice = Number(property.expected_price);
 
-  const parseBudget = (val) => {
-    if (!val) return null;
-    const num = parseFloat(val.replace(/[^0-9.]/g, ''));
-    return val.includes('CR') ? num * 10000000 : num;
-  };
+        if (
+            selectedFilters.cities &&
+            property.city &&
+            property.city.toLowerCase() !== selectedFilters.cities.toLowerCase()
+        ) return false;
 
-  const minBudget = parseBudget(filter.minBudget);
-  const maxBudget = parseBudget(filter.maxBudget);
+        if (
+            selectedFilters.localities &&
+            property.locality &&
+            property.locality.toLowerCase() !== selectedFilters.localities.toLowerCase()
+        ) return false;
 
-  const filteredProperties = properties.filter((p) => {
-    const propertyPrice = parseBudget(p.expected_price);
+        if (
+            selectedFilters.propertyType &&
+            property.subcategory_name &&
+            property.subcategory_name.toLowerCase() !== selectedFilters.propertyType.toLowerCase()
+        ) return false;
 
-    const matchesBudget =
-      (!minBudget && !maxBudget) || // no filter set
-      (propertyPrice != null &&
-        (!minBudget || propertyPrice >= minBudget) &&
-        (!maxBudget || propertyPrice <= maxBudget));
+        if (selectedFilters.bhk) {
+            const propBhk = Number(property.bedrooms);
+            if (selectedFilters.bhk === "4+ BHK") {
+                if (propBhk < 4) return false;
+            } else {
+                const filterBhk = Number(selectedFilters.bhk.split(" ")[0]);
+                if (propBhk !== filterBhk) return false;
+            }
+        }
 
-    // Other filters (same as before)
-    const matchesSearch = !searchQuery || p.project_name?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesPurpose = !filter.purpose || p.purpose?.toLowerCase() === filter.purpose.toLowerCase();
-    const matchesBHK = !filter.bhk || String(p.bedrooms) === filter.bhk;
-    const matchesPropertyType = !filter.propertyType || p.property_type?.toLowerCase() === filter.propertyType.toLowerCase();
-    const matchesHouseType = !filter.houseType || p.apartment_type?.toLowerCase() === filter.houseType.toLowerCase();
-    const matchesPossession = !filter.possession || p.possession_status?.toLowerCase() === filter.possession.toLowerCase();
-    const matchesLocality = !filter.locality || (p.locality?.toLowerCase() || '').includes(filter.locality.toLowerCase());
+        if (selectedFilters.budget) {
+            const budgetInfo = budgetRange[selectedFilters.budget];
+            if (!budgetInfo || expectedPrice < budgetInfo.min || expectedPrice > budgetInfo.max)
+                return false;
+        }
 
-    return (
-      matchesSearch &&
-      matchesPurpose &&
-      matchesBHK &&
-      matchesPropertyType &&
-      matchesHouseType &&
-      matchesPossession &&
-      matchesLocality &&
-      matchesBudget
-    );
-  });
+        return true;
+    });
 
-  // const uniqueCities = Array.from(
-  //   new Set(
-  //     properties.map((p) =>
-  //       p.city.trim().replace(/:$/, '') // remove trailing ":" and trim spaces
-  //     )
-  //   )
-  // );
 
   const handleDetailsClick = (id) => {
     window.open(`/details/${id}`, '_blank');
@@ -160,7 +152,25 @@ const NewProjects = () => {
       <NewNav />
       <section className="bg-[#F4EFE5] pb-5 pt-10 md:pt-8 lg:pt-16" ref={listRef}>
         <div className="container">
-          <div className="mt-5">
+          <FilterBar
+                        selected={selectedFilters}
+                        setSelected={setSelectedFilters}
+                        dynamicLocalities={
+                            selectedFilters.cities
+                                ? localities.filter(
+                                    (loc) =>
+                                        properties.find(
+                                            (p) =>
+                                                p.locality === loc &&
+                                                p.city.toLowerCase() === selectedFilters.cities.toLowerCase()
+                                        )
+                                )
+                                : localities
+                        }
+                        dynamicPropertyTypes={propertyTypes}
+                        dynamicCities={cities}
+                    />
+          <div className="pl-heading1">
             <h2 className="mb-2 text-2xl text-[#3C4142] font-bold font-geometric-regular">
               Property By Area
             </h2>
@@ -173,7 +183,7 @@ const NewProjects = () => {
               <h4 className="mb-2 text-2xl text-[#3C4142] font-bold font-geometric-regular">
                 All {properties.length} properies from {locality}.
               </h4>
-              <div className="flex gap-2 items-center mt-4 mb-4">
+              {/* <div className="flex gap-2 items-center mt-4 mb-4">
                 <div className="flex items-center bg-[#fff] w-full py-[5px] px-[10px] rounded-[20px]">
                   <FaSearch className="text-gray-500 mr-2" />
                   <input
@@ -192,162 +202,7 @@ const NewProjects = () => {
                 >
                   <FaFilter className="me-2" /> Filter
                 </button>
-              </div>
-              {/* ----------- Filter Model ----------> */}
-              {isFilterModalOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center  z-50">
-                  <div className="bg-white filter-modal w-full mx-3 lg:w-[600px] top-[18%] max-w-4xl rounded shadow-lg p-6 relative">
-                    <button
-                      className="absolute top-3 right-3 text-gray-500"
-                      onClick={() => setIsFilterModalOpen(false)}
-                    >
-                      <FaTimes size={20} />
-                    </button>
-                    <h4 className="text-lg font-bold text-center mb-2">Filters</h4>
-                    <div className="inner-filter bordered border-2 py-2 px-3">
-                      <div className="flex flex-col md:flex-row justify-between mb-2">
-                        <div className="flex flex-col md:w-[47%]">
-                          <label className="text-base font-semibold">Buy/Rent:</label>
-                          <div className="flex items-center">
-                            <select
-                              name="buyrent"
-                              value={filter.purpose}
-                              onChange={(e) => setFilter({ ...filter, purpose: e.target.value })}
-                              className="block w-full p-2 border border-gray-300 outline-0 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                            >
-                              <option value="">Selcet Buy/Rent</option>
-                              <option value="Buy">Buy</option>
-                              <option value="Rent">Rent</option>
-                            </select>
-                          </div>
-                        </div>
-                        <div className="flex flex-col md:w-[47%]">
-                          <label className="text-base font-semibold">BHK:</label>
-                          <div className="flex items-center">
-                            <select
-                              name="bhk"
-                              value={filter.bhk}
-                              onChange={(e) => setFilter({ ...filter, bhk: e.target.value })}
-                              className="block w-full p-2 border border-gray-300 outline-0 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                            >
-                              <option value="">Select BHK</option>
-                              {[...new Set(properties.map(p => p.bedrooms))]
-                                .filter(Boolean)
-                                .sort((a, b) => a - b)
-                                .map((val, index) => (
-                                  <option key={index} value={val}>{val} BHK</option>
-                                ))}
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex flex-col mb-2">
-                        <label className="text-base font-semibold">Budget:</label>
-                        <div className="flex gap-2 items-center">
-                          <select
-                            name="minBudget"
-                            value={filter.minBudget}
-                            onChange={(e) => setFilter({ ...filter, minBudget: e.target.value })}
-                            className="block w-full p-2 border border-gray-300 outline-0 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                          >
-                            <option value="">Min</option>
-                            <option value="1 CR">₹1 CR</option>
-                            <option value="2 CR">₹2 CR</option>
-                            <option value="3 CR">₹3 CR</option>
-                          </select>
-                          <div className="font-semibold text-gray-800">To</div>
-                          <select
-                            name="maxBudget"
-                            value={filter.maxBudget}
-                            onChange={(e) => setFilter({ ...filter, maxBudget: e.target.value })}
-                            className="block w-full p-2 border border-gray-300 outline-0 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                          >
-                            <option value="">Max</option>
-                            <option value="2 CR">₹2 CR</option>
-                            <option value="3 CR">₹3 CR</option>
-                            <option value="4 CR">₹4 CR</option>
-                          </select>
-                        </div>
-                      </div>
-                      <div className="flex flex-col md:flex-row justify-between mb-2">
-                        <div className="flex flex-col md:w-[47%]">
-                          <label className="text-base font-semibold">Localities:</label>
-                          <div className="flex items-center">
-                            <select
-                              name="locality"
-                              value={filter.locality}
-                              onChange={(e) => setFilter({ ...filter, locality: e.target.value })}
-                              className="block w-full p-2 border border-gray-300 outline-0 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                            >
-                              <option value="">Selcet Locality</option>
-                              {[...new Set(properties.map(p => p.locality))]
-                                .filter(Boolean)
-                                .sort((a, b) => a.localeCompare(b))
-                                .map((val, index) => (
-                                  <option key={index} value={val}>{val}</option>
-                                ))}
-                            </select>
-                          </div>
-                        </div>
-                        <div className="flex flex-col md:w-[47%]">
-                          <label className="text-base font-semibold">Properties:</label>
-                          <div className="flex items-center">
-                            <select
-                              name="propertyType"
-                              value={filter.propertyType}
-                              onChange={(e) => setFilter({ ...filter, propertyType: e.target.value })}
-                              className="block w-full p-2 border border-gray-300 outline-0 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                            >
-                              <option value="">Select Property</option>
-                              <option value="Flat">Flat</option>
-                              <option value="House">House</option>
-                              <option value="OfficeSpace">Office Space</option>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex flex-col md:flex-row justify-between mb-2">
-                        <div className="flex flex-col md:w-[47%]">
-                          <label className="text-base font-semibold">House Type:</label>
-                          <div className="flex items-center">
-                            <select
-                              name="houseType"
-                              value={filter.houseType}
-                              onChange={(e) => setFilter({ ...filter, houseType: e.target.value })}
-                              className="block w-full p-2 border border-gray-300 outline-0 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                            >
-                              <option value="">Selcet Type</option>
-                              <option value="Duplex">Duplex</option>
-                              <option value="PentHouse">Pent House</option>
-                            </select>
-                          </div>
-                        </div>
-                        <div className="flex flex-col md:w-[47%]">
-                          <label className="text-base font-semibold">Posession Status:</label>
-                          <div className="flex items-center">
-                            <select
-                              name="possession"
-                              value={filter.possession}
-                              onChange={(e) => setFilter({ ...filter, possession: e.target.value })}
-                              className="block w-full p-2 border border-gray-300 outline-0 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                            >
-                              <option value="">Select Status</option>
-                              <option value="Construction">Construction</option>
-                              <option value="R2M">Ready to Move</option>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <button className="px-4 py-2 bg-[#367588] text-white rounded-md hover:bg-[#1386a8] mt-3 float-right"
-                      onClick={() => {
-                        setPage(1); // Reset to first page
-                        setIsFilterModalOpen(false);
-                      }}
-                    >Done</button>
-                  </div>
-                </div>
-              )}
+              </div> */}
 
               {/* ======== Project Card ==========> */}
               {loading ? (
@@ -441,7 +296,7 @@ const NewProjects = () => {
                               <p className="text-gray-600 mb-0">Posessioned By : {formatDate(property.available_from)}</p>
                             </div>
                           </div>
-                          <div className="flex bg-[#f4efe5] py-[2px] px-[13px]">
+                          <div className="flex bg-[#f4efe5] py-[2px] px-[13px] gap-2">
                             <small className="text-[12px] font-bold">Property Listed By : </small>
                             <p className="text-gray-600 mb-0 mt-[-4px]">{property.developer_name}</p>
                           </div>

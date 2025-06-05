@@ -1,14 +1,15 @@
-import React,{ useState, useRef, useEffect } from "react";
-import { FaAngleDown, FaTimes, FaSearch, FaMapMarkerAlt, FaRupeeSign, FaHome, FaBath, FaUserTie } from "react-icons/fa";
+import React, { useState, useRef, useEffect } from "react";
+import { FaAngleDown, FaTimes, FaMapMarkerAlt, FaRupeeSign, FaHome, FaBath, FaUserTie } from "react-icons/fa";
 import { FaArrowsLeftRightToLine, FaBuildingCircleExclamation } from "react-icons/fa6";
 import { RiMoneyRupeeCircleLine } from "react-icons/ri";
 import { GiSofa } from "react-icons/gi";
-import { FaFilter } from "react-icons/fa";
-import { ChevronRightIcon, ChevronLeftIcon } from 'lucide-react';
+import { IoBed } from "react-icons/io5";
+import { MdBalcony } from "react-icons/md";
 import NewNav from "../header/NewNav";
 import Footer from "../footer/Footer";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import AdCards from "../advertisement/AdvertiseCard";
+import FilterBar from "./FilterBar";
 import axios from 'axios';
 
 const AdComponent = () => (
@@ -36,45 +37,55 @@ function formatDate(dateString) {
 }
 
 const ListingSection = () => {
-
     const location = useLocation();
     const navigate = useNavigate();
-
-    // Filter data passed via navigate state (from previous page)
-    const passedFilter = location.state || {};
 
     // API data
     const [properties, setProperties] = useState([]);
     const [loading, setLoading] = useState(true);
-     const [showModal, setShowModal] = useState(false);
-          const [modalImages, setModalImages] = useState([]);
-           const [pname, setPname] = useState("");
+    const [showModal, setShowModal] = useState(false);
+    const [modalImages, setModalImages] = useState([]);
+    const [pname, setPname] = useState("");
 
-    // UI states
-    const [searchQuery, setSearchQuery] = useState("");
-    const [page, setPage] = useState(1);
+    const [selectedFilters, setSelectedFilters] = useState({ type: "Buy" });
+    const [localities, setLocalities] = useState([]);
+    const [propertyTypes, setPropertyTypes] = useState([]);
+    const [cities, setCities] = useState([]);
+
     const listRef = useRef();
 
-    // Internal filter state for user filtering on this page
-    const [filter, setFilter] = useState({
-        bhk: "",
-        minBudget: "",
-        maxBudget: "",
-        locality: "",
-        propertyType: "",
-        houseType: "",
-        possession: "",
-    });
+    // Filter data passed via navigate state (from previous page)
+    const passedFilter = location.state || {};
 
-    const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-    const [showToast, setShowToast] = useState(false);
+    const budgetRange = {
+        "< 1 Cr": { min: 0, max: 10000000 },
+        "1Cr-2Cr": { min: 10000000, max: 20000000 },
+        "2Cr-3Cr": { min: 20000000, max: 30000000 },
+        "3Cr-4Cr": { min: 30000000, max: 40000000 },
+        "> 4Cr": { min: 40000000, max: Infinity },
+    };
 
-    // Scroll on page change (pagination)
-    useEffect(() => {
-        listRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [page]);
+    // Parse price string like "1.2 Cr" to number in rupees
+    const parseBudget = (val) => {
+        if (!val) return null;
+        const num = parseFloat(val.replace(/[^0-9.]/g, ""));
+        return val.toLowerCase().includes("cr") ? num * 10000000 : num;
+    };
 
-    // Fetch properties from API once
+    // Extracted budgets from passed filters
+    let passedMinBudget = null;
+    let passedMaxBudget = null;
+    if (passedFilter.priceRange) {
+        if (passedFilter.priceRange === "bellow1cr") {
+            passedMaxBudget = 10000000;
+        } else {
+            const [minStr, maxStr] = passedFilter.priceRange.split("-");
+            const parseCR = (str) => (str ? parseFloat(str.replace("CR", "")) * 10000000 : null);
+            passedMinBudget = parseCR(minStr);
+            passedMaxBudget = parseCR(maxStr);
+        }
+    }
+
     useEffect(() => {
         axios
             .get(`${process.env.REACT_APP_BASE_URL}/getminimumproperty`, {
@@ -82,6 +93,9 @@ const ListingSection = () => {
             })
             .then((res) => {
                 setProperties(res.data);
+                setLocalities([...new Set(res.data.map(p => p.locality).filter(Boolean))]);
+                setPropertyTypes([...new Set(res.data.map(p => p.subcategory_name).filter(Boolean))]);
+                setCities([...new Set(res.data.map(p => p.city).filter(Boolean))]);
                 setLoading(false);
             })
             .catch((error) => {
@@ -90,323 +104,202 @@ const ListingSection = () => {
             });
     }, []);
 
-    // Helpers to parse budgets/prices from strings
-    const parseBudget = (val) => {
-        if (!val) return null;
-        const num = parseFloat(val.replace(/[^0-9.]/g, ""));
-        return val.toLowerCase().includes("cr") ? num * 10000000 : num;
+
+    // const filteredProperties = properties.filter((property) => {
+    //   const expectedPrice = Number(property.expected_price);
+
+    //   // Match city from selected or passed filters
+    //   if (selectedFilters.cities &&
+    //     property.city?.toLowerCase() !== selectedFilters.cities.toLowerCase()) {
+    //     return false;
+    //   }
+    //   if (
+    //   passedFilter.location &&
+    //   property.city &&
+    //   property.city?.toLowerCase().trim() !== passedFilter.location.toLowerCase().trim()
+    // ) {
+    //   return false;
+    // }
+
+    //   // Match locality from selected or passed filters
+    //   if (selectedFilters.localities &&
+    //     property.locality?.toLowerCase() !== selectedFilters.localities.toLowerCase()) {
+    //     return false;
+    //   }
+    //   if (passedFilter.locality &&
+    //     !passedFilter.locality.includes(property.locality)) {
+    //     return false;
+    //   }
+
+    //   // Match property type
+    //   if (selectedFilters.propertyType &&
+    //     property.subcategory_name?.toLowerCase() !== selectedFilters.propertyType.toLowerCase()) {
+    //     return false;
+    //   }
+    //   if (passedFilter.propertyType && property.subcategory_name !== passedFilter.propertyType) {
+    //     return false;
+    //   }
+
+    //   // Match BHK
+    //   if (selectedFilters.bhk) {
+    //     const propBhk = Number(property.bedrooms);
+    //     if (selectedFilters.bhk === "4+ BHK") {
+    //       if (propBhk < 4) return false;
+    //     } else {
+    //       const filterBhk = Number(selectedFilters.bhk.split(" ")[0]);
+    //       if (propBhk !== filterBhk) return false;
+    //     }
+    //   }
+
+    //   // Match budget
+    //   if (selectedFilters.budget) {
+    //     const budgetInfo = budgetRange[selectedFilters.budget];
+    //     if (!budgetInfo || expectedPrice < budgetInfo.min || expectedPrice > budgetInfo.max) {
+    //       return false;
+    //     }
+    //   }
+    //   if (passedMinBudget && expectedPrice < passedMinBudget) return false;
+    //   if (passedMaxBudget && expectedPrice > passedMaxBudget) return false;
+
+    //   // Match passed project names
+    //   if (passedFilter.projectNames?.length &&
+    //     !passedFilter.projectNames.includes(property.title || property.project_name)) {
+    //     return false;
+    //   }
+
+    //   // Match passed builders
+    //   if (passedFilter.builders?.length &&
+    //     !passedFilter.builders.includes(property.developer_name)) {
+    //     return false;
+    //   }
+
+    //   return true;
+    // });
+    const filters = {
+        ...selectedFilters,
+        ...passedFilter,
     };
 
-    const minBudget = parseBudget(filter.minBudget);
-    const maxBudget = parseBudget(filter.maxBudget);
+    const filteredProperties = properties.filter((property) => {
+        const expectedPrice = Number(property.expected_price);
+        const city = property.city?.toLowerCase().trim();
+        const locality = property.locality?.toLowerCase().trim();
+        const subcategory = property.subcategory_name?.toLowerCase().trim();
+        const bhk = Number(property.bedrooms);
 
-    let passedMinBudget = null;
-    let passedMaxBudget = null;
+        const filterCity = (selectedFilters.cities || passedFilter.location)?.toLowerCase().trim();
+        const filterLocality = selectedFilters.localities || passedFilter.locality;
+        const filterType = (selectedFilters.propertyType || passedFilter.propertyType)?.toLowerCase().trim();
+        const filterBhk = selectedFilters.bhk;
+        const filterBudget = selectedFilters.budget;
+        const minBudget = passedFilter.minBudget || passedMinBudget;
+        const maxBudget = passedFilter.maxBudget || passedMaxBudget;
 
-    if (passedFilter.priceRange) {
-        if (passedFilter.priceRange === "bellow1cr") {
-            passedMaxBudget = 10000000; // Below 1 CR
-        } else {
-            const [minStr, maxStr] = passedFilter.priceRange.split("-");
-            const parseCR = (str) => {
-                if (!str) return null;
-                return parseFloat(str.replace("CR", "")) * 10000000;
-            };
-            passedMinBudget = parseCR(minStr);
-            passedMaxBudget = parseCR(maxStr);
+        // 1. City
+        if (filterCity && city !== filterCity) {
+            return false;
         }
-    }
-
-    // Combine internal filters + passed filters
-    const filteredProperties = properties.filter((p) => {
-        const propertyPrice = parseBudget(p.expected_price);
-
-        const matchesBudget =
-            propertyPrice != null &&
-            (
-                // Matches internal filter
-                (
-                    (!minBudget && !maxBudget) ||
-                    (
-                        (!minBudget || propertyPrice >= minBudget) &&
-                        (!maxBudget || propertyPrice <= maxBudget)
-                    )
-                ) &&
-                // Matches Buy page passed price range
-                (
-                    (!passedMinBudget && !passedMaxBudget) ||
-                    (
-                        (!passedMinBudget || propertyPrice >= passedMinBudget) &&
-                        (!passedMaxBudget || propertyPrice <= passedMaxBudget)
-                    )
-                )
-            );
 
 
-        const matchesSearch =
-            !searchQuery ||
-            p.project_name?.toLowerCase().includes(searchQuery.toLowerCase());
+        // 2. Locality
+        if (filterLocality && filterLocality.length > 0) {
+            const localitiesArray = Array.isArray(filterLocality)
+                ? filterLocality.map(l => l.toLowerCase().trim())
+                : [filterLocality.toLowerCase().trim()];
+            if (!localitiesArray.includes(locality)) {
+                return false;
+            }
+        }
 
-        const matchesBHK = !filter.bhk || String(p.bedrooms) === filter.bhk;
+        // 3. Property Type
+        if (filterType && subcategory !== filterType) {
+            return false;
+        }
 
-        const matchesPropertyType =
-            !filter.propertyType ||
-            p.property_type?.toLowerCase() === filter.propertyType.toLowerCase();
+        // 4. BHK
+        if (filterBhk) {
+            if (filterBhk === "4+ BHK") {
+                if (bhk < 4) return false;
+            } else {
+                const parsedBhk = Number(filterBhk.split(" ")[0]);
+                if (bhk !== parsedBhk) return false;
+            }
+        }
 
-        const matchesHouseType =
-            !filter.houseType ||
-            p.apartment_type?.toLowerCase() === filter.houseType.toLowerCase();
+        // 5. Budget (predefined ranges)
+        if (filterBudget) {
+            const budgetInfo = budgetRange[filterBudget];
+            if (!budgetInfo || expectedPrice < budgetInfo.min || expectedPrice > budgetInfo.max) {
+                return false;
+            }
+        }
 
-        const matchesPossession =
-            !filter.possession ||
-            p.possession_status?.toLowerCase() === filter.possession.toLowerCase();
+        // 6. Min/Max budget
+        if (minBudget && expectedPrice < minBudget) return false;
+        if (maxBudget && expectedPrice > maxBudget) return false;
 
-        const matchesLocality =
-            !filter.locality ||
-            (p.locality?.toLowerCase() || "").includes(filter.locality.toLowerCase());
+        // 7. Project name
+        const filterProjects = passedFilter.projectNames;
+        if (Array.isArray(filterProjects) && filterProjects.length > 0) {
+            const projectName = (property.title || property.project_name || "").toLowerCase().trim();
+            const match = filterProjects.some(name => name.toLowerCase().trim() === projectName);
+            if (!match) return false;
+        }
 
-        const matchesPassedLocation =
-            !passedFilter.location || p.city === passedFilter.location;
+        // 8. Builder
+        const filterBuilders = passedFilter.builders;
+        if (Array.isArray(filterBuilders) && filterBuilders.length > 0) {
+            const builder = (property.developer_name || "").toLowerCase().trim();
+            const match = filterBuilders.some(b => b.toLowerCase().trim() === builder);
+            if (!match) return false;
+        }
 
-        const matchesPassedLocalities =
-            !passedFilter.locality ||
-            passedFilter.locality.length === 0 ||
-            passedFilter.locality.includes(p.locality);
-
-        const matchesPassedProjectNames =
-            !passedFilter.projectNames ||
-            passedFilter.projectNames.length === 0 ||
-            passedFilter.projectNames.includes(p.title || p.project_name);
-
-        const matchesPassedBuilders =
-            !passedFilter.builders ||
-            passedFilter.builders.length === 0 ||
-            passedFilter.builders.includes(p.developer_name);
-
-        const matchesPassedPropertyType =
-            !passedFilter.propertyType || p.subcategory_name === passedFilter.propertyType;
-
-        return (
-            matchesBudget &&
-            matchesSearch &&
-            matchesBHK &&
-            matchesPropertyType &&
-            matchesHouseType &&
-            matchesPossession &&
-            matchesLocality &&
-            matchesPassedLocation &&
-            matchesPassedLocalities &&
-            matchesPassedProjectNames &&
-            matchesPassedBuilders &&
-            matchesPassedPropertyType
-        );
+        // ✅ All matched
+        return true;
     });
-
 
 
     const handleDetailsClick = (id) => {
         navigate(`/details/${id}`);
-    }
+    };
+
     const handleImageClick = async (property) => {
-          try {
+        try {
             const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/${property.id}/images`, {
-              withCredentials: true,
+                withCredentials: true,
             });
             setModalImages(res.data.images);
             setPname(property.project_name || "Property Name");
             setShowModal(true);
-          } catch (error) {
+        } catch (error) {
             console.error("Error fetching image data:", error);
-          }
-        };
-
+        }
+    };
 
     return (
-
         <div>
             <NewNav />
             <div className="bg-[#F4EFE5] pt-[10%]" ref={listRef}>
                 <div className="container">
                     {/* --------- Filter Bar -----------> */}
-                    <div className="bg-[#367588] main-banner text-white px-4 py-3 shadow-md w-[100%] left-0 fixed md:top-[57px] lg:top-[70px] z-[1] ">
-                        <div className="btn-badge flex gap-2 items-center ms-[40px]">
-                            <div className="relative bg-white text-gray-700 px-3 py-1 rounded-full flex items-center h-[40px] w-[100%] md:w-[50%]">
-                                <div className="flex items-center w-full">
-                                    <FaSearch className="text-gray-500 mr-2" />
-                                    <input
-                                        type="text"
-                                        placeholder="Search"
-                                        value={searchQuery}
-                                        onChange={(e) => {
-                                            setSearchQuery(e.target.value);
-                                            setPage(1);
-                                        }}
-                                        className="search outline-none w-full bg-transparent"
-                                    />
-                                </div>
-                            </div>
-                            <button className="bg-white text-gray-700 font-semibold px-3 py-1 rounded-full flex items-center h-[40px]"
-                                onClick={() => setIsFilterModalOpen(true)}
-                            >
-                                <FaFilter className="me-2" /> Filter
-                            </button>
-                        </div>
-                    </div>
-                    {/* ----------- Filter Model ----------> */}
-                    {isFilterModalOpen && (
-                        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center  z-50">
-                            <div className="bg-white filter-modal w-full mx-3 lg:w-[600px] top-[18%] max-w-4xl rounded shadow-lg p-6 relative">
-                                <button
-                                    className="absolute top-3 right-3 text-gray-500"
-                                    onClick={() => setIsFilterModalOpen(false)}
-                                >
-                                    <FaTimes size={20} />
-                                </button>
-                                <h4 className="text-lg font-bold text-center mb-2">Filters</h4>
-                                <div className="inner-filter bordered border-2 py-2 px-3">
-                                    <div className="flex flex-col md:flex-row justify-between mb-2">
-                                        <div className="flex flex-col md:w-[47%]">
-                                            <label className="text-base font-semibold">Buy/Rent:</label>
-                                            <div className="flex items-center">
-                                                <select
-                                                    name="buyrent"
-                                                    value={filter.purpose}
-                                                    onChange={(e) => setFilter({ ...filter, purpose: e.target.value })}
-                                                    className="block w-full p-2 border border-gray-300 outline-0 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                                                >
-                                                    <option value="">Selcet Buy/Rent</option>
-                                                    <option value="Buy">Buy</option>
-                                                    <option value="Rent">Rent</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-col md:w-[47%]">
-                                            <label className="text-base font-semibold">BHK:</label>
-                                            <div className="flex items-center">
-                                                <select
-                                                    name="bhk"
-                                                    value={filter.bhk}
-                                                    onChange={(e) => setFilter({ ...filter, bhk: e.target.value })}
-                                                    className="block w-full p-2 border border-gray-300 outline-0 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                                                >
-                                                    <option value="">Select BHK</option>
-                                                    {[...new Set(properties.map(p => p.bedrooms))]
-                                                        .filter(Boolean)
-                                                        .sort((a, b) => a - b)
-                                                        .map((val, index) => (
-                                                            <option key={index} value={val}>{val} BHK</option>
-                                                        ))}
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-col mb-2">
-                                        <label className="text-base font-semibold">Budget:</label>
-                                        <div className="flex gap-2 items-center">
-                                            <select
-                                                name="minBudget"
-                                                value={filter.minBudget}
-                                                onChange={(e) => setFilter({ ...filter, minBudget: e.target.value })}
-                                                className="block w-full p-2 border border-gray-300 outline-0 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                                            >
-                                                <option value="">Min</option>
-                                                <option value="1 CR">₹1 CR</option>
-                                                <option value="2 CR">₹2 CR</option>
-                                                <option value="3 CR">₹3 CR</option>
-                                            </select>
-                                            <div className="font-semibold text-gray-800">To</div>
-                                            <select
-                                                name="maxBudget"
-                                                value={filter.maxBudget}
-                                                onChange={(e) => setFilter({ ...filter, maxBudget: e.target.value })}
-                                                className="block w-full p-2 border border-gray-300 outline-0 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                                            >
-                                                <option value="">Max</option>
-                                                <option value="2 CR">₹2 CR</option>
-                                                <option value="3 CR">₹3 CR</option>
-                                                <option value="4 CR">₹4 CR</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-col md:flex-row justify-between mb-2">
-                                        <div className="flex flex-col md:w-[47%]">
-                                            <label className="text-base font-semibold">Localities:</label>
-                                            <div className="flex items-center">
-                                                <select
-                                                    name="locality"
-                                                    value={filter.locality}
-                                                    onChange={(e) => setFilter({ ...filter, locality: e.target.value })}
-                                                    className="block w-full p-2 border border-gray-300 outline-0 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                                                >
-                                                    <option value="">Selcet Locality</option>
-                                                    {[...new Set(properties.map(p => p.locality))]
-                                                        .filter(Boolean)
-                                                        .sort((a, b) => a.localeCompare(b))
-                                                        .map((val, index) => (
-                                                            <option key={index} value={val}>{val}</option>
-                                                        ))}
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-col md:w-[47%]">
-                                            <label className="text-base font-semibold">Properties:</label>
-                                            <div className="flex items-center">
-                                                <select
-                                                    name="propertyType"
-                                                    value={filter.propertyType}
-                                                    onChange={(e) => setFilter({ ...filter, propertyType: e.target.value })}
-                                                    className="block w-full p-2 border border-gray-300 outline-0 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                                                >
-                                                    <option value="">Select Property</option>
-                                                    <option value="Flat">Flat</option>
-                                                    <option value="House">House</option>
-                                                    <option value="OfficeSpace">Office Space</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-col md:flex-row justify-between mb-2">
-                                        <div className="flex flex-col md:w-[47%]">
-                                            <label className="text-base font-semibold">House Type:</label>
-                                            <div className="flex items-center">
-                                                <select
-                                                    name="houseType"
-                                                    value={filter.houseType}
-                                                    onChange={(e) => setFilter({ ...filter, houseType: e.target.value })}
-                                                    className="block w-full p-2 border border-gray-300 outline-0 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                                                >
-                                                    <option value="">Selcet Type</option>
-                                                    <option value="Duplex">Duplex</option>
-                                                    <option value="PentHouse">Pent House</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-col md:w-[47%]">
-                                            <label className="text-base font-semibold">Posession Status:</label>
-                                            <div className="flex items-center">
-                                                <select
-                                                    name="possession"
-                                                    value={filter.possession}
-                                                    onChange={(e) => setFilter({ ...filter, possession: e.target.value })}
-                                                    className="block w-full p-2 border border-gray-300 outline-0 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                                                >
-                                                    <option value="">Select Status</option>
-                                                    <option value="Construction">Construction</option>
-                                                    <option value="R2M">Ready to Move</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button className="px-4 py-2 bg-[#367588] text-white rounded-md hover:bg-[#1386a8] mt-3 float-right"
-                                    onClick={() => {
-                                        setPage(1); // Reset to first page
-                                        setIsFilterModalOpen(false);
-                                    }}
-                                >Done</button>
-                            </div>
-                        </div>
-                    )}
+                    <FilterBar
+                        selected={selectedFilters}
+                        setSelected={setSelectedFilters}
+                        dynamicLocalities={
+                            selectedFilters.cities
+                                ? localities.filter(
+                                    (loc) =>
+                                        properties.find(
+                                            (p) =>
+                                                p.locality === loc &&
+                                                p.city.toLowerCase() === selectedFilters.cities.toLowerCase()
+                                        )
+                                )
+                                : localities
+                        }
+                        dynamicPropertyTypes={propertyTypes}
+                        dynamicCities={cities}
+                    />
                     {/* --------- Filter Bar ----------> */}
                     <div className="pl-heading">
                         <h2 className="mb-2 text-2xl text-[#3C4142] font-bold font-geometric-regular">
@@ -444,6 +337,89 @@ const ListingSection = () => {
                                                     </p>
                                                 )}
                                             </div>
+                                            {/* <div className="flex-1 p-4 md:w-[60%]">
+                                                <h3 className="text-sm text-gray-500 semibold mb-0">{property.title}</h3>
+                                                <h3 className="text-lg text-[#3C4142] bold mb-3">{property.project_name}</h3>
+                                                <div className="flex gap-2 items-center mb-2">
+                                                    <FaMapMarkerAlt className="text-[17px] text-[#367588]" />
+                                                    <p className="text-gray-600 mb-0">
+                                                        {property.locality}, {property.city}
+                                                    </p>
+                                                </div>
+                                                <div className="flex flex-wrap justify-between items-center bg-[#F4EFE5] p-2 mb-2">
+                                                   
+                                                    <div className="flex gap-2 items-center w-[50%] md:w-[33%] mb-2">
+                                                        <FaRupeeSign className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
+                                                        <div>
+                                                            <p className="text-[#3C4142] text-[13px] font-bold mb-0">Price</p>
+                                                            <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">
+                                                                {formatPrice(property.expected_price)}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                   
+                                                    <div className="flex gap-2 items-center w-[50%] md:w-[33%] mb-2">
+                                                        <FaArrowsLeftRightToLine className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
+                                                        <div>
+                                                            <p className="text-[#3C4142] text-[13px] font-bold mb-0">SBA</p>
+                                                            <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">
+                                                                {property.built_up_area} sq.ft.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                     
+                                                    <div className="flex gap-2 items-center w-[50%] md:w-[33%]">
+                                                        <GiSofa className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
+                                                        <div>
+                                                            <p className="text-[#3C4142] text-[13px] font-bold mb-0">Furnishing</p>
+                                                            <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">{property.furnished_status}</p>
+                                                        </div>
+                                                    </div>
+                                                   
+                                                    <div className="flex gap-2 items-center w-[50%] md:w-[33%] mb-2">
+                                                        <IoBed className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
+                                                        <div>
+                                                            <p className="text-[#3C4142] text-[13px] font-bold mb-0">Bedroom</p>
+                                                            <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">
+                                                                {property.bedrooms}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div className="flex gap-2 items-center w-[50%] md:w-[33%]">
+                                                        <FaBath className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
+                                                        <div>
+                                                            <p className="text-[#3C4142] text-[13px] font-bold mb-0">Bathroom</p>
+                                                            <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">{property.bathrooms}</p>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div className="flex gap-2 items-center w-[50%] md:w-[33%]">
+                                                        <MdBalcony className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
+                                                        <div>
+                                                            <p className="text-[#3C4142] text-[13px] font-bold mb-0">Balcony</p>
+                                                            <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">{property.balcony}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div className="flex flex-row md:flex-col lg:flex-col gap-4 items-center justify-between mb-2">
+                                                    <div className="flex gap-2 items-center">
+                                                        <FaBuildingCircleExclamation className="text-[17px] text-[#367588]" />
+                                                        <p className="text-gray-600 mb-0">
+                                                            Possessioned By: {formatDate(property.available_from)}
+                                                        </p>
+                                                    </div>
+                                                    <button
+                                                        className="px-4 py-2 bg-[#367588] text-white rounded-md hover:bg-[#1386a8]"
+                                                        onClick={() => handleDetailsClick(property.id)}
+                                                    >
+                                                        View Details
+                                                    </button>
+                                                </div>
+                                                
+                                                
+                                            </div> */}
                                             <div className="flex-1 p-4 md:w-[60%]">
                                                 <h3 className="text-sm text-gray-500 semibold mb-0">{property.title}</h3>
                                                 <h3 className="text-lg text-[#3C4142] bold mb-3">{property.project_name}</h3>
@@ -480,7 +456,7 @@ const ListingSection = () => {
                                                         <div>
                                                             <p className="text-[#3C4142] text-[13px] font-bold mb-0">Per sq.ft.</p>
                                                             <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">
-                                                                {property.price_per_sqft}
+                                                                {property.price_per_sqft} sq.ft.
                                                             </p>
                                                         </div>
                                                     </div>
@@ -519,7 +495,7 @@ const ListingSection = () => {
                                                     </div>
                                                 </div>
                                                 {/* Developer */}
-                                                <div className="flex bg-[#f4efe5] py-[2px] px-[13px]">
+                                                <div className="flex bg-[#f4efe5] py-[2px] px-[13px] gap-2">
                                                     <small className="text-[12px] font-bold">Property Listed By:</small>
                                                     <p className="text-gray-600 mb-0 mt-[-4px]">{property.developer_name}</p>
                                                 </div>
@@ -542,39 +518,38 @@ const ListingSection = () => {
 
                     {/* ------- right box ------- */}
                     <div className="block lg:flex flex-col gap-4 p-4">
-                        <AdCards/>
+                        <AdCards />
                     </div>
                 </div>
             </div>
             <Footer />
-             {/* ----------- Modal ------------- */}
-                                 {showModal && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                      <div className="bg-white w-full mx-2 md:mx-5 max-w-4xl rounded shadow-lg p-6 relative">
+            {/* ----------- Modal ------------- */}
+            {showModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="bg-white w-full mx-2 md:mx-5 max-w-4xl rounded shadow-lg p-6 relative">
                         <div className="flex items-center justify-between mb-2">
-                          <h1 className="text-xl font-semibold">{pname}</h1>
-                          <button
-                            className="text-gray-500 hover:text-gray-700"
-                            onClick={() => setShowModal(false)}
-                          >
-                            <FaTimes size={20} />
-                          </button>
+                            <h1 className="text-xl font-semibold">{pname}</h1>
+                            <button
+                                className="text-gray-500 hover:text-gray-700"
+                                onClick={() => setShowModal(false)}
+                            >
+                                <FaTimes size={20} />
+                            </button>
                         </div>
                         <div className="flex flex-wrap -mx-1 max-h-[80vh] overflow-y-auto">
-                          {modalImages.map((img) => (
-                            <div key={img.image_id} className="w-full sm:w-1/2 px-1 mb-2">
-                              <img
-                                src={img.image_url}
-                                alt=""
-                                className="md:h-[300px] lg:h-[300px] w-full object-cover rounded"
-                              />
-                            </div>
-                          ))}
+                            {modalImages.map((img) => (
+                                <div key={img.image_id} className="w-full sm:w-1/2 px-1 mb-2">
+                                    <img
+                                        src={img.image_url}
+                                        alt=""
+                                        className="md:h-[300px] lg:h-[300px] w-full object-cover rounded"
+                                    />
+                                </div>
+                            ))}
                         </div>
-                      </div>
                     </div>
-            
-                  )}
+                </div>
+            )}
         </div>
     );
 };
