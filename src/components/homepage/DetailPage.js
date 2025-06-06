@@ -487,6 +487,24 @@ const PropertyDetails = () => {
     }
   };
 
+  const [minPrice, setMinPrice] = useState(null);
+  const [maxPrice, setMaxPrice] = useState(null);
+  const [minSBA, setMinSBA] = useState(null);
+  const [maxSBA, setMaxSBA] = useState(null);
+
+  useEffect(() => {
+  if (property?.bhk_configurations?.length > 0) {
+    const sbaValues = property.bhk_configurations.map(c => parseFloat(c.super_built_up_area));
+    const min = Math.min(...sbaValues);
+    const max = Math.max(...sbaValues);
+    setMinSBA(min);
+    setMaxSBA(max);
+
+    const pricePerSqft = parseFloat(property?.basic?.price_per_sqft || 0);
+    setMinPrice(pricePerSqft * min);
+    setMaxPrice(pricePerSqft * max);
+  }
+}, [property]);
 
   return (
     <>
@@ -514,7 +532,7 @@ const PropertyDetails = () => {
 
             {/* Property Info */}
             <div className="md:col-span-12 lg:col-span-4 bg-white p-6 rounded-lg shadow-lg">
-              <h2 className="text-2xl font-bold text-[#367588] mb-0">
+              <h2 className="lg:text-xl xl:text-2xl font-bold text-[#367588] mb-0">
                 {property?.details?.project_name}
               </h2>
               <h4 className="text-base font-bold text-gray-500 mb-0">
@@ -536,7 +554,12 @@ const PropertyDetails = () => {
               </div>
               <div className="flex items-center justify-between dtl-price">
                 <div className="text-xl font-bold text-gray-900 dtl-price-dt">
-                  ₹{formatPrice(property?.basic?.expected_price)}
+                  {
+                    (property?.basic?.property_category_name === "Project Apartment" || property?.basic?.property_category_name === "Project House/Villa")
+                      ? `₹ ${formatPrice(minPrice)} - ₹ ${formatPrice(maxPrice)}`
+                      : `₹ ${formatPrice(property?.basic?.expected_price)}`
+                  }
+                  {/* ₹{formatPrice(property?.basic?.expected_price)} */}
                 </div>
                 <p className="text-gray-500 dtl-pricesq font-semibold mb-0">₹{formatPrice(property?.basic?.price_per_sqft)} / Sqft</p>
               </div>
@@ -570,7 +593,14 @@ const PropertyDetails = () => {
                     <FaArrowsLeftRightToLine />
                     <p className="font-semibold mb-0 small-fs">SBA</p>
                   </div>
-                  <p className="dtl-body">{property?.details?.super_built_up_area} sq.ft.</p>
+                  <p className="dtl-body">
+                    {
+                    (property?.basic?.property_category_name === "Project Apartment" || property?.basic?.property_category_name === "Project House/Villa")
+                      ? `${Math.round(minSBA)} - ${Math.round(maxSBA)} sq.ft`
+                      : `${property?.details?.super_built_up_area} sq.ft`
+                    }
+                    {/* {property?.details?.super_built_up_area}sq.ft.*/}
+                  </p>
                 </div>
               </div>
               <div className=" grid grid-cols-2 gap-2 dtl-flex2">
@@ -996,7 +1026,7 @@ const PropertyDetails = () => {
                     <RiCarouselView className="text-[#367588] text-xl" />
                     <div>
                       <p className="text-gray-500 font-bold text-sm mb-0">Facing</p>
-                      <p className="font-semibold mb-2">{property?.details?.facing}</p>
+                      <p className="font-semibold mb-2">{property?.details?.facing.join(', ') ?? 'N/A'}</p>
                     </div>
                   </div>
                   {property?.details?.built_up_area && (
@@ -1109,9 +1139,9 @@ const PropertyDetails = () => {
             {property?.details?.description && (
               <div className="text-gray-700 mt-5">
                 <h2 className="mb-2 text-xl font-bold font-geometric-regular text-[#3C4142]">
-                        Description
-                      </h2>
-                      <div className="w-12 h-1 bg-yellow-500 mb-3"></div>
+                  Description
+                </h2>
+                <div className="w-12 h-1 bg-yellow-500 mb-3"></div>
                 <div
                   dangerouslySetInnerHTML={{
                     __html: property.details.description,
@@ -1122,9 +1152,9 @@ const PropertyDetails = () => {
             {property?.details?.about_location && (
               <div className="text-gray-700 mt-3">
                 <h2 className="mb-2 text-xl font-bold font-geometric-regular text-[#3C4142]">
-                        Location
-                      </h2>
-                      <div className="w-12 h-1 bg-yellow-500 mb-3"></div>
+                  Location
+                </h2>
+                <div className="w-12 h-1 bg-yellow-500 mb-3"></div>
                 <div
                   dangerouslySetInnerHTML={{
                     __html: property?.details?.about_location || '',
@@ -1255,10 +1285,10 @@ const PropertyDetails = () => {
                 </div>
               </div>
 
-              {/* Floor Plans & Pricing Section - Takes 2/3 Width */}
+              {/* Floor Plans & Documents Section - Takes 2/3 Width */}
               <div className="mb-3 container">
                 <h2 className="mb-2 ms-[-12px] text-2xl font-bold font-geometric-regular text-[#3C4142] ">
-                  Floor Plans & Pricing
+                  Floor Plans & Documents
                 </h2>
                 <div className="w-12 h-1 bg-yellow-500"></div>
               </div>

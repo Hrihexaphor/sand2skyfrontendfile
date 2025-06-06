@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { RiArrowLeftSLine } from "react-icons/ri";
 import { ToastContainer, toast } from 'react-toastify';
+import { useLocation } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import 'swiper/css/autoplay';
 import axios from "axios";
@@ -9,7 +10,17 @@ import axios from "axios";
 // import Footer from "./footer/Footer";
 
 const PostReq = () => {
-  const [activeTab, setActiveTab] = useState("Buy");
+
+   const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const initialTab = queryParams.get("tab") || "Buy";
+
+  const [activeTab, setActiveTab] = useState(initialTab);
+
+   useEffect(() => {
+    setActiveTab(initialTab);
+  }, [initialTab]);
+
   const initialForm = {
     name: "",
     email: "",

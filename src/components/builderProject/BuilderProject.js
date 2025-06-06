@@ -2,7 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import { FaSearch, FaMapMarkerAlt, FaRupeeSign, FaBath, FaFilter, FaHome, FaTimes } from "react-icons/fa";
 import { FaArrowsLeftRightToLine, FaBuildingCircleExclamation } from "react-icons/fa6";
 import { GiSofa } from "react-icons/gi";
-import { RiMoneyRupeeCircleLine } from "react-icons/ri";
+import { IoBed } from "react-icons/io5";
+import { MdBalcony } from "react-icons/md";
 import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
 import NewNav from "../header/NewNav";
 import Footer from "../footer/Footer";
@@ -19,13 +20,13 @@ const BuilderProject = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
-        const [modalImages, setModalImages] = useState([]);
-         const [pname, setPname] = useState("");
+  const [modalImages, setModalImages] = useState([]);
+  const [pname, setPname] = useState("");
 
-         const [selectedFilters, setSelectedFilters] = useState({ type: "Buy" });
-    const [localities, setLocalities] = useState([]);
-    const [propertyTypes, setPropertyTypes] = useState([]);
-    const [cities, setCities] = useState([]);
+  const [selectedFilters, setSelectedFilters] = useState({ type: "Buy" });
+  const [localities, setLocalities] = useState([]);
+  const [propertyTypes, setPropertyTypes] = useState([]);
+  const [cities, setCities] = useState([]);
 
   // <------------ API INTEGRATION START -------------->
   // Fetch blog data
@@ -40,8 +41,8 @@ const BuilderProject = () => {
         );
         setProjects(filtered);
         setLocalities([...new Set(filtered.map(p => p.locality).filter(Boolean))]);
-                setPropertyTypes([...new Set(filtered.map(p => p.subcategory_name).filter(Boolean))]);
-                setCities([...new Set(filtered.map(p => p.city).filter(Boolean))]);
+        setPropertyTypes([...new Set(filtered.map(p => p.subcategory_name).filter(Boolean))]);
+        setCities([...new Set(filtered.map(p => p.city).filter(Boolean))]);
         // setProjects(res.data.blogs);
         setLoading(false);
       })
@@ -53,53 +54,53 @@ const BuilderProject = () => {
   // <------------ API INTEGRATION END -------------->
 
   // ======================== main filter ===================>
- const budgetRange = {
-        "< 1 Cr": { min: 0, max: 10000000 },
-        "1Cr-2Cr": { min: 10000000, max: 20000000 },
-        "2Cr-3Cr": { min: 20000000, max: 30000000 },
-        "3Cr-4Cr": { min: 30000000, max: 40000000 },
-        "> 4Cr": { min: 40000000, max: Infinity },
-    };
+  const budgetRange = {
+    "< 1 Cr": { min: 0, max: 10000000 },
+    "1Cr-2Cr": { min: 10000000, max: 20000000 },
+    "2Cr-3Cr": { min: 20000000, max: 30000000 },
+    "3Cr-4Cr": { min: 30000000, max: 40000000 },
+    "> 4Cr": { min: 40000000, max: Infinity },
+  };
 
-    const filteredProperties = projects.filter((property) => {
-        const expectedPrice = Number(property.price);
+  const filteredProperties = projects.filter((property) => {
+    const expectedPrice = Number(property.price);
 
-        if (
-            selectedFilters.cities &&
-            property.city &&
-            property.city.toLowerCase() !== selectedFilters.cities.toLowerCase()
-        ) return false;
+    if (
+      selectedFilters.cities &&
+      property.city &&
+      property.city.toLowerCase() !== selectedFilters.cities.toLowerCase()
+    ) return false;
 
-        if (
-            selectedFilters.localities &&
-            property.locality &&
-            property.locality.toLowerCase() !== selectedFilters.localities.toLowerCase()
-        ) return false;
+    if (
+      selectedFilters.localities &&
+      property.locality &&
+      property.locality.toLowerCase() !== selectedFilters.localities.toLowerCase()
+    ) return false;
 
-        if (
-            selectedFilters.propertyType &&
-            property.subcategory_name &&
-            property.subcategory_name.toLowerCase() !== selectedFilters.propertyType.toLowerCase()
-        ) return false;
+    if (
+      selectedFilters.propertyType &&
+      property.subcategory_name &&
+      property.subcategory_name.toLowerCase() !== selectedFilters.propertyType.toLowerCase()
+    ) return false;
 
-        if (selectedFilters.bhk) {
-            const propBhk = Number(property.bedrooms);
-            if (selectedFilters.bhk === "4+ BHK") {
-                if (propBhk < 4) return false;
-            } else {
-                const filterBhk = Number(selectedFilters.bhk.split(" ")[0]);
-                if (propBhk !== filterBhk) return false;
-            }
-        }
+    if (selectedFilters.bhk) {
+      const propBhk = Number(property.bedrooms);
+      if (selectedFilters.bhk === "4+ BHK") {
+        if (propBhk < 4) return false;
+      } else {
+        const filterBhk = Number(selectedFilters.bhk.split(" ")[0]);
+        if (propBhk !== filterBhk) return false;
+      }
+    }
 
-        if (selectedFilters.budget) {
-            const budgetInfo = budgetRange[selectedFilters.budget];
-            if (!budgetInfo || expectedPrice < budgetInfo.min || expectedPrice > budgetInfo.max)
-                return false;
-        }
+    if (selectedFilters.budget) {
+      const budgetInfo = budgetRange[selectedFilters.budget];
+      if (!budgetInfo || expectedPrice < budgetInfo.min || expectedPrice > budgetInfo.max)
+        return false;
+    }
 
-        return true;
-    });
+    return true;
+  });
 
   // Format date string to "DD MMM YYYY"
   function formatDate(dateString) {
@@ -119,22 +120,22 @@ const BuilderProject = () => {
     return num.toLocaleString(); // fallback
   }
 
-   const handleDetailsClick = (id) => {
+  const handleDetailsClick = (id) => {
     window.open(`/details/${id}`, '_blank');
   }
-  
+
   const handleImageClick = async (project) => {
-        try {
-          const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/${project.id}/images`, {
-            withCredentials: true,
-          });
-          setModalImages(res.data.images);
-          setPname(project.project_name || "Property Name");
-          setShowModal(true);
-        } catch (error) {
-          console.error("Error fetching image data:", error);
-        }
-      };
+    try {
+      const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/${project.id}/images`, {
+        withCredentials: true,
+      });
+      setModalImages(res.data.images);
+      setPname(project.project_name || "Property Name");
+      setShowModal(true);
+    } catch (error) {
+      console.error("Error fetching image data:", error);
+    }
+  };
 
   return (
     <>
@@ -142,23 +143,23 @@ const BuilderProject = () => {
       <section className="bg-[#F4EFE5] pb-5 pt-10 md:pt-8 lg:pt-16" >
         <div className="container">
           <FilterBar
-                        selected={selectedFilters}
-                        setSelected={setSelectedFilters}
-                        dynamicLocalities={
-                            selectedFilters.cities
-                                ? localities.filter(
-                                    (loc) =>
-                                        projects.find(
-                                            (p) =>
-                                                p.locality === loc &&
-                                                p.city.toLowerCase() === selectedFilters.cities.toLowerCase()
-                                        )
-                                )
-                                : localities
-                        }
-                        dynamicPropertyTypes={propertyTypes}
-                        dynamicCities={cities}
-                    />
+            selected={selectedFilters}
+            setSelected={setSelectedFilters}
+            dynamicLocalities={
+              selectedFilters.cities
+                ? localities.filter(
+                  (loc) =>
+                    projects.find(
+                      (p) =>
+                        p.locality === loc &&
+                        p.city.toLowerCase() === selectedFilters.cities.toLowerCase()
+                    )
+                )
+                : localities
+            }
+            dynamicPropertyTypes={propertyTypes}
+            dynamicCities={cities}
+          />
           <div className="pl-heading1">
             <h2 className="mb-2 text-2xl text-[#3C4142] font-bold font-geometric-regular">
               Builder's Projects
@@ -196,14 +197,11 @@ const BuilderProject = () => {
               {loading ? (
                 <p className="text-center text-gray-600 text-lg py-6">Loading properties...</p>
               ) : (filteredProperties.map((project, index) => (
-                <div
-                  key={index}
-                  className="bg-[#fff] rounded-lg mb-4 flex md:flex-row flex-col shadow-[0_4px_20px_rgba(0,95,107,0.2)]"
-                >
+                <div className="bg-[#fff] rounded-lg mb-4 flex md:flex-row flex-col shadow-[0_4px_20px_rgba(0,95,107,0.2)]">
                   <div onClick={() => handleImageClick(project)} className="md:w-[40%] relative list-imgbox cursor-pointer">
                     <img
                       src={project.primary_image}
-                      alt={project.title}
+                      alt={project.project_name}
                       className="w-[100%] h-[100%] rounded-tl-md md:rounded-bl-md object-cover"
                     />
                     {project.is_featured === true && (
@@ -213,58 +211,40 @@ const BuilderProject = () => {
                     )}
                   </div>
                   <div className="flex-1 p-4 md:w-[60%]">
-                    <h3 className="text-sm text-gray-500 semibold mb-0">
-                      {project.title}
-                    </h3>
-                    <h3 className="text-lg text-[#3C4142] bold mb-3">
-                      {project.project_name}
-                    </h3>
+                    <h3 className="text-sm text-gray-500 semibold mb-0">{project.title}</h3>
+                    <h3 className="text-lg text-[#3C4142] bold mb-3">{project.project_name}</h3>
                     <div className="flex gap-2 items-center mb-2">
                       <FaMapMarkerAlt className="text-[17px] text-[#367588]" />
-                      <p className="text-gray-600 mb-0">{project.locality}, {project.city}</p>
+                      <p className="text-gray-600 mb-0">
+                        {project.locality}, {project.city}
+                      </p>
                     </div>
                     <div className="flex flex-wrap justify-between items-center bg-[#F4EFE5] p-2 mb-2">
+                      {/* Price */}
                       <div className="flex gap-2 items-center w-[50%] md:w-[33%] mb-2">
                         <FaRupeeSign className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
                         <div>
                           <p className="text-[#3C4142] text-[13px] font-bold mb-0">Price</p>
-                          <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">{formatPrice(project.price)}</p>
+                          <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">
+                            {formatPrice(project.price)}
+                          </p>
                         </div>
-
                       </div>
+                      {/* SBA */}
                       <div className="flex gap-2 items-center w-[50%] md:w-[33%] mb-2">
                         <FaArrowsLeftRightToLine className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
                         <div>
                           <p className="text-[#3C4142] text-[13px] font-bold mb-0">SBA</p>
-                          <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">{project.built_up_area} sq.ft.</p>
-                        </div>
-
-                      </div>
-                      <div className="flex gap-2 items-center w-[50%] md:w-[33%] mb-2">
-                        <RiMoneyRupeeCircleLine className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
-                        <div>
-                          <p className="text-[#3C4142] text-[13px] font-bold mb-0">Per sq.ft.</p>
-                          <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">{project.price_per_sqft}</p>
+                          <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">
+                            {(project.category_name === "Project House/Villa" || project.category_name === "Project Apartment")
+                              ? project.configurations?.[0]?.super_built_up_area
+                              : project.super_built_up_area
+                            }
+                            sq.ft.
+                          </p>
                         </div>
                       </div>
-                      {/* </div>
-                                                                                              <div className="flex justify-between items-center bg-[#F4EFE5] p-2 mb-2"> */}
-                      <div className="flex gap-2 items-center w-[50%] md:w-[33%]">
-                        <FaHome className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
-                        <div>
-                          <p className="text-[#3C4142] text-[13px] font-bold mb-0">Carpet Area</p>
-                          <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">{project.carpet_area} sq.ft.</p>
-                        </div>
-
-                      </div>
-                      <div className="flex gap-2 items-center w-[50%] md:w-[33%]">
-                        <FaBath className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
-                        <div>
-                          <p className="text-[#3C4142] text-[13px] font-bold mb-0">Bathroom</p>
-                          <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">{project.bathrooms}</p>
-                        </div>
-
-                      </div>
+                      {/* Furnishing */}
                       <div className="flex gap-2 items-center w-[50%] md:w-[33%]">
                         <GiSofa className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
                         <div>
@@ -272,22 +252,57 @@ const BuilderProject = () => {
                           <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">{project.furnished_status}</p>
                         </div>
                       </div>
-                    </div>
-                    <div className="flex gap-4 items-center mb-2">
-
-                      <div className="flex gap-2 items-center">
-                        <FaBuildingCircleExclamation className="text-[17px] text-[#367588]" />
-                        <p className="text-gray-600 mb-0">Posessioned By : {formatDate(project.available_from)}</p>
+                      {/* Bedroom */}
+                      <div className="flex gap-2 items-center w-[50%] md:w-[33%] mb-2">
+                        <IoBed className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
+                        <div>
+                          <p className="text-[#3C4142] text-[13px] font-bold mb-0">Bedroom</p>
+                          <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">
+                            {(project.category_name === "Project House/Villa" || project.category_name === "Project Apartment")
+                              ? project.configurations?.[0]?.bedrooms
+                              : project.bedrooms
+                            }
+                          </p>
+                        </div>
+                      </div>
+                      {/* Bathroom */}
+                      <div className="flex gap-2 items-center w-[50%] md:w-[33%]">
+                        <FaBath className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
+                        <div>
+                          <p className="text-[#3C4142] text-[13px] font-bold mb-0">Bathroom</p>
+                          <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">
+                            {(project.category_name === "Project House/Villa" || project.category_name === "Project Apartment")
+                              ? project.configurations?.[0]?.bathrooms
+                              : project.bathrooms
+                            }
+                          </p>
+                        </div>
+                      </div>
+                      {/* Balcony */}
+                      <div className="flex gap-2 items-center w-[50%] md:w-[33%]">
+                        <MdBalcony className="text-[17px] bg-[#367588] text-[#fff] h-[26px] w-[26px] rounded-[25px] p-[5px]" />
+                        <div>
+                          <p className="text-[#3C4142] text-[13px] font-bold mb-0">Balcony</p>
+                          <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">
+                            {(project.category_name === "Project House/Villa" || project.category_name === "Project Apartment")
+                              ? project.configurations?.[0]?.balconies
+                              : project.balconies
+                            }
+                          </p>
+                        </div>
                       </div>
                     </div>
-                    <div className="flex bg-[#f4efe5] py-[2px] px-[13px] gap-2">
-                      <small className="text-[12px] font-bold">Property Listed By : </small>
-                      <p className="text-gray-600 mb-0 mt-[-4px]">{project.developer_name}</p>
-                    </div>
-                    <div className="flex float-right mt-2">
+                    {/* Possession */}
+                    <div className="flex lastbtn gap-2 justify-between">
+                      <div className="flex gap-2 items-center">
+                        <FaBuildingCircleExclamation className="text-[17px] text-[#367588]" />
+                        <p className="text-[#3C4142] text-[13px] font-bold mb-0">
+                          Possessioned By: <span className="text-gray-600 text-sm font-semibold">{formatDate(project.available_from)}</span>
+                        </p>
+                      </div>
                       <button
-                        className=" px-4 py-2 bg-[#367588] text-white rounded-md hover:bg-[#1386a8]"
-                      onClick={() => handleDetailsClick(project.id)}
+                        className="px-4 py-2 bg-[#367588] text-white rounded-md hover:bg-[#1386a8]"
+                        onClick={() => handleDetailsClick(project.id)}
                       >
                         View Details
                       </button>
@@ -307,34 +322,34 @@ const BuilderProject = () => {
 
         </div>
       </section>
-       {/* ----------- Modal ------------- */}
-                           {showModal && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                <div className="bg-white w-full mx-2 md:mx-5 max-w-4xl rounded shadow-lg p-6 relative">
-                  <div className="flex items-center justify-between mb-2">
-                    <h1 className="text-xl font-semibold">{pname}</h1>
-                    <button
-                      className="text-gray-500 hover:text-gray-700"
-                      onClick={() => setShowModal(false)}
-                    >
-                      <FaTimes size={20} />
-                    </button>
-                  </div>
-                  <div className="flex flex-wrap -mx-1 max-h-[80vh] overflow-y-auto">
-                    {modalImages.map((img) => (
-                      <div key={img.image_id} className="w-full sm:w-1/2 px-1 mb-2">
-                        <img
-                          src={img.image_url}
-                          alt=""
-                          className="md:h-[300px] lg:h-[300px] w-full object-cover rounded"
-                        />
-                      </div>
-                    ))}
-                  </div>
+      {/* ----------- Modal ------------- */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white w-full mx-2 md:mx-5 max-w-4xl rounded shadow-lg p-6 relative">
+            <div className="flex items-center justify-between mb-2">
+              <h1 className="text-xl font-semibold">{pname}</h1>
+              <button
+                className="text-gray-500 hover:text-gray-700"
+                onClick={() => setShowModal(false)}
+              >
+                <FaTimes size={20} />
+              </button>
+            </div>
+            <div className="flex flex-wrap -mx-1 max-h-[80vh] overflow-y-auto">
+              {modalImages.map((img) => (
+                <div key={img.image_id} className="w-full sm:w-1/2 px-1 mb-2">
+                  <img
+                    src={img.image_url}
+                    alt=""
+                    className="md:h-[300px] lg:h-[300px] w-full object-cover rounded"
+                  />
                 </div>
-              </div>
-      
-            )}
+              ))}
+            </div>
+          </div>
+        </div>
+
+      )}
       <Footer />
     </>
   );

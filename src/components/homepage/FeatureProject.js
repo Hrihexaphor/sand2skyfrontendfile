@@ -64,16 +64,16 @@ const FeatureProject = () => {
         <div className="flex items-center justify-between mb-4">
           <div className="mb-3">
             <h2 className="mb-2 text-[#3C4142] text-2xl font-bold font-geometric-regular">
-              Featured Projects
+              Featured Property
             </h2>
             <div className="w-12 h-1 bg-yellow-500"></div>
           </div>
 
           <Link
-            to={"/Projects"}
+            to={"/featuredproperty"}
             className="text-[#367588] text-sm sm:text-base font-small font-bold flex items-center no-underline font-roboto-light"
           >
-            See all Projects <span className="ml-1">→</span>
+            See all Property <span className="ml-1">→</span>
           </Link>
         </div>
         <Swiper

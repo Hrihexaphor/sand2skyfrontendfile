@@ -167,10 +167,10 @@ const ToolsAdvice = () => {
                         />
                       ) : null}
                     </div>
-                    <div className="p-4 pb-6 relative h-[150px]">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="bg-[#367588] text-white text-xs py-[4px] px-[10px] rounded-lg mt-0">{category}</div>
-                        <p className="mb-0 text-[#367588] text-xs font-semibold mt-0">
+                    <div className="p-3 pb-6 relative h-[150px]">
+                      <div className="flex items-center justify-between mb-2">
+                        {/* <div className="bg-[#367588] text-white text-xs py-[4px] px-[10px] rounded-lg mt-0">{category}</div> */}
+                        <p className="mb-0 text-[#367588] text-sm font-bold mt-0">
                           {formatDate(blog.created_at)}
                         </p>
                       </div>
@@ -178,7 +178,7 @@ const ToolsAdvice = () => {
                         className="font-lg text-center text-base text-[#3C4142] transition duration-500 ease-in-out block mb-2"
                         title={blog.title}
                       >
-                        {blog.title.split(" ").slice(0, 7).join(" ")}{blog.title.split(" ").length > 7 ? "..." : ""}
+                        {blog.title.split(" ").slice(0, 12).join(" ")}{blog.title.split(" ").length > 12 ? "..." : ""}
                       </h3>
                       <p className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-sm text-[#367588] font-bold">Read More..</p>
                     </div>

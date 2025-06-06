@@ -3,8 +3,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation, Autoplay } from "swiper/modules";
-import { FaSearch, FaMapMarkerAlt, FaHome, FaRupeeSign, FaTimes } from "react-icons/fa";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'swiper/css/autoplay';
 import NewNav from "./NewNav";
@@ -16,9 +15,6 @@ const SearchBar = () => {
   // ============= add after 5 second End ===========>
 
   const slides = [
-    // "http://hompark.themezinho.net/wp-content/uploads/2020/03/slide03.jpg",
-    // "http://hompark.themezinho.net/wp-content/uploads/2020/03/slide01.jpg",
-    // "http://hompark.themezinho.net/wp-content/uploads/2020/03/slide02.jpg",
      "https://res.cloudinary.com/djqpz99jb/image/upload/v1748412331/hero1_tgfln0.jpg",
      "https://res.cloudinary.com/djqpz99jb/image/upload/v1748412426/hero2_ffm5us.jpg",
     "https://res.cloudinary.com/djqpz99jb/image/upload/v1748412459/hero3_t9zruj.jpg"
@@ -33,7 +29,7 @@ const SearchBar = () => {
       name: "Project",
       image:
         "https://cdn.staticmb.com/magicservicestatic/images/mb-home-web/collection/buy/webp/owner-property.webp",
-      url: `${process.env.REACT_APP_BASE_URL}/getminimumproperty`,
+      url: `${process.env.REACT_APP_BASE_URL}/getoldproperty`,
       visit: "/projects"
     },
     {
@@ -137,7 +133,7 @@ const SearchBar = () => {
             <SwiperSlide>
                <Link to={apiEndpoints[index].visit}>
                <div key={property.index}
-                className="cursor-pointer sm:me-5 mt-4 bg-gray-900 rounded-xl overflow-hidden shadow-lg relative hover:scale-105 transition transform duration-300">
+                className="cursor-pointer sm:me-5 mt-4 bg-gray-900 rounded-xl overflow-hidden shadow-lg relative">
                 <div
                   className="h-48 bg-cover bg-center relative rounded-xl"
                   style={{ backgroundImage: `url(${property.img})` }}
@@ -149,7 +145,7 @@ const SearchBar = () => {
                   <p className="text-sm sm:text-lg font-geometric-regular">{property.name}</p>
                   <a
                     href="#"
-                    className="text-yellow-400 font-bold flex items-center mt-1 font-geometric-regular no-underline"
+                    className="text-[#E4BA46] font-bold flex items-center mt-1 font-geometric-regular no-underline"
                   >
                     Explore →
                   </a>

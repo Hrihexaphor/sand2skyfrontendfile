@@ -76,7 +76,7 @@ const ReadyToMove = () => {
   );
 
   const handleNavigate = () => {
-    window.open("/postreq", "_blank");
+    window.open("/postreq?tab=Sell", "_blank");
   };
 
   return (

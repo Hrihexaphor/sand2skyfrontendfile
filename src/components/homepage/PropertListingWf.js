@@ -78,7 +78,7 @@ const PropertyListing = () => {
             {/* Featured Property Carousel */}
             <div>
               <div className="mb-5">
-                <h2 className="mb-2 text-2xl text-[#3C4142] font-bold font-geometric-regular">Listing project</h2>
+                <h2 className="mb-2 text-2xl text-[#3C4142] font-bold font-geometric-regular">Property You May Like</h2>
                 <div className="w-12 h-1 bg-yellow-500"></div>
               </div>
               <Swiper

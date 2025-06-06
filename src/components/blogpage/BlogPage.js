@@ -119,10 +119,10 @@ const handleDetailsClick = (id) => {
                   </div>
                   <div className="p-3 pb-6 relative h-[150px]">
                     <div className="flex items-center justify-between mb-2">
-                      <p className="bg-[#367588] text-white text-xs py-[4px] px-[10px] rounded-lg mt-0 mb-0">
+                      {/* <p className="bg-[#367588] text-white text-xs py-[4px] px-[10px] rounded-lg mt-0 mb-0">
                         {category}
-                      </p>
-                      <p className="no-underline mb-0 cursor-pointer text-xs text-[#367588] font-semibold flex items-center gap-2 mt-0">
+                      </p> */}
+                      <p className="no-underline mb-0 cursor-pointer text-sm text-[#367588] font-bold flex items-center gap-2 mt-0">
                         {formatDate(blog.created_at)}
                       </p>
                     </div>
@@ -131,7 +131,7 @@ const handleDetailsClick = (id) => {
                       className="no-underline font-medium text-center text-base text-[#3C4142] transition duration-500 ease-in-out block mb-2"
                       title={blog.title}
                     >
-                      {blog.title.split(" ").slice(0, 7).join(" ")}{blog.title.split(" ").length > 7 ? "..." : ""}
+                      {blog.title.split(" ").slice(0, 12).join(" ")}{blog.title.split(" ").length > 12 ? "..." : ""}
                     </a>
                     <p className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-sm text-[#367588] font-bold">Read More..</p>
                   </div>

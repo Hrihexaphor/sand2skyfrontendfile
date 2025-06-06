@@ -133,14 +133,6 @@ export default function Footer() {
         {/* Support */}
         <div>
           <h3 className="text-xl font-semibold">Contact</h3>
-          <p className="mt-1 mb-0 text-gray-300 flex items-center gap-2">
-            <span><FaPhoneAlt /></span>
-            <a href="tel:+919114942292" className="no-underline text-white">+91 91189 56222</a>
-          </p>
-          <p className="mt-0 mb-0 text-gray-300 flex items-center gap-2">
-            <span><FaPhoneAlt /></span>
-            <a href="tel:+917030066666" className="no-underline text-white">+91 70300 66666</a>
-          </p>
           <p className="mt-2 mb-0 text-gray-300 flex items-center gap-2">
             <span><FaRegEnvelope /></span>
             <a href="mailto:info@houssed.com" className="no-underline text-white">info@houssed.com</a>

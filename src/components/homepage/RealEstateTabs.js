@@ -13,7 +13,7 @@ export default function RealEstateTabs() {
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`text-white font-bold px-2 py-2 border-b-2 ${activeTab === tab ? "border-[#FFD700]" : "border-transparent"
+            className={`text-white font-bold px-2 py-2 border-b-2 ${activeTab === tab ? "border-[#E4BA46]" : "border-transparent"
               }`}
           >
             {tab === "buy" ? "Buy" : tab === "new" ? "New Project" : "Project"}
@@ -229,7 +229,7 @@ function SearchBox({ activeTab }) {
       <div className="flex flex-col md:flex-row items-center gap-2">
         {/* Input Field */}
         <div className="flex items-center border-b border-gray-300 md:border-0 gap-2 relative w-full">
-          <FaMapMarkerAlt className="text-[#FFD700]" />
+          <FaMapMarkerAlt className="text-[#E4BA46]" />
           <div
             onClick={() => setDropdownVisible(true)}
             onBlur={() => setTimeout(() => setDropdownVisible(false), 200)}
@@ -335,7 +335,7 @@ function SearchBox({ activeTab }) {
 
         {/* Property Type Dropdown */}
         <div className="flex items-center gap-2 border-b border-gray-300 md:border-0 w-[100%] mt-[0px] md:mt-[0]">
-          <FaHome className="text-[#FFD700] text-[1.4rem]" />
+          <FaHome className="text-[#E4BA46] text-[1.4rem]" />
           <select
             className="py-2 rounded-lg outline-none text-gray-700 cursor-pointer w-[100%] md:w-[130px]"
             value={propertyType}
@@ -353,18 +353,17 @@ function SearchBox({ activeTab }) {
 
         {/* Price Dropdown */}
         <div className="flex items-center gap-2 border-b border-gray-300 md:border-0 w-[100%] mt-[0px]">
-          <FaRupeeSign className="text-[#FFD700] text-[1.4rem]" />
+          <FaRupeeSign className="text-[#E4BA46] text-[1.4rem]" />
           <select
             className="py-2 rounded-lg outline-none text-gray-700 cursor-pointer w-[100%] lg:w-[130px]"
             value={priceRange}
             onChange={(e) => setPriceRange(e.target.value)}
           >
             <option value="">Price Range</option>
-            <option value="bellow1cr">Below 1 CR</option>
             <option value="1CR-2CR">1 CR - 2 CR</option>
             <option value="2CR-3CR">2 CR - 3 CR</option>
             <option value="3CR-4CR">3 CR - 4 CR</option>
-            <option value="4CR-5CR">4 CR - 5 CR</option>
+            <option value="morethan4CR">4 CR +</option>
           </select>
           <span className="mx-2 text-gray-800 md:block hidden lg:block">|</span>
         </div>
@@ -373,7 +372,7 @@ function SearchBox({ activeTab }) {
         <div className="mt-[7px] w-[100%] md:mt-[0]">
           <button
             type="submit"
-            className="ml-auto bg-[#FFD700] hover:bg-yellow-500 text-white px-3 lg:px-6 py-2 rounded-full flex items-center space-x-2 w-full"
+            className="ml-auto bg-[#E4BA46] hover:bg-[#D59F24] text-white px-3 lg:px-6 py-2 rounded-full flex items-center space-x-2 w-full"
           >
             <FaSearch className="me-2" />
             <span>Search</span>
