@@ -3,6 +3,7 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import { ChevronRightIcon, ChevronLeftIcon } from "lucide-react";
 import NewNav from "../header/NewNav";
 import Footer from "../footer/Footer";
+import AdCards from "../advertisement/AdvertiseCard";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -142,7 +143,7 @@ const handleDetailsClick = (id) => {
 
           {/* Sidebar */}
           <aside className="w-full lg:w-1/4 h-[100vh]">
-            <div className="bg-white rounded-lg shadow p-4 sticky top-[10%]">
+            <div className="bg-white rounded-lg shadow p-4 sticky top-[10%] mb-4">
               <div className="mb-4">
                 <input
                   type="text"
@@ -181,6 +182,7 @@ const handleDetailsClick = (id) => {
                 ))}
               </ul>
             </div>
+            <AdCards location="blog"/>
           </aside>
         </div>
       </section>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
+import faq from "../../assets/FAQ-v3.jpg";
 import axios from 'axios';
 
 export default function FAQSection() {
@@ -39,9 +40,10 @@ export default function FAQSection() {
             {/* Left - Image Section */}
             <div className="w-full lg:w-[30%]">
               <img
-                src="https://cdn.pixabay.com/photo/2017/08/18/15/25/faq-2655310_640.jpg"
+                // src="https://cdn.pixabay.com/photo/2017/08/18/15/25/faq-2655310_640.jpg"
+                src={faq}
                 alt="FAQ Illustration"
-                className="w-full h-auto max-w-sm mx-auto rounded-lg shadow-lg"
+                className="w-full h-auto max-w-sm mx-auto rounded-lg shadow-lg sticky top-[120px]"
               />
             </div>
 

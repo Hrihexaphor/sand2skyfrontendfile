@@ -19,10 +19,11 @@ const FilterBar = ({
 
   const options = {
     localities: [...new Set(dynamicLocalities)],
-    budget: ["< 1 Cr", "1Cr-2Cr", "2Cr-3Cr", "3Cr-4Cr", "> 4Cr"],
+    budget: ["1Cr-2Cr", "2Cr-3Cr", "3Cr-4Cr", "> 4Cr"],
     propertyType: [...new Set(dynamicPropertyTypes)],
     bhk: ["1 BHK", "2 BHK", "3 BHK", "4+ BHK"],
-    // possession: ["Ready to Move", "Under Construction"],
+    selectType: ["New Property", "Resale"],
+    status: ["Ready to Move", "Under Construction"],
   };
 
   useEffect(() => {
@@ -81,10 +82,10 @@ const FilterBar = ({
     );
   };
 
-  const renderDropdown = (category, label, alignRight = false) =>
+  const renderDropdown = (category, label) =>
     dropdown === category && (
       <div
-        className={`absolute top-[48px] ${alignRight ? "right-0" : "left-[-10px]"} bg-white border border-gray-200 rounded-lg shadow-md z-20 p-3 w-[225px] xl:w-[300px]`}
+        className={`absolute top-[48px] bg-white border border-gray-200 rounded-lg shadow-md z-20 p-3 w-[225px] xl:w-[300px]`}
       >
         <div className="text-sm font-semibold text-gray-800 mb-3">{label}</div>
         <div className="flex flex-wrap gap-2 max-h-48 overflow-auto">
@@ -101,7 +102,8 @@ const FilterBar = ({
       </div>
     );
 
-  const FilterChip = ({ category, label, width, alignRight = false }) => {
+    // const FilterChip = ({ category, label, width, alignRight = false }) => {
+  const FilterChip = ({ category, label, width }) => {
     if (selected[category]) {
       return (
         <div
@@ -130,7 +132,8 @@ const FilterBar = ({
           </p>
           <IoIosArrowDown className="text-[20px] text-[#367588]" />
         </div>
-        {renderDropdown(category, label, alignRight)}
+        {renderDropdown(category, label)}
+         {/* {renderDropdown(category, label, alignRight)} */}
       </div>
     );
   };
@@ -142,15 +145,15 @@ const FilterBar = ({
     >
       <div className="flex flex-wrap gap-2 items-center lg:ms-[40px] relative">
         {/* Buy selector + Search input */}
-        <div className="relative bg-white text-gray-700 px-2 py-1 lg:px-3 lg:py-2 rounded-full flex items-center h-[30px] lg:h-[40px] w-[255px] md:w-[237px] lg:w-[350px] max-w-full">
-          <select
+        <div className="relative bg-white text-gray-700 px-2 py-1 lg:px-3 lg:py-2 rounded-full flex items-center h-[30px] lg:h-[40px] w-[255px] md:w-[237px] lg:w-[240px] max-w-full">
+          {/* <select
             value={selected.type || "Buy"}
             onChange={(e) => handleSelect("type", e.target.value)}
             className="bg-transparent outline-none text-[12px] md:w-[60px] lg:w-[80px] text-base font-semibold cursor-pointer"
           >
             <option value="Buy">Buy</option>
           </select>
-          <span className="text-gray-400 mx-2 select-none">|</span>
+          <span className="text-gray-400 mx-2 select-none">|</span> */}
           <div className="flex items-center flex-grow relative">
             <FaSearch className="text-gray-500 mr-2" />
             <input
@@ -175,7 +178,7 @@ const FilterBar = ({
           </div>
 
           {citySuggestions.length > 0 && !selectedCity && (
-            <ul className="absolute top-[40px] left-[95px] min-w-[240px] w-auto px-4 py-2 bg-white border border-gray-300 rounded-md shadow-md z-20 max-h-48 overflow-auto">
+            <ul className="absolute top-[40px] left-[0px] min-w-[240px] w-auto px-4 py-2 bg-white border border-gray-300 rounded-md shadow-md z-20 max-h-48 overflow-auto">
               {citySuggestions.map((city, index) => (
                 <li
                   key={index}
@@ -198,7 +201,10 @@ const FilterBar = ({
         <FilterChip category="localities" label="Top Localities" width="md:w-[135px] lg:w-[170px]" />
         <FilterChip category="budget" label="Budget" width="md:w-[100px] lg:w-[120px]" />
         <FilterChip category="propertyType" label="Property Type" width="md:w-[135px] lg:w-[160px]" />
-        <FilterChip category="bhk" label="BHK" width="md:w-[80px] lg:w-[100px]" alignRight={true} />
+        <FilterChip category="bhk" label="BHK" width="md:w-[80px] lg:w-[100px]" />
+        <FilterChip category="selectType" label="Select Type" width="md:w-[120px] lg:w-[140px]" />
+        <FilterChip category="status" label="Status" width="md:w-[125px] lg:w-[145px]" />
+        {/* <FilterChip category="status" label="Status" width="md:w-[125px] lg:w-[145px]" alignRight={true} /> */}
         {/* <FilterChip category="possession" label="Possession Status" width="w-[200px]" /> */}
       </div>
     </div>

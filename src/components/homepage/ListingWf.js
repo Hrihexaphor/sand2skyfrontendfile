@@ -17,7 +17,7 @@ const ListingWf = () => {
   const [topLocations, setTopLocations] = useState([]);
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_BASE_URL}/localities`, {
+    axios.get(`${process.env.REACT_APP_BASE_URL}/top-localities`, {
       withCredentials: true, // replaces fetch's `credentials: 'include'`
     })
       .then((res) => {
@@ -81,7 +81,7 @@ const ListingWf = () => {
                   <h3 className="text-lg font-semibold">{loc.locality}</h3>
                   <p className="text-sm">
                     <span className="text-lg font-bold text-[#FFD700]">
-                      {loc.property_count}
+                      {loc.hit_count}
                     </span>+ Properties
                   </p>
                 </div>

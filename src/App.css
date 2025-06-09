@@ -174,10 +174,10 @@ body{
     width: 200px;
   } */
   .pl-heading{
-    margin-top:7% !important;
+    margin-top:11% !important;
   }
   .pl-heading1{
-    margin-top:11% !important;
+    margin-top:15% !important;
   }
   .list-imgbox{
     height: 341px;
@@ -195,10 +195,10 @@ body{
 }
 @media (max-width: 768px){
   .pl-heading{
-    margin-top:9% !important;
+    margin-top:14% !important;
   }
   .pl-heading1{
-    margin-top:15% !important;
+    margin-top:20% !important;
   }
   .list-imgbox{
     height: 314px;
@@ -216,10 +216,10 @@ body{
     top: 57px;
   }
   .pl-heading{
-    margin-top:32% !important;
+    margin-top:43% !important;
   }
   .pl-heading1{
-    margin-top:33% !important;
+    margin-top:42% !important;
   }
   .list-imgbox{
     height: 200px;

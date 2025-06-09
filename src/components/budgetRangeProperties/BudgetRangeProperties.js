@@ -24,6 +24,10 @@ const BudgetRangeProperties = () => {
   const [localities, setLocalities] = useState([]);
   const [propertyTypes, setPropertyTypes] = useState([]);
   const [cities, setCities] = useState([]);
+  const [search, setSearch] = useState("");
+
+  const filterSelectType = selectedFilters.selectType;
+  const filterStatus = selectedFilters.status;
 
 
   const title = searchParams.get("title");
@@ -118,8 +122,24 @@ const BudgetRangeProperties = () => {
         return false;
     }
 
+    // 9. Select Type
+        if (filterSelectType && property.transaction_types?.toLowerCase().trim() !== filterSelectType.toLowerCase().trim()) {
+            return false;
+        }
+
+        // 10. Status
+        if (filterStatus && property.possession_status?.toLowerCase().trim() !== filterStatus.toLowerCase().trim()) {
+            return false;
+        }
+
     return true;
   });
+
+   // ------- Search Filter ------>
+  const searchFilter = filteredProperties.filter((property) =>
+    property.project_name.toLowerCase().includes(search.toLowerCase())
+  );
+
 
 
   const formatDate = (dateString) => {
@@ -188,30 +208,27 @@ const BudgetRangeProperties = () => {
           <div className="mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4">
             {/* ------------ Left box ------------> */}
             <div className="lg:col-span-2">
-              {/* <div className="flex gap-2 items-center mt-4 mb-4">
+              <div className="flex gap-2 items-center mt-4 mb-4">
                 <div className="flex items-center bg-[#fff] w-full py-[5px] px-[10px] rounded-[20px]">
                   <FaSearch className="text-gray-500 mr-2" />
                   <input
                     type="text"
-                    placeholder="Search Project"
-                    value={searchQuery}
-                    onChange={(e) => {
-                      setSearchQuery(e.target.value);
-                      setPage(1);
-                    }}
+                    placeholder="Search Project Name"
                     className="search outline-none w-full bg-transparent"
+                     value={search}
+                    onChange={(e) => setSearch(e.target.value)}
                   />
                 </div>
-                <button className="bg-white text-gray-700 font-semibold px-3 py-1 rounded-full flex items-center h-[34px]"
-                  onClick={() => setIsFilterModalOpen(true)}>
-                  <FaFilter className="me-2" /> Filter
-                </button>
-              </div> */}
+              </div>
 
               {/* ======== Project Card ==========> */}
               {loading ? (
                 <p className="text-center text-gray-600 text-lg py-6">Loading properties...</p>
-              ) : (filteredProperties.sort((a, b) => (b.is_featured === true) - (a.is_featured === true)).map((project, index) => (
+              ) : searchFilter.length === 0 ? (
+                            <div className="text-center text-gray-600 text-lg py-6">
+                                No properties match your criteria.
+                            </div>
+              ) : (searchFilter.sort((a, b) => (b.is_featured === true) - (a.is_featured === true)).map((project, index) => (
                 <div className="bg-[#fff] rounded-lg mb-4 flex md:flex-row flex-col shadow-[0_4px_20px_rgba(0,95,107,0.2)]">
                   <div onClick={() => handleImageClick(project)} className="md:w-[40%] relative list-imgbox cursor-pointer">
                     <img
@@ -331,7 +348,7 @@ const BudgetRangeProperties = () => {
 
             {/* ------- right box ------- */}
             <div className="block lg:flex flex-col gap-4 p-4">
-              <AdCards />
+              <AdCards location="home" />
             </div>
           </div>
 

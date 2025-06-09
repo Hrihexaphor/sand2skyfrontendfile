@@ -94,7 +94,7 @@ const ContactPage = () => {
                         <p className="mb-0">info@houssed.com</p>
                       </div>
                     </div>
-                    <div className="bg-white p-4 rounded-lg shadow-lg flex items-center gap-5 mb-4 flex-1">
+                    {/* <div className="bg-white p-4 rounded-lg shadow-lg flex items-center gap-5 mb-4 flex-1">
                       <div className="h-[40px] w-[40px] p-[6px] rounded-full border border-[#1386a8] flex items-center justify-center">
                         <IoCall className="text-[47px] text-[#367588]" />
                       </div>
@@ -102,17 +102,17 @@ const ContactPage = () => {
                         <p className="mb-0">+91 91156 98292</p>
                         <p className="mb-0">+91 70300 66666</p>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
 
-                  <div className="bg-white p-4 rounded-lg shadow-lg flex items-center gap-5 mb-4">
+                  {/* <div className="bg-white p-4 rounded-lg shadow-lg flex items-center gap-5 mb-4">
                     <div className="h-[40px] w-[40px] p-[6px] rounded-full border border-[#1386a8] flex items-center justify-center">
                       <IoLocationSharp className="text-[47px] text-[#367588]" />
                     </div>
                     <div>
                       <p className="mb-0">Sand2sky. #1189, 4th Floor, Nilakantha Nagar Behind Passport Office, Debray College Road, NayaPalli, Bhubaneswar-751012</p>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 
@@ -173,7 +173,7 @@ const ContactPage = () => {
             </div>
           </div>
         </div>
-        <div className="w-full h-[400px]">
+        {/* <div className="w-full h-[400px]">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3766.9440388033986!2d85.79810939999999!3d20.27631689999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a19a78622f0fc5f%3A0x86bdd81c7c11e2f!2sRajdhani%20College!5e1!3m2!1sen!2sin!4v1746512670715!5m2!1sen!2sin"
             width="100%"
@@ -183,7 +183,7 @@ const ContactPage = () => {
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
           ></iframe>
-        </div>
+        </div> */}
       </div>
  <ToastContainer />
       <Footer />
