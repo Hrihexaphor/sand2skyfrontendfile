@@ -552,44 +552,11 @@ const PropertyDetails = ({ propertyId }) => {
       setMinSBA(min);
       setMaxSBA(max);
 
-      const pricePerSqft = parseFloat(property?.basic?.price_per_sqft || 0);
-      setMinPrice(pricePerSqft * min);
-      setMaxPrice(pricePerSqft * max);
-    }
-  }, [property]);
-
-  // ------- tab section ------
-  const documentTabsWithSuffix = (() => {
-    const counts = {};
-    return (property?.documents || [])
-      .filter(
-        (doc) =>
-          !doc.file_url?.endsWith(".pdf") &&
-          (/BHK$/i.test(doc.type) ||
-            ["floorplan", "masterplan", "brochure", "approval"].includes(doc.type.toLowerCase()))
-      )
-      .map((doc) => {
-        const key = doc.type.toLowerCase();
-        counts[key] = (counts[key] || 0) + 1;
-        const suffix = counts[key] > 1 ? ` ${counts[key]}` : "";
-        return { ...doc, tabName: doc.type + suffix };
-      });
-  })();
-
-  // Prepare all tab names: BHK tabs + document tabs with proper suffix
-  const allTabs = [
-    ...(property?.bhk_configurations?.map(
-      (config) => `${config.bhk_type}`
-    ) || []),
-    ...documentTabsWithSuffix.map((doc) => doc.tabName),
-  ];
-
-  // Set first tab active on mount or when property changes
-  useEffect(() => {
-    if (allTabs.length > 0) {
-      setActiveTab(allTabs[0]);
-    }
-  }, [property]);
+    const pricePerSqft = parseFloat(property?.basic?.price_per_sqft || 0);
+    setMinPrice(pricePerSqft * min);
+    setMaxPrice(pricePerSqft * max);
+  }
+}, [property]);
 
   return (
     <>
@@ -1372,7 +1339,7 @@ const PropertyDetails = ({ propertyId }) => {
 
               {/* Floor Plans & Documents Section - Takes 2/3 Width */}
               <div className="mb-3 container">
-                <h2 className="mb-2 ms-[-12px] text-2xl font-bold font-geometric-regular text-[#3C4142]">
+                <h2 className="mb-2 ms-[-12px] text-2xl font-bold font-geometric-regular text-[#3C4142] ">
                   Floor Plans & Documents
                 </h2>
                 <div className="w-12 h-1 bg-yellow-500"></div>
@@ -1380,65 +1347,109 @@ const PropertyDetails = ({ propertyId }) => {
 
               <div className="shadow-sm bg-white rounded-lg smallsizes">
                 <div className="w-full">
-                  {/* Tab Buttons */}
+                  
                   <div className="flex flex-wrap border-b">
-                    {allTabs.map((tab) => (
-                      <button
-                        key={tab}
-                        onClick={() => setActiveTab(tab)}
-                        className={`px-4 py-2 border-b-2 transition-colors duration-200 ${activeTab === tab
+                    {/* For Project Apartment and Project House/Villa - Show BHK Configurations */}
+                    {(property?.basic?.property_category_name === "Project Apartment" ||
+                      property?.basic?.property_category_name === "Project House/Villa") &&
+                      Array.isArray(property?.bhk_configurations) &&
+                      // Group by bhk_type to avoid duplicate tabs
+                      [...new Set(property.bhk_configurations.map(config => config.bhk_type))].map((bhkType) => (
+                        <button
+                          key={bhkType}
+                          onClick={() => setActiveTab(bhkType)}
+                          className={`px-4 py-2 border-b-2 transition-colors duration-200 ${activeTab === bhkType
                             ? "border-blue-600 text-blue-600 font-semibold"
                             : "border-transparent text-gray-600"
-                          }`}
-                      >
-                        {tab}
-                      </button>
-                    ))}
+                            }`}
+                        >
+                          {bhkType}
+                        </button>
+                      ))}
+
+                    {/* For Apartment and House/Villa - Show Document Types */}
+                    {(property?.basic?.property_category_name === "Apartment" ||
+                      property?.basic?.property_category_name === "House/Villa") &&
+                      property?.documents
+                        ?.filter(
+                          (doc) =>
+                            /BHK$/i.test(doc.type) ||
+                            doc.type.toLowerCase() === "floorplan" ||
+                            doc.type.toLowerCase() === "masterplan"
+                        )
+                        .map((doc) => (
+                          <button
+                            key={doc.id}
+                            onClick={() => setActiveTab(doc.type)}
+                            className={`px-4 py-2 border-b-2 transition-colors duration-200 ${activeTab === doc.type
+                              ? "border-blue-600 text-blue-600 font-semibold"
+                              : "border-transparent text-gray-600"
+                              }`}
+                          >
+                            {doc.type}
+                          </button>
+                        ))}
                   </div>
 
-                  {/* Tab Content */}
+                  
                   <div className="mt-2 p-4">
-                    {activeTab && (
-                      <>
-                        {/* BHK Configuration Tab Content */}
-                        {property?.bhk_configurations
-                          ?.filter(
-                            (config) =>
-                              `${config.bhk_type}` ===
-                              activeTab
-                          )
-                          .map((config) => (
-                            <div key={config.id} className="mb-6">
-                              <div className="p-4 bg-gray-50 rounded-lg">
-                                <h4 className="text-md font-semibold mb-2">
-                                  {config.bhk_type} - {config.carpet_area} sqft
-                                </h4>
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                                  <div>
-                                    <span className="font-medium">Bedrooms:</span>{" "}
-                                    {config.bedrooms}
-                                  </div>
-                                  <div>
-                                    <span className="font-medium">Bathrooms:</span>{" "}
-                                    {config.bathrooms}
-                                  </div>
-                                  <div>
-                                    <span className="font-medium">Balconies:</span>{" "}
-                                    {config.balconies}
-                                  </div>
-                                  <div>
-                                    <span className="font-medium">Super Built-up:</span>{" "}
-                                    {config.super_built_up_area} sqft
-                                  </div>
-                                  <div>
-                                    <span className="font-medium">Carpet Area:</span>{" "}
+                    {/* Content for Project Apartment and Project House/Villa */}
+                    {(property?.basic?.property_category_name === "Project Apartment" ||
+                      property?.basic?.property_category_name === "Project House/Villa") &&
+                      activeTab && (
+                        <div>
+                          {/* Show carpet area buttons for selected BHK type */}
+                          <div className="mb-4">
+                            <h3 className="text-lg font-semibold mb-3">{activeTab} Configurations</h3>
+                            <div className="flex flex-wrap gap-2">
+                              {property.bhk_configurations
+                                ?.filter((config) => config.bhk_type === activeTab)
+                                .map((config) => (
+                                  <button
+                                    key={config.id}
+                                    onClick={() => setSelectedConfig(config.id)}
+                                    className={`px-4 py-2 border rounded-lg transition-colors duration-200 ${selectedConfig === config.id
+                                      ? "bg-blue-600 text-white border-blue-600"
+                                      : "bg-white text-gray-700 border-gray-300 hover:border-blue-400"
+                                      }`}
+                                  >
                                     {config.carpet_area} sqft
-                                  </div>
-                                </div>
-                              </div>
+                                  </button>
+                                ))}
+                            </div>
+                          </div>
 
-                              {config.file_url && (
-                                <>
+                          {/* Show selected configuration details and floor plan */}
+                          {selectedConfig &&
+                            property.bhk_configurations
+                              ?.filter((config) => config.id === selectedConfig)
+                              .map((config) => (
+                                <div key={config.id}>
+                                  {/* BHK Configuration Details */}
+                                  <div className="mb-4 p-4 bg-gray-50 rounded-lg">
+                                    <h4 className="text-md font-semibold mb-2">
+                                      {config.bhk_type} - {config.carpet_area} sqft Configuration
+                                    </h4>
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                                      <div>
+                                        <span className="font-medium">Bedrooms:</span> {config.bedrooms}
+                                      </div>
+                                      <div>
+                                        <span className="font-medium">Bathrooms:</span> {config.bathrooms}
+                                      </div>
+                                      <div>
+                                        <span className="font-medium">Balconies:</span> {config.balconies}
+                                      </div>
+                                      <div>
+                                        <span className="font-medium">Super Built-up:</span> {config.super_built_up_area} sqft
+                                      </div>
+                                      <div>
+                                        <span className="font-medium">Carpet Area:</span> {config.carpet_area} sqft
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  {/* Floor Plan Image */}
                                   <img
                                     src={config.file_url}
                                     alt={`${config.bhk_type} - ${config.carpet_area} sqft`}
@@ -1450,39 +1461,194 @@ const PropertyDetails = ({ propertyId }) => {
                                     rel="noopener noreferrer"
                                     className="text-blue-600 underline mt-2 block"
                                   >
-                                    View {config.bhk_type} Floor Plan (
-                                    {config.carpet_area} sqft)
+                                    View {config.bhk_type} Floor Plan ({config.carpet_area} sqft)
                                   </a>
-                                </>
-                              )}
-                            </div>
-                          ))}
+                                </div>
+                              ))}
+                        </div>
+                      )}
 
-                        {/* Document Tab Content */}
-                        {documentTabsWithSuffix
-                          .filter((doc) => doc.tabName === activeTab)
-                          .map((doc) => (
-                            <div key={doc.id} className="mb-6">
-                              <img
-                                src={doc.file_url}
-                                alt={doc.type}
-                                className="w-full max-h-[500px] object-contain border rounded-lg"
-                              />
-                              <a
-                                href={doc.file_url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-blue-600 underline mt-2 block"
-                              >
-                                View {doc.type}
-                              </a>
-                            </div>
-                          ))}
-                      </>
-                    )}
+                    {/* Content for Apartment and House/Villa - Show all tabs content or active tab */}
+                    {(property?.basic?.property_category_name === "Apartment" ||
+                      property?.basic?.property_category_name === "House/Villa") && (
+                        <>
+                          {/* If no active tab is set, show all documents */}
+                          {!activeTab && property?.documents
+                            ?.filter(
+                              (doc) =>
+                                /BHK$/i.test(doc.type) ||
+                                doc.type.toLowerCase() === "floorplan" ||
+                                doc.type.toLowerCase() === "masterplan"
+                            )
+                            .map((doc, index) => (
+                              <div key={doc.id} className={index > 0 ? "mt-6 pt-6 border-t border-gray-200" : ""}>
+                                <h3 className="text-lg font-semibold mb-3 capitalize">{doc.type}</h3>
+                                <img
+                                  src={doc.file_url}
+                                  alt={doc.type}
+                                  className="w-full max-h-[500px] object-contain border rounded-lg"
+                                />
+                                <a
+                                  href={doc.file_url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-blue-600 underline mt-2 block"
+                                >
+                                  View {doc.type}
+                                </a>
+                              </div>
+                            ))}
+
+                          {/* If active tab is set, show specific document */}
+                          {activeTab && property?.documents
+                            ?.filter(
+                              (doc) =>
+                                /BHK$/i.test(doc.type) ||
+                                doc.type.toLowerCase() === "floorplan" ||
+                                doc.type.toLowerCase() === "masterplan"
+                            )
+                            ?.filter((doc) => doc.type === activeTab)
+                            .map((doc) => (
+                              <div key={doc.id}>
+                                <img
+                                  src={doc.file_url}
+                                  alt={doc.type}
+                                  className="w-full max-h-[500px] object-contain border rounded-lg"
+                                />
+                                <a
+                                  href={doc.file_url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-blue-600 underline mt-2 block"
+                                >
+                                  View {doc.type}
+                                </a>
+                              </div>
+                            ))}
+                        </>
+                      )}
                   </div>
                 </div>
-              </div>
+              </div> */}
+
+              {/* --------- test-------- */}
+              <div className="mb-3 container">
+        <h2 className="mb-2 ms-[-12px] text-2xl font-bold font-geometric-regular text-[#3C4142]">
+          Floor Plans & Documents
+        </h2>
+        <div className="w-12 h-1 bg-yellow-500"></div>
+      </div>
+
+      <div className="shadow-sm bg-white rounded-lg smallsizes">
+        <div className="w-full">
+          {/* Tab Buttons */}
+          <div className="flex flex-wrap border-b">
+            {allTabs.map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`px-4 py-2 border-b-2 transition-colors duration-200 ${
+                  activeTab === tab
+                    ? "border-blue-600 text-blue-600 font-semibold"
+                    : "border-transparent text-gray-600"
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+
+          {/* Tab Content */}
+          <div className="mt-2 p-4">
+            {activeTab && (
+              <>
+                {/* BHK Configuration Tab Content */}
+                {property?.bhk_configurations
+                  ?.filter(
+                    (config) =>
+                      `${config.bhk_type}` ===
+                      activeTab
+                  )
+                  .map((config) => (
+                    <div key={config.id} className="mb-6">
+                      <div className="p-4 bg-gray-50 rounded-lg">
+                        <h4 className="text-md font-semibold mb-2">
+                          {config.bhk_type} - {config.carpet_area} sqft
+                        </h4>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                          <div>
+                            <span className="font-medium">Bedrooms:</span>{" "}
+                            {config.bedrooms}
+                          </div>
+                          <div>
+                            <span className="font-medium">Bathrooms:</span>{" "}
+                            {config.bathrooms}
+                          </div>
+                          <div>
+                            <span className="font-medium">Balconies:</span>{" "}
+                            {config.balconies}
+                          </div>
+                          <div>
+                            <span className="font-medium">Super Built-up:</span>{" "}
+                            {config.super_built_up_area} sqft
+                          </div>
+                          <div>
+                            <span className="font-medium">Carpet Area:</span>{" "}
+                            {config.carpet_area} sqft
+                          </div>
+                        </div>
+                      </div>
+
+                      {config.file_url && (
+                        <>
+                          <img
+                            src={config.file_url}
+                            alt={`${config.bhk_type} - ${config.carpet_area} sqft`}
+                            className="w-full max-h-[500px] object-contain border rounded-lg mt-4"
+                          />
+                          <a
+                            href={config.file_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 underline mt-2 block"
+                          >
+                            View {config.bhk_type} Floor Plan (
+                            {config.carpet_area} sqft)
+                          </a>
+                        </>
+                      )}
+                    </div>
+                  ))}
+
+                {/* Document Tab Content */}
+                {documentTabsWithSuffix
+                  .filter((doc) => doc.tabName === activeTab)
+                  .map((doc) => (
+                    <div key={doc.id} className="mb-6">
+                      <img
+                        src={doc.file_url}
+                        alt={doc.type}
+                        className="w-full max-h-[500px] object-contain border rounded-lg"
+                      />
+                      <a
+                        href={doc.file_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 underline mt-2 block"
+                      >
+                        View {doc.type}
+                      </a>
+                    </div>
+                  ))}
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+
+
+
+              {/* --------- test ------- */}
 
               <div className="md:flex-row gap-6 mt-10">
                 {/* Video Section - Takes 2/3 Width */}
