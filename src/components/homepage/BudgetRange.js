@@ -74,7 +74,7 @@ const BudgetRange = () => {
     <div className="container">
       <div className="text-center mx-auto mt-2 one">
         <h1 className="text-yellow-700 text-lg font-semibold uppercase tracking-wide mb-2">
-          Budget Range.
+          Budget Range
         </h1>
       </div>
 
