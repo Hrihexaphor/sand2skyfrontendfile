@@ -80,11 +80,11 @@ const ContactPage = () => {
                   Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi non quis exercitationem culpa nesciunt nihil aut nostrum explicabo reprehenderit optio amet ab temporibus asperiores quasi cupiditate. Voluptatum ducimus voluptates voluptas?
                 </p>
                 <div className="mt-2 m-auto">
-                  {/* <img
-                    src="https://www.poornima.org/img/contact-img.png"
+                  <img
+                    src="https://res.cloudinary.com/dfjf4inz6/image/upload/v1749545247/contact-us_densv3.png"
                     alt="Contact Illustration"
-                  /> */}
-                  <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                  />
+                  {/* <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                     <div className="bg-white p-4 rounded-lg shadow-lg flex items-center gap-5 mb-4 flex-1">
                       <div className="h-[40px] w-[40px] p-[6px] rounded-full border border-[#1386a8] flex items-center justify-center">
                         <IoIosMail className="text-[47px] text-[#367588]" />
@@ -94,7 +94,7 @@ const ContactPage = () => {
                         <p className="mb-0">info@houssed.com</p>
                       </div>
                     </div>
-                    {/* <div className="bg-white p-4 rounded-lg shadow-lg flex items-center gap-5 mb-4 flex-1">
+                    <div className="bg-white p-4 rounded-lg shadow-lg flex items-center gap-5 mb-4 flex-1">
                       <div className="h-[40px] w-[40px] p-[6px] rounded-full border border-[#1386a8] flex items-center justify-center">
                         <IoCall className="text-[47px] text-[#367588]" />
                       </div>
@@ -102,8 +102,8 @@ const ContactPage = () => {
                         <p className="mb-0">+91 91156 98292</p>
                         <p className="mb-0">+91 70300 66666</p>
                       </div>
-                    </div> */}
-                  </div>
+                    </div>
+                  </div> */}
 
                   {/* <div className="bg-white p-4 rounded-lg shadow-lg flex items-center gap-5 mb-4">
                     <div className="h-[40px] w-[40px] p-[6px] rounded-full border border-[#1386a8] flex items-center justify-center">

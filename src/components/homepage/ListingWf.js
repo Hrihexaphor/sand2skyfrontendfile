@@ -67,7 +67,8 @@ const ListingWf = () => {
                 key={i}
                 className="relative cursor-pointer rounded-lg overflow-hidden shadow-md me-4 h-40 group w-[260px] object-cover"
                 style={{
-                  backgroundImage: `url('https://houssed.com/assets/images/locality/locality2.webp')`,
+                  // backgroundImage: `url('https://houssed.com/assets/images/locality/locality2.webp')`,
+                  backgroundImage: `url('https://media.istockphoto.com/id/184962061/photo/business-towers.jpg?s=612x612&w=0&k=20&c=gLQLQ9lnfW6OnJVe39r516vbZYupOoEPl7P_22Un6EM=')`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }}
@@ -79,11 +80,11 @@ const ListingWf = () => {
                 {/* Text Content */}
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-white px-2 text-center">
                   <h3 className="text-lg font-semibold">{loc.locality}</h3>
-                  <p className="text-sm">
+                  {/* <p className="text-sm">
                     <span className="text-lg font-bold text-[#FFD700]">
                       {loc.hit_count}
                     </span>+ Properties
-                  </p>
+                  </p> */}
                 </div>
               </div>
             ))}

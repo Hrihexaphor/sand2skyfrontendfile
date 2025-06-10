@@ -59,20 +59,76 @@ const FeaturedProperty = () => {
     const filterSelectType = selectedFilters.selectType;
     const filterStatus = selectedFilters.status;
 
+    const [city, setCity] = useState("");
+    
+    // Detect city on mount
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_BASE_URL}/featured-properties-lite`, {
-            withCredentials: true, // replaces fetch's `credentials: 'include'`
+      const getCity = async () => {
+        try {
+          const res = await axios.get("https://ipapi.co/json/");
+          setCity(res.data.city || "Bhubaneswar"); // fallback if empty
+        } catch (error) {
+          console.error("Failed to detect city, using fallback:", error);
+          setCity("Bhubaneswar");
+        }
+      };
+    
+      getCity();
+    }, []);
+    
+    useEffect(() => {
+      if (!city) return; // wait for city detection
+    
+      axios
+        .get(`${process.env.REACT_APP_BASE_URL}/featured-properties-lite`, {
+          withCredentials: true,
         })
-            .then((res) => {
-                setProperties(res.data);
+        .then((res) => {
+          const now = new Date();
+          
+          const filteredProperties = res.data.filter((property) => {
+            // Check if the property is currently featured (active)
+            const start = new Date(property.featured_from);
+            const end = new Date(property.featured_to);
+            const isActive = now >= start && now <= end;
+            
+            // Check if the detected city matches any city in city_names array
+            const cityMatch = property.city_names?.some(
+              (cityName) => cityName.trim().toLowerCase() === city.trim().toLowerCase()
+            );
+            
+            // If user's city matches, show the property
+            // If user's city doesn't match, only show if it's a Bhubaneswar property
+            const shouldShow = cityMatch || property.city_names?.some(
+              (cityName) => cityName.trim().toLowerCase() === "bhubaneswar"
+            );
+            
+            return isActive && shouldShow;
+          });
+    
+           setProperties(filteredProperties);
                 console.log(setProperties)
                 setLoading(false);
-            })
-            .catch((error) => {
-                console.error('Error fetching data:', error);
-                setLoading(false);
-            });
-    }, []);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+    }, [city]); // Add city as dependency
+
+    // useEffect(() => {
+    //     axios.get(`${process.env.REACT_APP_BASE_URL}/featured-properties-lite`, {
+    //         withCredentials: true, // replaces fetch's `credentials: 'include'`
+    //     })
+    //         .then((res) => {
+    //             setProperties(res.data);
+    //             console.log(setProperties)
+    //             setLoading(false);
+    //         })
+    //         .catch((error) => {
+    //             console.error('Error fetching data:', error);
+    //             setLoading(false);
+    //         });
+    // }, []);
     // --------------- API INTEGRATION END -------> 
 
     useEffect(() => {

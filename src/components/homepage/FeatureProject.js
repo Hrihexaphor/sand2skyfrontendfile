@@ -16,23 +16,64 @@ import { Navigation, Autoplay } from "swiper/modules";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const FeatureProject = () => {
-  const [featureProperty, setFeatureProperty] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [modalImages, setModalImages] = useState([]);
-   const [pname, setPname] = useState("");
+  
+const [featureProperty, setFeatureProperty] = useState([]);
+const [showModal, setShowModal] = useState(false);
+const [modalImages, setModalImages] = useState([]);
+const [pname, setPname] = useState("");
+const [city, setCity] = useState("");
 
-  useEffect(() => {
-    axios
-      .get(`${BASE_URL}/featured-properties-lite`, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        setFeatureProperty(res.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
+// Detect city on mount
+useEffect(() => {
+  const getCity = async () => {
+    try {
+      const res = await axios.get("https://ipapi.co/json/");
+      setCity(res.data.city || "Bhubaneswar"); // fallback if empty
+    } catch (error) {
+      console.error("Failed to detect city, using fallback:", error);
+      setCity("Bhubaneswar");
+    }
+  };
+
+  getCity();
+}, []);
+
+useEffect(() => {
+  if (!city) return; // wait for city detection
+
+  axios
+    .get(`${BASE_URL}/featured-properties-lite`, {
+      withCredentials: true,
+    })
+    .then((res) => {
+      const now = new Date();
+      
+      const filteredProperties = res.data.filter((property) => {
+        // Check if the property is currently featured (active)
+        const start = new Date(property.featured_from);
+        const end = new Date(property.featured_to);
+        const isActive = now >= start && now <= end;
+        
+        // Check if the detected city matches any city in city_names array
+        const cityMatch = property.city_names?.some(
+          (cityName) => cityName.trim().toLowerCase() === city.trim().toLowerCase()
+        );
+        
+        // If user's city matches, show the property
+        // If user's city doesn't match, only show if it's a Bhubaneswar property
+        const shouldShow = cityMatch || property.city_names?.some(
+          (cityName) => cityName.trim().toLowerCase() === "bhubaneswar"
+        );
+        
+        return isActive && shouldShow;
       });
-  }, []);
+
+      setFeatureProperty(filteredProperties);
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
+}, [city]); // Add city as dependency
 
   const handleDetailsClick = (id) => {
     window.open(`/details/${id}`, '_blank');
@@ -119,7 +160,7 @@ const FeatureProject = () => {
                         Price
                       </p>
                       <p className="text-gray-600 text-[13px] mb-0 mt-[0px]">
-                        {formatPrice(property.expected_price)}
+                        {formatPrice(property.price)}
                       </p>
                     </div>
                   </div>
