@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaTimes } from "react-icons/fa";
 
-const AdCards = ({ location }) => {
+const AdBanner = ({ location }) => {
   const [adCard, setAdCard] = useState([]);
   const [city, setCity] = useState("");
 
@@ -53,7 +53,7 @@ const AdCards = ({ location }) => {
             (c) => c.name?.trim().toLowerCase() === city.trim().toLowerCase()
           );
           const isActive = now >= start && now <= end;
-          const isCorrectSize = ad.image_size === "368x219";
+          const isCorrectSize = ad.image_size === "856x72";
 
           return adLocation === matchLocation && cityMatch && isActive && isCorrectSize;
         });
@@ -63,11 +63,6 @@ const AdCards = ({ location }) => {
         console.error("Error fetching advertisement data:", error);
       });
   }, [location, city]);
-
-  const handleClose = (id, e) => {
-    e.preventDefault(); // prevent navigation
-    setAdCard((prev) => prev.filter((ad) => ad.id !== id));
-  };
 
   return (
     <>
@@ -86,13 +81,6 @@ const AdCards = ({ location }) => {
           <p className="text-sm text-white absolute top-1 left-1 bg-black bg-opacity-50 px-1 rounded-sm">
             AD.
           </p>
-          <button
-            onClick={(e) => handleClose(ad.id, e)}
-            className="absolute top-2 right-2 text-gray-600 bg-white bg-opacity-75 rounded-full p-1 z-10 lg:hidden"
-            aria-label="Close Advertisement"
-          >
-            <FaTimes size={18} />
-          </button>
 
           <img
             src={ad.image_url}
@@ -106,4 +94,4 @@ const AdCards = ({ location }) => {
   );
 };
 
-export default AdCards;
+export default AdBanner;

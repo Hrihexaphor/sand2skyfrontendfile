@@ -9,6 +9,7 @@ import Footer from "../footer/Footer";
 import { useNavigate, useLocation } from "react-router-dom";
 import AdCards from "../advertisement/AdvertiseCard";
 import FilterBar from "./FilterBar";
+import AdBanner from "../advertisement/AdvertiseBanner";
 import axios from 'axios';
 
 const AdComponent = () => (
@@ -397,7 +398,8 @@ const ListingSection = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                        {index === 1 && <AdComponent />}
+                                        {/* {index === 1 && <AdComponent />} */}
+                                        {(index + 1) % 2 === 0 && <AdBanner location="buy" />}
                                     </React.Fragment>
                                 ))
                         )}
