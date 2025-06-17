@@ -25,7 +25,7 @@ const Readytomove = () => {
 
   const [selectedFilters, setSelectedFilters] = useState({ type: "Buy" });
   const [localities, setLocalities] = useState([]);
-  const [propertyTypes, setPropertyTypes] = useState([]);
+  // const [propertyTypes, setPropertyTypes] = useState([]);
   const [cities, setCities] = useState([]);
   const [search, setSearch] = useState("");
 
@@ -53,7 +53,7 @@ const Readytomove = () => {
    useEffect(() => {
       if (projects.length > 0) {
         setLocalities([...new Set(projects.map((p) => p.locality).filter(Boolean))]);
-        setPropertyTypes([...new Set(projects.map((p) => p.subcategory_name).filter(Boolean))]);
+        // setPropertyTypes([...new Set(projects.map((p) => p.subcategory_name).filter(Boolean))]);
         setCities([...new Set(projects.map((p) => p.city).filter(Boolean))]);
       }
     }, [projects]);
@@ -177,7 +177,7 @@ const Readytomove = () => {
                 )
                 : localities
             }
-            dynamicPropertyTypes={propertyTypes}
+            // dynamicPropertyTypes={propertyTypes}
             dynamicCities={cities}
           />
           <div className="pl-heading1">

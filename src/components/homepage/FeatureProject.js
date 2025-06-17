@@ -101,7 +101,7 @@ useEffect(() => {
 
   return (
     <div className="bg-[#F4EFE5]">
-      <div className="container pt-44">
+      <div className="container pt-[40%] md:pt-5">
         <div className="flex items-center justify-between mb-4">
           <div className="mb-3">
             <h2 className="mb-2 text-[#3C4142] text-2xl font-bold font-geometric-regular">

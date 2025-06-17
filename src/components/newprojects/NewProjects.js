@@ -53,7 +53,7 @@ const NewProjects = () => {
 
   const [selectedFilters, setSelectedFilters] = useState({ type: "Buy" });
   const [localities, setLocalities] = useState([]);
-  const [propertyTypes, setPropertyTypes] = useState([]);
+  // const [propertyTypes, setPropertyTypes] = useState([]);
   const [cities, setCities] = useState([]);
   const [search, setSearch] = useState("");
 
@@ -89,7 +89,7 @@ const NewProjects = () => {
       .then((res) => {
         setProperties(res.data);
         setLocalities([...new Set(res.data.map(p => p.locality).filter(Boolean))]);
-        setPropertyTypes([...new Set(res.data.map(p => p.subcategory_name).filter(Boolean))]);
+        // setPropertyTypes([...new Set(res.data.map(p => p.subcategory_name).filter(Boolean))]);
         setCities([...new Set(res.data.map(p => p.city).filter(Boolean))]);
         setLoading(false);
       })
@@ -107,46 +107,6 @@ const NewProjects = () => {
     "3Cr-4Cr": { min: 30000000, max: 40000000 },
     "> 4Cr": { min: 40000000, max: Infinity },
   };
-
-  // const filteredProperties = properties.filter((property) => {
-  //   const expectedPrice = Number(property.price);
-
-  //   if (
-  //     selectedFilters.cities &&
-  //     property.city &&
-  //     property.city.toLowerCase() !== selectedFilters.cities.toLowerCase()
-  //   ) return false;
-
-  //   if (
-  //     selectedFilters.localities &&
-  //     property.locality &&
-  //     property.locality.toLowerCase() !== selectedFilters.localities.toLowerCase()
-  //   ) return false;
-
-  //   if (
-  //     selectedFilters.propertyType &&
-  //     property.subcategory_name &&
-  //     property.subcategory_name.toLowerCase() !== selectedFilters.propertyType.toLowerCase()
-  //   ) return false;
-
-  //   if (selectedFilters.bhk) {
-  //     const propBhk = Number(property.bedrooms);
-  //     if (selectedFilters.bhk === "4+ BHK") {
-  //       if (propBhk < 4) return false;
-  //     } else {
-  //       const filterBhk = Number(selectedFilters.bhk.split(" ")[0]);
-  //       if (propBhk !== filterBhk) return false;
-  //     }
-  //   }
-
-  //   if (selectedFilters.budget) {
-  //     const budgetInfo = budgetRange[selectedFilters.budget];
-  //     if (!budgetInfo || expectedPrice < budgetInfo.min || expectedPrice > budgetInfo.max)
-  //       return false;
-  //   }
-
-  //   return true;
-  // });
 
   const filteredProperties = properties.filter((property) => {
     const expectedPrice = Number(property.price);
@@ -280,7 +240,7 @@ const NewProjects = () => {
                 )
                 : localities
             }
-            dynamicPropertyTypes={propertyTypes}
+            // dynamicPropertyTypes={propertyTypes}
             dynamicCities={cities}
           />
           <div className="pl-heading1">

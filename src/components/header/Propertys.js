@@ -102,8 +102,8 @@ const SearchBar = () => {
         </Swiper>
       </div>
 
-      <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center px-6 z-10">
-        <h1 className="text-white mb-5 font-bold text-3xl md:text-5xl lg:text-5xl text-center font-roboto-bold">
+      <div className="absolute mt-[32%] md:mt-[17%] top-0 left-0 w-full flex flex-col items-center px-6 z-10">
+        <h1 className="text-white mb-1 font-bold text-3xl md:text-5xl lg:text-5xl text-center font-roboto-bold">
            Luxury Living, Priceless Memories
         </h1>
 
@@ -111,7 +111,7 @@ const SearchBar = () => {
       </div>
       {/* Property Cards Inside Carousel */}
       {/* Container for the section */}
-      <div className="z-[1] container mx-auto  absolute top-[70%] mt-16 left-1/2 transform -translate-x-1/2 w-full">
+      <div className="z-[1] container mx-auto  absolute top-[63%] left-1/2 transform -translate-x-1/2 w-full">
         <h2 className="font-bold text-white text-2xl font-geometric-regular">
           We've got properties for everyone
         </h2>

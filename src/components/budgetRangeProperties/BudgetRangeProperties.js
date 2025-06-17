@@ -22,7 +22,7 @@ const BudgetRangeProperties = () => {
 
   const [selectedFilters, setSelectedFilters] = useState({ type: "Buy" });
   const [localities, setLocalities] = useState([]);
-  const [propertyTypes, setPropertyTypes] = useState([]);
+  // const [propertyTypes, setPropertyTypes] = useState([]);
   const [cities, setCities] = useState([]);
   const [search, setSearch] = useState("");
 
@@ -66,7 +66,7 @@ const BudgetRangeProperties = () => {
     });
     setFilteredProperty(filtered);
     setLocalities([...new Set(filtered.map(p => p.locality).filter(Boolean))]);
-    setPropertyTypes([...new Set(filtered.map(p => p.subcategory_name).filter(Boolean))]);
+    // setPropertyTypes([...new Set(filtered.map(p => p.subcategory_name).filter(Boolean))]);
     setCities([...new Set(filtered.map(p => p.city).filter(Boolean))]);
 
   }, [title, properties]);
@@ -195,7 +195,7 @@ const BudgetRangeProperties = () => {
                 )
                 : localities
             }
-            dynamicPropertyTypes={propertyTypes}
+            // dynamicPropertyTypes={propertyTypes}
             dynamicCities={cities}
           />
           <div className="pl-heading1">

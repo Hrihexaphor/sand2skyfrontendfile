@@ -52,7 +52,7 @@ const FeaturedProperty = () => {
 
     const [selectedFilters, setSelectedFilters] = useState({ type: "Buy" });
     const [localities, setLocalities] = useState([]);
-    const [propertyTypes, setPropertyTypes] = useState([]);
+    // const [propertyTypes, setPropertyTypes] = useState([]);
     const [cities, setCities] = useState([]);
     const [search, setSearch] = useState("");
 
@@ -134,7 +134,7 @@ const FeaturedProperty = () => {
     useEffect(() => {
         if (properties.length > 0) {
             setLocalities([...new Set(properties.map((p) => p.locality).filter(Boolean))]);
-            setPropertyTypes([...new Set(properties.map((p) => p.subcategory_name).filter(Boolean))]);
+            // setPropertyTypes([...new Set(properties.map((p) => p.subcategory_name).filter(Boolean))]);
             setCities([...new Set(properties.map((p) => p.city).filter(Boolean))]);
         }
     }, [properties]);
@@ -246,7 +246,7 @@ const FeaturedProperty = () => {
                                 )
                                 : localities
                         }
-                        dynamicPropertyTypes={propertyTypes}
+                        // dynamicPropertyTypes={propertyTypes}
                         dynamicCities={cities}
                     />
                     <div className="pl-heading1">

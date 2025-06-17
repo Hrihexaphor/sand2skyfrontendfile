@@ -52,7 +52,7 @@ const NewProjects = () => {
 
   const [selectedFilters, setSelectedFilters] = useState({ type: "Buy" });
   const [localities, setLocalities] = useState([]);
-  const [propertyTypes, setPropertyTypes] = useState([]);
+  // const [propertyTypes, setPropertyTypes] = useState([]);
   const [cities, setCities] = useState([]);
   const [search, setSearch] = useState("");
 
@@ -69,7 +69,7 @@ const NewProjects = () => {
         );
         setProperties(filtered);
         setLocalities([...new Set(filtered.map(p => p.locality).filter(Boolean))]);
-        setPropertyTypes([...new Set(filtered.map(p => p.subcategory_name).filter(Boolean))]);
+        // setPropertyTypes([...new Set(filtered.map(p => p.subcategory_name).filter(Boolean))]);
         setCities([...new Set(filtered.map(p => p.city).filter(Boolean))]);
         // setProperties(res.data);
         setLoading(false);
@@ -188,7 +188,7 @@ const NewProjects = () => {
                 )
                 : localities
             }
-            dynamicPropertyTypes={propertyTypes}
+            // dynamicPropertyTypes={propertyTypes}
             dynamicCities={cities}
           />
           <div className="pl-heading1">

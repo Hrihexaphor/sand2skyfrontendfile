@@ -48,7 +48,7 @@ const ListingSection = () => {
 
     const [selectedFilters, setSelectedFilters] = useState({ type: "Buy" });
     const [localities, setLocalities] = useState([]);
-    const [propertyTypes, setPropertyTypes] = useState([]);
+    // const [propertyTypes, setPropertyTypes] = useState([]);
     const [cities, setCities] = useState([]);
     const [search, setSearch] = useState("");
 
@@ -97,7 +97,7 @@ const ListingSection = () => {
             .then((res) => {
                 setProperties(res.data);
                 setLocalities([...new Set(res.data.map(p => p.locality).filter(Boolean))]);
-                setPropertyTypes([...new Set(res.data.map(p => p.subcategory_name).filter(Boolean))]);
+                // setPropertyTypes([...new Set(res.data.map(p => p.subcategory_name).filter(Boolean))]);
                 setCities([...new Set(res.data.map(p => p.city).filter(Boolean))]);
                 setLoading(false);
             })
@@ -107,77 +107,6 @@ const ListingSection = () => {
             });
     }, []);
 
-
-    // const filteredProperties = properties.filter((property) => {
-    //   const expectedPrice = Number(property.expected_price);
-
-    //   // Match city from selected or passed filters
-    //   if (selectedFilters.cities &&
-    //     property.city?.toLowerCase() !== selectedFilters.cities.toLowerCase()) {
-    //     return false;
-    //   }
-    //   if (
-    //   passedFilter.location &&
-    //   property.city &&
-    //   property.city?.toLowerCase().trim() !== passedFilter.location.toLowerCase().trim()
-    // ) {
-    //   return false;
-    // }
-
-    //   // Match locality from selected or passed filters
-    //   if (selectedFilters.localities &&
-    //     property.locality?.toLowerCase() !== selectedFilters.localities.toLowerCase()) {
-    //     return false;
-    //   }
-    //   if (passedFilter.locality &&
-    //     !passedFilter.locality.includes(property.locality)) {
-    //     return false;
-    //   }
-
-    //   // Match property type
-    //   if (selectedFilters.propertyType &&
-    //     property.subcategory_name?.toLowerCase() !== selectedFilters.propertyType.toLowerCase()) {
-    //     return false;
-    //   }
-    //   if (passedFilter.propertyType && property.subcategory_name !== passedFilter.propertyType) {
-    //     return false;
-    //   }
-
-    //   // Match BHK
-    //   if (selectedFilters.bhk) {
-    //     const propBhk = Number(property.bedrooms);
-    //     if (selectedFilters.bhk === "4+ BHK") {
-    //       if (propBhk < 4) return false;
-    //     } else {
-    //       const filterBhk = Number(selectedFilters.bhk.split(" ")[0]);
-    //       if (propBhk !== filterBhk) return false;
-    //     }
-    //   }
-
-    //   // Match budget
-    //   if (selectedFilters.budget) {
-    //     const budgetInfo = budgetRange[selectedFilters.budget];
-    //     if (!budgetInfo || expectedPrice < budgetInfo.min || expectedPrice > budgetInfo.max) {
-    //       return false;
-    //     }
-    //   }
-    //   if (passedMinBudget && expectedPrice < passedMinBudget) return false;
-    //   if (passedMaxBudget && expectedPrice > passedMaxBudget) return false;
-
-    //   // Match passed project names
-    //   if (passedFilter.projectNames?.length &&
-    //     !passedFilter.projectNames.includes(property.title || property.project_name)) {
-    //     return false;
-    //   }
-
-    //   // Match passed builders
-    //   if (passedFilter.builders?.length &&
-    //     !passedFilter.builders.includes(property.developer_name)) {
-    //     return false;
-    //   }
-
-    //   return true;
-    // });
     const filters = {
         ...selectedFilters,
         ...passedFilter,
@@ -316,7 +245,7 @@ const ListingSection = () => {
                                 )
                                 : localities
                         }
-                        dynamicPropertyTypes={propertyTypes}
+                        // dynamicPropertyTypes={propertyTypes}
                         dynamicCities={cities}
                     />
                     {/* --------- Filter Bar ----------> */}

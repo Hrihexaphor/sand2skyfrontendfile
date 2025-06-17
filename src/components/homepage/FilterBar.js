@@ -6,7 +6,7 @@ const FilterBar = ({
   selected,
   setSelected,
   dynamicLocalities = [],
-  dynamicPropertyTypes = [],
+  // dynamicPropertyTypes = [],
   dynamicCities = [],
   onSearch,
 }) => {
@@ -20,7 +20,8 @@ const FilterBar = ({
   const options = {
     localities: [...new Set(dynamicLocalities)],
     budget: ["1Cr-2Cr", "2Cr-3Cr", "3Cr-4Cr", "> 4Cr"],
-    propertyType: [...new Set(dynamicPropertyTypes)],
+    // propertyType: [...new Set(dynamicPropertyTypes)],
+     propertyType: ["Apartment", "Pent House", "House", "Villa"],
     bhk: ["1 BHK", "2 BHK", "3 BHK", "4+ BHK"],
     selectType: ["New Property", "Resale"],
     status: ["Ready to Move", "Under Construction"],
