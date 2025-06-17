@@ -32,7 +32,7 @@ const NewNav = () => {
     <>
       <div className="top-0">
         {/* Top Navbar */}
-        <nav className="bg-dark fixed top-0 left-0 w-full z-[99] px-6 lg:px-16 py-2 shadow-sm flex justify-between items-center">
+        <nav className="bg-dark fixed top-0 left-0 w-full z-50 px-6 lg:px-16 py-2 shadow-sm flex justify-between items-center">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2 w-[150px] lg:w-[200px]">
             {/* <img
