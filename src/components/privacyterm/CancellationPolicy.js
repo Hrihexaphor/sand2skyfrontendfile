@@ -49,7 +49,7 @@ const CancellationPolicy = () => {
         <div className="container mx-auto py-10 px-4">
           {/* Contact Form Section */}
           <div className="bg-white p-2 rounded-lg w-full lg:w-[80%] m-auto items-center justify-center">
-            <h2 className="text-lg font-bold text-center my-2">Term of Service</h2>
+            <h2 className="text-lg font-bold text-center my-2">Cancellation Policy</h2>
             {cancelPolicy.length > 0 ? (
               <div className='p-4'>
                 <h3 className="text-2xl font-bold font-geometric-regular">

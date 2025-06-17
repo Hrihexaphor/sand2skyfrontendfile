@@ -660,3 +660,25 @@ body{
     width: 95%;
    }
 }
+
+/* ====== Blog Card ====== */
+@media screen and (width: 1024px){
+  /* .blog-card {
+    flex-direction: column;
+  }
+  .blog-img-text-box {
+    width: 100%;
+  } */
+  .blog-img-box{
+    width: 230px;
+    height: 241px;
+  }
+}
+@media screen and (width: 768px){
+  .blog-card {
+    flex-direction: column;
+  }
+  .blog-img-box, .blog-text-box {
+    width: 100%;
+  }
+}

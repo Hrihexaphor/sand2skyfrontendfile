@@ -11,6 +11,7 @@ import Review from "../review/Review";
 import AdCards from "../advertisement/AdvertiseCard";
 import PropertyCard from "./PropertyCard";
 import TestimonialCard from "../review/ReviewCard";
+import ReviewModal from "../review/ReviewModal.js"
 import faq from "../../assets/FAQ-v3.jpg"
 import LocationMap from "./LocationMap";
 import { GetUserIP } from "../../utills/GetUserIP.js";
@@ -244,7 +245,7 @@ const PropertyDetails = ({ propertyId }) => {
   const [pjName, setPjName] = useState("");
   const [dtlId, setDtlId] = useState("");
   const [locality, setLocality] = useState("");
-  
+
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_BASE_URL}/property/${id}`, {
       withCredentials: true, // replaces fetch's `credentials: 'include'`
@@ -274,7 +275,7 @@ const PropertyDetails = ({ propertyId }) => {
   const [selectedConfig, setSelectedConfig] = useState(null);
   const selectedCity = property?.details?.city;
   const selectedLocality = property?.details?.locality || locality;
- 
+
   useEffect(() => {
     if (!activeTab && property?.basic?.property_category_name) {
       const category = property.basic.property_category_name;
@@ -574,6 +575,17 @@ const PropertyDetails = ({ propertyId }) => {
     }
   }, [property]);
 
+  // ------ review modal -----
+  const [selectedReview, setSelectedReview] = useState(null);
+
+  const handleCardClick = (data) => {
+    setSelectedReview(data);
+  };
+
+  const closeModal = () => {
+    setSelectedReview(null);
+  };
+
   return (
     <>
       <NewNav />
@@ -700,7 +712,7 @@ const PropertyDetails = ({ propertyId }) => {
                   <FaDownload className="mr-2" /> Download Brochure
                 </button>
               </div>
-              <p className="font-semibold mb-0 dtl-rera">Rera Id: {property?.details?.project_rera_id}</p>
+              <p className="font-semibold mb-0 dtl-rera">RERA NO: {property?.details?.project_rera_id}</p>
             </div>
 
             {/* ----------- Modals ----------> */}
@@ -1370,8 +1382,8 @@ const PropertyDetails = ({ propertyId }) => {
                         key={tab}
                         onClick={() => setActiveTab(tab)}
                         className={`px-4 py-2 border-b-2 transition-colors duration-200 ${activeTab === tab
-                            ? "border-blue-600 text-blue-600 font-semibold"
-                            : "border-transparent text-gray-600"
+                          ? "border-blue-600 text-blue-600 font-semibold"
+                          : "border-transparent text-gray-600"
                           }`}
                       >
                         {tab}
@@ -1691,9 +1703,52 @@ const PropertyDetails = ({ propertyId }) => {
               </div>
             )}
 
+          {/* ------- Review ----- */}
+          {reviews.length > 0 && (
+            <div className="mt-5 pb-5">
+              <div className="mb-5 container">
+                <h2 className="mb-2 ms-[-12px] text-2xl font-bold font-geometric-regular text-[#3C4142]">
+                  Ratings & Reviews
+                </h2>
+                <div className="w-12 h-1 bg-yellow-500"></div>
+              </div>
+
+              <Swiper
+                spaceBetween={24}
+                loop={true}
+                autoplay={{ delay: 2000 }}
+                modules={[Autoplay]}
+                breakpoints={{
+                  320: { slidesPerView: 1 },
+                  425: { slidesPerView: 1 },
+                  768: { slidesPerView: 2 },
+                  1024: { slidesPerView: 3 },
+                  1440: { slidesPerView: 3 },
+                }}
+              >
+                {reviews.map((review, index) => (
+                  <SwiperSlide key={index}>
+                    <TestimonialCard
+                      name={review.name}
+                      review={review.review}
+                      rating={review.rating}
+                      onClickCard={handleCardClick}
+                    />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+          )}
+
+          <ReviewModal
+            isOpen={!!selectedReview}
+            onClose={closeModal}
+            reviewData={selectedReview}
+          />
+
           {/* ------- Faq------ */}
           <div className="bg-[#F4EFE5]">
-            <div className="container mx-auto sm:p-10 md:p-16 pt-5">
+            <div className="container mx-auto sm:p-10 md:p-16 pt-2">
               <div className="mb-5">
                 <h2 className="mb-2 text-2xl font-bold  font-geometric-regular text-[#3C4142]">Frequently Asked Questions</h2>
                 <div className="w-12 h-1 bg-yellow-500"></div>
@@ -1737,41 +1792,7 @@ const PropertyDetails = ({ propertyId }) => {
 
             </div>
           </div>
-          {/* ------- Review ----- */}
-          {reviews.length > 0 && (
-            <div className="mt-2 pb-5">
-              <div className="mb-5 container">
-                <h2 className="mb-2 ms-[-12px] text-2xl font-bold font-geometric-regular text-[#3C4142]">
-                  Testimonial
-                </h2>
-                <div className="w-12 h-1 bg-yellow-500"></div>
-              </div>
 
-              <Swiper
-                spaceBetween={24}
-                loop={true}
-                autoplay={{ delay: 2000 }}
-                modules={[Autoplay]}
-                breakpoints={{
-                  320: { slidesPerView: 1 },
-                  425: { slidesPerView: 1 },
-                  768: { slidesPerView: 2 },
-                  1024: { slidesPerView: 3 },
-                  1440: { slidesPerView: 3 },
-                }}
-              >
-                {reviews.map((review, index) => (
-                  <SwiperSlide key={index}>
-                    <TestimonialCard
-                      name={review.name}
-                      review={review.review}
-                      rating={review.rating}
-                    />
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            </div>
-          )}
 
         </div>
       </div>

@@ -54,18 +54,18 @@ const BlogPage = () => {
   });
 
   // Format date string to "DD MMM YYYY"
-function formatDate(dateString) {
+  function formatDate(dateString) {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-IN", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric"
+      day: "2-digit",
+      month: "short",
+      year: "numeric"
     });
-}
+  }
 
-const handleDetailsClick = (id) => {
+  const handleDetailsClick = (id) => {
     navigate(`/blogDetails/${id}`);
-}
+  }
 
   return (
     <>
@@ -99,7 +99,7 @@ const handleDetailsClick = (id) => {
 
         <div className="container mx-auto py-5 px-4 flex flex-col lg:flex-row gap-8">
           {/* Blog Cards */}
-          <div className="w-full lg:w-3/4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 self-start">
+          {/* <div className="w-full lg:w-3/4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 self-start">
             {filteredProperties.map((blog) => {
               const category = blog.category_name || blog.category || "Uncategorized";
               return (
@@ -120,9 +120,7 @@ const handleDetailsClick = (id) => {
                   </div>
                   <div className="p-3 pb-6 relative h-[150px]">
                     <div className="flex items-center justify-between mb-2">
-                      {/* <p className="bg-[#367588] text-white text-xs py-[4px] px-[10px] rounded-lg mt-0 mb-0">
-                        {category}
-                      </p> */}
+                     
                       <p className="no-underline mb-0 cursor-pointer text-sm text-[#367588] font-bold flex items-center gap-2 mt-0">
                         {formatDate(blog.created_at)}
                       </p>
@@ -139,7 +137,65 @@ const handleDetailsClick = (id) => {
                 </div>
               );
             })}
+          </div> */}
+
+          <div className="w-full lg:w-3/4 flex flex-col gap-6 self-start">
+            {filteredProperties.map((blog) => {
+              const category = blog.category_name || blog.category || "Uncategorized";
+              return (
+                <div
+                  key={blog.id}
+                  className="flex blog-card flex-col md:flex-row items-start bg-white border shadow-md rounded overflow-hidden cursor-pointer"
+                  onClick={() => handleDetailsClick(blog.id)}
+                >
+                  {/* Left: Image or Video */}
+                  <div className="w-full md:w-1/3 h-[200px] flex-shrink-0 blog-img-box">
+                    {blog.image_url ? (
+                      <img
+                        src={blog.image_url}
+                        alt={blog.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : blog.youtube_link ? (
+                      <div
+                        className="w-full h-full"
+                        dangerouslySetInnerHTML={{ __html: blog.youtube_link }}
+                      />
+                    ) : null}
+                  </div>
+
+                  {/* Right: Text content */}
+                  <div className="flex flex-col justify-between p-3 w-full md:w-2/3 relative blog-text-box">
+                    <p className="text-sm text-[#367588] font-bold mb-2">
+                        {formatDate(blog.created_at)}
+                    </p>
+                    <a
+                      href="#"
+                      className="text-lg text-[#3C4142] font-medium no-underline mb-2"
+                      title={blog.title}
+                    >
+                      {/* {blog.title.split(" ").slice(0, 12).join(" ")}
+                      {blog.title.split(" ").length > 12 ? "..." : ""} */}
+                      {blog.title}
+                    </a>
+                    <div
+                      className="w-full text-gray-500 text-sm mb-0"
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          blog.description
+                            ? blog.description.split(" ").slice(0, 45).join(" ") + (blog.description.split(" ").length > 45 ? "..." : "")
+                            : "",
+                      }}
+                    />
+                    <p className="text-sm text-[#367588] font-bold mt-auto mb-0">
+                      Read More..
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
+
 
           {/* Sidebar */}
           <aside className="w-full lg:w-1/4 h-[100vh]">
@@ -182,7 +238,7 @@ const handleDetailsClick = (id) => {
                 ))}
               </ul>
             </div>
-            <AdCards location="blog"/>
+            <AdCards location="blog" />
           </aside>
         </div>
       </section>

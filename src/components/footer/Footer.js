@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
-    <footer className="bg-dark text-white py-10 px-6 md:px-16">
+    <footer className="bg-dark text-white pt-10 pb-4 px-6 md:px-16">
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
         {/* Company Info */}
         <div>
@@ -146,8 +146,8 @@ export default function Footer() {
 
       {/* Bottom Footer */}
       <div className="border-t border-gray-600 mt-8 pt-4 text-center text-gray-300 text-sm">
-        <p>&copy; 2025 Sand2sky Technologies Pvt Ltd. All rights reserved.</p>
-        <div className="mt-2 flex justify-center space-x-4">
+        <p className="mb-0">&copy; 2025 Sand2sky. All rights reserved. | Design & Developed by Hexaphor Technologies Pvt.Ltd.</p>
+        {/* <div className="mt-2 flex justify-center space-x-4">
           <span className="cursor-pointer hover:text-blue-400">
             <Link
               to="/term"
@@ -166,7 +166,7 @@ export default function Footer() {
               Privacy Policy
             </Link>
           </span>
-        </div>
+        </div> */}
       </div>
     </footer>
   );
