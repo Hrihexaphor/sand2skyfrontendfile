@@ -399,7 +399,7 @@ const ListingSection = () => {
                                             </div>
                                         </div>
                                         {/* {index === 1 && <AdComponent />} */}
-                                        {(index + 1) % 2 === 0 && <AdBanner location="buy" />}
+                                        {index === 1 && <AdBanner location="buy" />}
                                     </React.Fragment>
                                 ))
                         )}
