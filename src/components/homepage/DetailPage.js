@@ -15,6 +15,7 @@ import ReviewModal from "../review/ReviewModal.js"
 import faq from "../../assets/FAQ-v3.jpg"
 import LocationMap from "./LocationMap";
 import { GetUserIP } from "../../utills/GetUserIP.js";
+import CustomTooltip from "./CustomTooltip.js";
 
 import {
   FaCar,
@@ -586,6 +587,13 @@ const PropertyDetails = ({ propertyId }) => {
   const closeModal = () => {
     setSelectedReview(null);
   };
+
+  useEffect(() => {
+    const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.forEach((tooltipTriggerEl) => {
+      new window.bootstrap.Tooltip(tooltipTriggerEl);
+    });
+  }, []);
 
   return (
     <>
@@ -1256,8 +1264,8 @@ const PropertyDetails = ({ propertyId }) => {
 
           </div>
 
-          <section className="grid grid-cols-1 md:grid-cols-12 gap-8 mt-5 items-start dtl-other-box">
-            <div className="md:col-span-8">
+          <section className="grid grid-cols-12 md:grid-cols-12 gap-8 mt-5 items-start dtl-other-box">
+            <div className="col-12 md:col-span-8">
               {/* ------- Nearby Properties ------ */}
               {(() => {
                 // 1. Filter “nearby” properties by locality and exclude the current property
@@ -1355,11 +1363,12 @@ const PropertyDetails = ({ propertyId }) => {
                     {property?.keyfeature?.map((category, index) => {
                       return (
                         <div
-                          key={index}
-                          className="flex gap-2 items-center text-white space-y-1 border-2 font-semibold bg-[#367588] p-[11px] rounded-[7px]"
-                        >
-                          <Star className="font-semibold" />{category.name}
-                        </div>
+                            key={index}
+                            className="flex gap-2 items-center text-white space-y-1 border-2 font-semibold bg-[#367588] p-[11px] rounded-[7px] cursor-pointer"
+                            title={category.description}
+                          >
+                            <Star className="font-semibold" />{category.name}
+                          </div>
                       );
                     })}
                   </div>

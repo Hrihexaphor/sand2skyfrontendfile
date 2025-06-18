@@ -14,11 +14,30 @@ import { Link } from "react-router-dom";
 const SearchBar = () => {
   // ============= add after 5 second End ===========>
 
-  const slides = [
-     "https://res.cloudinary.com/djqpz99jb/image/upload/v1748412331/hero1_tgfln0.jpg",
-     "https://res.cloudinary.com/djqpz99jb/image/upload/v1748412426/hero2_ffm5us.jpg",
-    "https://res.cloudinary.com/djqpz99jb/image/upload/v1748412459/hero3_t9zruj.jpg"
-  ];
+    
+const [slides, setSlides] = useState([]);
+
+  useEffect(() => {
+    axios
+       .get(`${process.env.REACT_APP_BASE_URL}/hero`, {
+        withCredentials: true,
+      })
+      .then((response) => {
+        if (Array.isArray(response.data)) {
+          const urls = response.data.map(item => item.image_url);
+          setSlides(urls);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching hero images:", error);
+      });
+  }, []);
+
+  // const slides = [
+  //    "https://res.cloudinary.com/djqpz99jb/image/upload/v1748412331/hero1_tgfln0.jpg",
+  //    "https://res.cloudinary.com/djqpz99jb/image/upload/v1748412426/hero2_ffm5us.jpg",
+  //   "https://res.cloudinary.com/djqpz99jb/image/upload/v1748412459/hero3_t9zruj.jpg"
+  // ];
 
 
   // --------------------->
