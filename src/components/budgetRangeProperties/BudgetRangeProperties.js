@@ -208,6 +208,7 @@ const BudgetRangeProperties = () => {
           <div className="mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4">
             {/* ------------ Left box ------------> */}
             <div className="lg:col-span-2">
+               <span className="text-base text-[#367588] font-semibold absolute -mt-[6px]">{searchFilter.length} Properties</span>
               <div className="flex gap-2 items-center mt-4 mb-4">
                 <div className="flex items-center bg-[#fff] w-full py-[5px] px-[10px] rounded-[20px]">
                   <FaSearch className="text-gray-500 mr-2" />

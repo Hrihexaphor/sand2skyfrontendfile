@@ -92,10 +92,11 @@ const ReadyToMove = () => {
               </h2>
               <div className="w-12 h-1 bg-yellow-500"></div>
             </div>
+            <span className="text-base text-[#367588] font-semibold absolute -mt-[6px]">{filteredProperties.length} Properties</span>
             <input
               type="text"
               placeholder="Search properties..."
-              className="w-full p-3 border outline-[#F5F5DC] border-gray-300 rounded-lg mb-6 font-sans"
+              className="w-full p-3 border outline-[#F5F5DC] border-gray-300 rounded-lg mt-4 mb-6 font-sans"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />

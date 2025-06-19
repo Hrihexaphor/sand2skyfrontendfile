@@ -51,12 +51,12 @@ const PrivacyPolicy = () => {
         <div className="container mx-auto py-10 px-4">
           {/* Contact Form Section */}
           <div className="bg-white p-2 rounded-lg w-full lg:w-[80%] m-auto items-center justify-center">
-            <h2 className="text-lg font-bold text-center my-2">Privacy Policy</h2>
+            {/* <h2 className="text-lg font-bold text-center my-2">Privacy Policy</h2> */}
             {privacyPolicy.length > 0 ? (
               <div className='p-4'>
-                <h3 className="text-2xl font-bold font-geometric-regular">
+                {/* <h3 className="text-2xl font-bold font-geometric-regular">
                   {privacyPolicy[0].title}
-                </h3>
+                </h3> */}
                 <div
                   className="w-full text-gray-500 text-sm"
                   dangerouslySetInnerHTML={{ __html: privacyPolicy[0].description }}

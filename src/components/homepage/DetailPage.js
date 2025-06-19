@@ -595,6 +595,7 @@ const PropertyDetails = ({ propertyId }) => {
     });
   }, []);
 
+
   return (
     <>
       <NewNav />

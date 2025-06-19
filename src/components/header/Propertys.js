@@ -130,7 +130,7 @@ const [slides, setSlides] = useState([]);
       </div>
       {/* Property Cards Inside Carousel */}
       {/* Container for the section */}
-      <div className="z-[1] container mx-auto  absolute top-[63%] left-1/2 transform -translate-x-1/2 w-full">
+      <div className="z-[1] container mx-auto  absolute top-[80%] md:top-[63%] left-1/2 transform -translate-x-1/2 w-full">
         <h2 className="font-bold text-white text-2xl font-geometric-regular">
           We've got properties for everyone
         </h2>

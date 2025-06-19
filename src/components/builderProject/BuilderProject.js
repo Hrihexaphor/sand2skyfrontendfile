@@ -215,7 +215,7 @@ const BuilderProject = () => {
                             <div className="text-center text-gray-600 text-lg py-6">
                                 No properties match your criteria.
                             </div>
-              ) : (searchFilter.map((project, index) => (
+              ) : (searchFilter.sort((a, b) => (b.is_featured === true) - (a.is_featured === true)).map((project, index) => (
                 <div className="bg-[#fff] rounded-lg mb-4 flex md:flex-row flex-col shadow-[0_4px_20px_rgba(0,95,107,0.2)]">
                   <div onClick={() => handleImageClick(project)} className="md:w-[40%] relative list-imgbox cursor-pointer">
                     <img

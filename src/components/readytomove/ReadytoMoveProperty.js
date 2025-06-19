@@ -190,6 +190,7 @@ const Readytomove = () => {
           <div className="mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4">
             {/* ------------ Left box ------------> */}
             <div className="lg:col-span-2">
+              <span className="text-base text-[#367588] font-semibold absolute -mt-[6px]">{searchFilter.length} Properties</span>
               <div className="flex gap-2 items-center mt-4 mb-4">
                 <div className="flex items-center bg-[#fff] w-full py-[5px] px-[10px] rounded-[20px]">
                   <FaSearch className="text-gray-500 mr-2" />
@@ -210,7 +211,7 @@ const Readytomove = () => {
                             <div className="text-center text-gray-600 text-lg py-6">
                                 No properties match your criteria.
                             </div>
-              ) : (searchFilter.map((project, index) => (
+              ) : (searchFilter.sort((a, b) => (b.is_featured === true) - (a.is_featured === true)).map((project, index) => (
                 <div className="bg-[#fff] rounded-lg mb-4 flex md:flex-row flex-col shadow-[0_4px_20px_rgba(0,95,107,0.2)]">
                   <div onClick={() => handleImageClick(project)} className="md:w-[40%] relative list-imgbox cursor-pointer">
                     <img

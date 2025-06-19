@@ -796,7 +796,7 @@ body {
 
 @media screen and (width: 425px) {
   .smallsizes {
-    width: 95%;
+    width: 100%;
   }
 }
 

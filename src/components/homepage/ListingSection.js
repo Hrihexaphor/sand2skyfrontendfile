@@ -252,7 +252,7 @@ const ListingSection = () => {
                     {/* --------- Filter Bar ----------> */}
                     <div className="pl-heading">
                         <h2 className="mb-2 text-2xl text-[#3C4142] font-bold font-geometric-regular">
-                            Property Listing
+                            Property Listing 
                         </h2>
                         <div className="w-12 h-1 bg-yellow-500"></div>
                     </div>
@@ -262,6 +262,7 @@ const ListingSection = () => {
                 <div className="container mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4">
                     {/* ------------ left box ---------- */}
                     <div className="lg:col-span-2">
+                        <span className="text-base text-[#367588] font-semibold absolute -mt-[25px]">{searchFilter.length} Properties</span>
                         <div className="mt-1 mb-4">
                             <div className="flex items-center bg-[#fff] w-full py-[5px] px-[10px] rounded-[20px]">
                                 <FaSearch className="text-gray-500 mr-2" />

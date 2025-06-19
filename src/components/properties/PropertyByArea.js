@@ -341,7 +341,7 @@ const NewProjects = () => {
                           </div>
                         </div>
                       </div>
-                      {index === 1 && <AdComponent />}
+                      {/* {index === 1 && <AdComponent />} */}
                     </>
                   ))
               )}
