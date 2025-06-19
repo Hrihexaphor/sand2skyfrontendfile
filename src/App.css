@@ -798,6 +798,9 @@ body {
   .smallsizes {
     width: 100%;
   }
+  .key-small {
+    width: 100%;
+  }
 }
 
 /* ====== Blog Card ====== */

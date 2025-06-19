@@ -595,6 +595,8 @@ const PropertyDetails = ({ propertyId }) => {
     });
   }, []);
 
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+
 
   return (
     <>
@@ -1360,18 +1362,29 @@ const PropertyDetails = ({ propertyId }) => {
               </div>
               <div className="bg-white p-6 rounded-lg shadow-lg mb-4 smallsizes">
                 <div className="space-y-6">
-                  <div className="flex items-center flex-wrap gap-2 dtl-amenities-inner">
-                    {property?.keyfeature?.map((category, index) => {
-                      return (
-                        <div
-                            key={index}
-                            className="flex gap-2 items-center text-white space-y-1 border-2 font-semibold bg-[#367588] p-[11px] rounded-[7px] cursor-pointer"
-                            title={category.description}
-                          >
-                            <Star className="font-semibold" />{category.name}
+                  <div className="flex items-center flex-wrap gap-2 dtl-amenities-inner relative">
+                    {property?.keyfeature?.map((category, index) => (
+                      <div
+                        key={index}
+                        className="relative group cursor-pointer key-small"
+                        onMouseEnter={() => setHoveredIndex(index)}
+                        onMouseLeave={() => setHoveredIndex(null)}
+                      >
+                        {/* Feature Box */}
+                        <div className="flex gap-2 items-center text-white border-2 font-semibold bg-[#367588] p-[11px] rounded-[7px]">
+                          <Star className="font-semibold" />
+                          {category.name}
+                        </div>
+
+                        {/* Hover Card */}
+                        {hoveredIndex === index && (
+                          <div className="absolute top-full left-0 mt-2 w-full md:w-64 lg:w-80 bg-white text-black text-sm p-3 rounded-lg shadow-lg z-10">
+                            <h4 className="text-lg font-bold mb-1 text-center">{category.name}</h4>
+                            <p className="text-base">{category.description}</p>
                           </div>
-                      );
-                    })}
+                        )}
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
