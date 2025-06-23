@@ -47,7 +47,7 @@ import { GiSofa } from "react-icons/gi";
 import { FaArrowsLeftRightToLine, FaUserGraduate } from "react-icons/fa6";
 import { GrStatusGood } from "react-icons/gr";
 import { GiModernCity, GiPoolTableCorner, GiHouse } from "react-icons/gi";
-import { MdOutlineMeetingRoom , MdBalcony } from "react-icons/md";
+import { MdOutlineMeetingRoom, MdBalcony } from "react-icons/md";
 import { PiBuildingOfficeBold, PiHospital } from "react-icons/pi";
 import { GoGear } from "react-icons/go";
 import { LiaSchoolSolid } from "react-icons/lia";
@@ -552,6 +552,21 @@ const PropertyDetails = ({ propertyId }) => {
   }, [property]);
 
   // ------- tab section ------
+  // Enhanced BHK configuration processing with unique tab names
+  const bhkConfigurationsWithSuffix = (() => {
+    const counts = {};
+    return (property?.bhk_configurations || []).map((config) => {
+      const key = config.bhk_type.toLowerCase();
+      counts[key] = (counts[key] || 0) + 1;
+      const suffix = counts[key] > 1 ? ` ${counts[key]}` : "";
+      return {
+        ...config,
+        tabName: `${config.bhk_type}${suffix}`,
+        uniqueId: `${config.bhk_type}-${config.id}` // Additional unique identifier
+      };
+    });
+  })();
+  // Updated document processing (your existing code)
   const documentTabsWithSuffix = (() => {
     const counts = {};
     return (property?.documents || [])
@@ -566,16 +581,19 @@ const PropertyDetails = ({ propertyId }) => {
         counts[key] = (counts[key] || 0) + 1;
         const suffix = counts[key] > 1 ? ` ${counts[key]}` : "";
         return { ...doc, tabName: `${doc.type}${suffix}` };
-        // return { ...doc, tabName: doc.type + suffix };
       });
   })();
 
   // Prepare all tab names: BHK tabs + document tabs with proper suffix
+  // const allTabs = [
+  //   ...(property?.bhk_configurations?.map(
+  //     (config) => `${config.bhk_type}`
+  //   ) || []),
+  //   ...documentTabsWithSuffix.map((doc) => doc.tabName),
+  // ];
   const allTabs = [
-    ...(property?.bhk_configurations?.map(
-      (config) => `${config.bhk_type}`
-    ) || []),
-    ...documentTabsWithSuffix.map((doc) => doc.tabName),
+    ...bhkConfigurationsWithSuffix.map(config => config.tabName),
+    ...documentTabsWithSuffix.map(doc => doc.tabName)
   ];
 
   // Set first tab active on mount or when property changes
@@ -1000,14 +1018,7 @@ const PropertyDetails = ({ propertyId }) => {
                     <div>
                       <p className="text-gray-500 font-bold text-sm mb-0">Bedrooms</p>
                       {/* <p className="font-semibold mb-2">{property?.details?.bathrooms}</p> */}
-                      {property?.basic?.property_category_name !== 'Project Apartment' &&
-                        property?.basic?.property_category_name !== 'Project Flat' ? (
-                        <p className="font-semibold mb-2">{property?.details?.bedrooms ?? 0}</p>
-                      ) : (
-                        <p className="font-semibold mb-2">
-                          {property?.bhk_configurations?.map((bedroom) => bedroom.bedrooms).join(', ') || '0'}
-                        </p>
-                      )}
+                      <p className="font-semibold mb-2">{property?.details?.bedrooms ?? 0}</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
@@ -1015,14 +1026,7 @@ const PropertyDetails = ({ propertyId }) => {
                     <div>
                       <p className="text-gray-500 font-bold text-sm mb-0">Bathrooms</p>
                       {/* <p className="font-semibold mb-2">{property?.details?.bathrooms}</p> */}
-                      {property?.basic?.property_category_name !== 'Project Apartment' &&
-                        property?.basic?.property_category_name !== 'Project Flat' ? (
-                        <p className="font-semibold mb-2">{property?.details?.bathrooms ?? 0}</p>
-                      ) : (
-                        <p className="font-semibold mb-2">
-                          {property?.bhk_configurations?.map((bathroom) => bathroom.bathrooms).join(', ') || '0'}
-                        </p>
-                      )}
+                      <p className="font-semibold mb-2">{property?.details?.bathrooms ?? 0}</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
@@ -1030,14 +1034,7 @@ const PropertyDetails = ({ propertyId }) => {
                     <div>
                       <p className="text-gray-500 font-bold text-sm mb-0">Balcony</p>
                       {/* <p className="font-semibold mb-2">{property?.details?.balconies}</p> */}
-                      {property?.basic?.property_category_name !== 'Project Apartment' &&
-                        property?.basic?.property_category_name !== 'Project Flat' ? (
-                        <p className="font-semibold mb-2">{property?.details?.balconies ?? 0}</p>
-                      ) : (
-                        <p className="font-semibold mb-2">
-                          {property?.bhk_configurations?.map((balconie) => balconie.balconies).join(', ') || '0'}
-                        </p>
-                      )}
+                      <p className="font-semibold mb-2">{property?.details?.balconies ?? 0}</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
@@ -1048,7 +1045,7 @@ const PropertyDetails = ({ propertyId }) => {
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <MdOutlineMeetingRoom  className="text-[#367588] text-xl" />
+                    <MdOutlineMeetingRoom className="text-[#367588] text-xl" />
                     <div>
                       <p className="text-gray-500 font-bold text-sm mb-0">Other Rooms</p>
                       <p className="font-semibold mb-2">{property?.details?.other_rooms.join(', ')}</p>
@@ -1083,47 +1080,47 @@ const PropertyDetails = ({ propertyId }) => {
                     </div>
                   </div>
                 </div>
-              ) : property?.basic?.property_category_name === "Project House/Villa" ? 
-              (
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-5">
-                  <div className="flex items-center space-x-3">
-                    <FaVectorSquare className="text-[#367588] text-xl" />
-                    <div>
-                      <p className="text-gray-500 font-bold text-sm mb-0">Project Area</p>
-                      <p className="font-semibold mb-2">{property?.details?.project_area} sq.ft.</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <GiHouse className="text-[#367588] text-xl" />
-                    <div>
-                      <p className="text-gray-500 font-bold text-sm mb-0">No. Of House/Villa</p>
-                      <p className="font-semibold mb-2">{property?.details?.no_of_house}</p>
-                    </div>
-                  </div>
-                  {property?.details?.total_floors && (
+              ) : property?.basic?.property_category_name === "Project House/Villa" ?
+                (
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-5">
                     <div className="flex items-center space-x-3">
-                      <HiMiniBuildingOffice2 className="text-[#367588] text-xl" />
+                      <FaVectorSquare className="text-[#367588] text-xl" />
                       <div>
-                        <p className="text-gray-500 font-bold text-sm mb-0">Total Floors</p>
-                        <p className="font-semibold mb-2">{property?.details?.total_floors}</p>
+                        <p className="text-gray-500 font-bold text-sm mb-0">Project Area</p>
+                        <p className="font-semibold mb-2">{property?.details?.project_area} sq.ft.</p>
                       </div>
                     </div>
-                  )}
-                  <div className="flex items-center space-x-3">
-                    <RiCarouselView className="text-[#367588] text-xl" />
-                    <div>
-                      <p className="text-gray-500 font-bold text-sm mb-0">Facing</p>
-                      <p className="font-semibold mb-2">{property?.details?.facing.join(', ') ?? 'N/A'}</p>
+                    <div className="flex items-center space-x-3">
+                      <GiHouse className="text-[#367588] text-xl" />
+                      <div>
+                        <p className="text-gray-500 font-bold text-sm mb-0">No. Of House/Villa</p>
+                        <p className="font-semibold mb-2">{property?.details?.no_of_house}</p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <FaArrowsLeftRightToLine className="text-[#367588] text-xl" />
-                    <div>
-                      <p className="text-gray-500 font-bold text-sm mb-0">Plot Area</p>
-                      <p className="font-semibold mb-2">{`${Math.round(minCarpet)} - ${Math.round(maxCarpet)} sq.ft`}</p>
+                    {property?.details?.total_floors && (
+                      <div className="flex items-center space-x-3">
+                        <HiMiniBuildingOffice2 className="text-[#367588] text-xl" />
+                        <div>
+                          <p className="text-gray-500 font-bold text-sm mb-0">Total Floors</p>
+                          <p className="font-semibold mb-2">{property?.details?.total_floors}</p>
+                        </div>
+                      </div>
+                    )}
+                    <div className="flex items-center space-x-3">
+                      <RiCarouselView className="text-[#367588] text-xl" />
+                      <div>
+                        <p className="text-gray-500 font-bold text-sm mb-0">Facing</p>
+                        <p className="font-semibold mb-2">{property?.details?.facing.join(', ') ?? 'N/A'}</p>
+                      </div>
                     </div>
-                  </div>
-                  {/* {property?.details?.super_built_up_area && (
+                    <div className="flex items-center space-x-3">
+                      <FaArrowsLeftRightToLine className="text-[#367588] text-xl" />
+                      <div>
+                        <p className="text-gray-500 font-bold text-sm mb-0">Plot Area</p>
+                        <p className="font-semibold mb-2">{`${Math.round(minCarpet)} - ${Math.round(maxCarpet)} sq.ft`}</p>
+                      </div>
+                    </div>
+                    {/* {property?.details?.super_built_up_area && (
                     <div className="flex items-center space-x-3">
                       <BiArea className="text-[#367588] text-xl" />
                       <div>
@@ -1132,258 +1129,274 @@ const PropertyDetails = ({ propertyId }) => {
                       </div>
                     </div>
                   )} */}
-                  {/* <div className="flex items-center space-x-3">
+                    {/* <div className="flex items-center space-x-3">
                     <FaArrowsLeftRightToLine className="text-[#367588] text-xl" />
                     <div>
                       <p className="text-gray-500 font-bold text-sm mb-0">Plot Length</p>
                       <p className="font-semibold mb-2">{property?.details?.plot_length} sq.ft.</p>
                     </div>
                   </div> */}
-                  {/* <div className="flex items-center space-x-3">
+                    {/* <div className="flex items-center space-x-3">
                     <FaArrowsLeftRightToLine className="text-[#367588] text-xl rotate-90" />
                     <div>
                       <p className="text-gray-500 font-bold text-sm mb-0">Plot Width</p>
                       <p className="font-semibold mb-2">{property?.details?.plot_breadth} sq.ft.</p>
                     </div>
                   </div> */}
-                  <div className="flex items-center space-x-3">
-                    <IoBed className="text-[#367588] text-xl" />
-                    <div>
-                      <p className="text-gray-500 font-bold text-sm mb-0">Bedrooms</p>
-                      {/* <p className="font-semibold mb-2">{property?.details?.bathrooms}</p> */}
-                      <p className="font-semibold mb-2">
+                    <div className="flex items-center space-x-3">
+                      <IoBed className="text-[#367588] text-xl" />
+                      <div>
+                        <p className="text-gray-500 font-bold text-sm mb-0">Bedrooms</p>
+                        {/* <p className="font-semibold mb-2">{property?.details?.bathrooms}</p> */}
+                        <p className="font-semibold mb-2">
                           {property?.bhk_configurations?.map((bedroom) => bedroom.bedrooms).join(', ') || '0'}
                         </p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <FaBath className="text-[#367588] text-xl" />
-                    <div>
-                      <p className="text-gray-500 font-bold text-sm mb-0">Bathrooms</p>
-                      {/* <p className="font-semibold mb-2">{property?.details?.bathrooms}</p> */}
-                     <p className="font-semibold mb-2">
+                    <div className="flex items-center space-x-3">
+                      <FaBath className="text-[#367588] text-xl" />
+                      <div>
+                        <p className="text-gray-500 font-bold text-sm mb-0">Bathrooms</p>
+                        {/* <p className="font-semibold mb-2">{property?.details?.bathrooms}</p> */}
+                        <p className="font-semibold mb-2">
                           {property?.bhk_configurations?.map((bathroom) => bathroom.bathrooms).join(', ') || '0'}
                         </p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <MdBalcony className="text-[#367588] text-xl" />
-                    <div>
-                      <p className="text-gray-500 font-bold text-sm mb-0">Balcony</p>
-                      {/* <p className="font-semibold mb-2">{property?.details?.balconies}</p> */}
-                       <p className="font-semibold mb-2">
+                    <div className="flex items-center space-x-3">
+                      <MdBalcony className="text-[#367588] text-xl" />
+                      <div>
+                        <p className="text-gray-500 font-bold text-sm mb-0">Balcony</p>
+                        {/* <p className="font-semibold mb-2">{property?.details?.balconies}</p> */}
+                        <p className="font-semibold mb-2">
                           {property?.bhk_configurations?.map((balconie) => balconie.balconies).join(', ') || '0'}
                         </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <FaCar className="text-[#367588] text-xl" />
-                    <div>
-                      <p className="text-gray-500 font-bold text-sm mb-0">Parking</p>
-                      <p className="font-semibold mb-2">{property?.details?.covered_parking}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <MdOutlineMeetingRoom  className="text-[#367588] text-xl" />
-                    <div>
-                      <p className="text-gray-500 font-bold text-sm mb-0">Other Rooms</p>
-                      <p className="font-semibold mb-2">{property?.details?.other_rooms.join(', ')}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <FaKey className="text-[#367588] text-xl" />
-                    <div>
-                      <p className="text-gray-500 font-bold text-sm mb-0">Transaction Type</p>
-                      <p className="font-semibold mb-2">{property?.details?.transaction_types}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <FaEye className="text-[#367588] text-2xl" />
-                    <div>
-                      <p className="text-gray-500 font-bold text-sm mb-0">Property Overlooking</p>
-                      <p className="font-semibold mb-2">{property?.details?.overlooking.join(', ') ?? 'N/A'}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <BsHouseGearFill className="text-[#367588] text-xl" />
-                    <div>
-                      <p className="text-gray-500 font-bold text-sm mb-0">Maintainance Charge</p>
-                      <p className="font-semibold mb-2">₹ {property?.details?.maintenance_charge}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <GiModernCity className="text-[#367588] text-xl" />
-                    <div>
-                      <p className="text-gray-500 font-bold text-sm mb-0">ROI</p>
-                      <p className="font-semibold mb-2">{property?.details?.rental_return}</p>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-5">
-                  <div className="flex items-center space-x-3">
-                    <FaVectorSquare className="text-[#367588] text-xl" />
-                    <div>
-                      <p className="text-gray-500 font-bold text-sm mb-0">Project Area</p>
-                      <p className="font-semibold mb-2">{property?.details?.project_area} sq.ft.</p>
-                    </div>
-                  </div>
-                  {property?.details?.no_of_tower && (
-                    <div className="flex items-center space-x-3">
-                      <LuBuilding2 className="text-[#367588] text-xl" />
-                      <div>
-                        <p className="text-gray-500 font-bold text-sm mb-0">No. Of Towers</p>
-                        <p className="font-semibold mb-2">{property.details.no_of_tower}</p>
                       </div>
                     </div>
-                  )}
-                  {property?.details?.total_floors && (
                     <div className="flex items-center space-x-3">
-                      <HiMiniBuildingOffice2 className="text-[#367588] text-xl" />
+                      <FaCar className="text-[#367588] text-xl" />
                       <div>
-                        <p className="text-gray-500 font-bold text-sm mb-0">Total Floors</p>
-                        <p className="font-semibold mb-2">{property?.details?.total_floors}</p>
+                        <p className="text-gray-500 font-bold text-sm mb-0">Parking</p>
+                        <p className="font-semibold mb-2">{property?.details?.covered_parking}</p>
                       </div>
                     </div>
-                  )}
-                  {property?.details?.no_of_flat && (
                     <div className="flex items-center space-x-3">
-                      <FaBuffer className="text-[#367588] text-xl" />
+                      <MdOutlineMeetingRoom className="text-[#367588] text-xl" />
                       <div>
-                        <p className="text-gray-500 font-bold text-sm mb-0">Number of Flats</p>
-                        <p className="font-semibold mb-2">{property?.details?.no_of_flat}</p>
+                        <p className="text-gray-500 font-bold text-sm mb-0">Other Rooms</p>
+                        <p className="font-semibold mb-2">{property?.details?.other_rooms.join(', ')}</p>
                       </div>
                     </div>
-                  )}
-                  {property?.details?.floor && (
                     <div className="flex items-center space-x-3">
-                      <SiHomeadvisor className="text-[#367588] text-xl" />
+                      <FaKey className="text-[#367588] text-xl" />
                       <div>
-                        <p className="text-gray-500 font-bold text-sm mb-0">Property in Floor</p>
-                        <p className="font-semibold mb-2">{property?.details?.floor}</p>
+                        <p className="text-gray-500 font-bold text-sm mb-0">Transaction Type</p>
+                        <p className="font-semibold mb-2">{property?.details?.transaction_types}</p>
                       </div>
                     </div>
-                  )}
+                    <div className="flex items-center space-x-3">
+                      <FaEye className="text-[#367588] text-2xl" />
+                      <div>
+                        <p className="text-gray-500 font-bold text-sm mb-0">Property Overlooking</p>
+                        <p className="font-semibold mb-2">{property?.details?.overlooking.join(', ') ?? 'N/A'}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <BsHouseGearFill className="text-[#367588] text-xl" />
+                      <div>
+                        <p className="text-gray-500 font-bold text-sm mb-0">Maintainance Charge</p>
+                        <p className="font-semibold mb-2">₹ {property?.details?.maintenance_charge}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <GiModernCity className="text-[#367588] text-xl" />
+                      <div>
+                        <p className="text-gray-500 font-bold text-sm mb-0">ROI</p>
+                        <p className="font-semibold mb-2">{property?.details?.rental_return}</p>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-5">
+                    <div className="flex items-center space-x-3">
+                      <FaVectorSquare className="text-[#367588] text-xl" />
+                      <div>
+                        <p className="text-gray-500 font-bold text-sm mb-0">Project Area</p>
+                        <p className="font-semibold mb-2">{property?.details?.project_area} sq.ft.</p>
+                      </div>
+                    </div>
+                    {property?.details?.no_of_tower && (
+                      <div className="flex items-center space-x-3">
+                        <LuBuilding2 className="text-[#367588] text-xl" />
+                        <div>
+                          <p className="text-gray-500 font-bold text-sm mb-0">No. Of Towers</p>
+                          <p className="font-semibold mb-2">{property.details.no_of_tower}</p>
+                        </div>
+                      </div>
+                    )}
+                    {property?.details?.total_floors && (
+                      <div className="flex items-center space-x-3">
+                        <HiMiniBuildingOffice2 className="text-[#367588] text-xl" />
+                        <div>
+                          <p className="text-gray-500 font-bold text-sm mb-0">Total Floors</p>
+                          <p className="font-semibold mb-2">{property?.details?.total_floors}</p>
+                        </div>
+                      </div>
+                    )}
+                    {property?.details?.no_of_flat && (
+                      <div className="flex items-center space-x-3">
+                        <FaBuffer className="text-[#367588] text-xl" />
+                        <div>
+                          <p className="text-gray-500 font-bold text-sm mb-0">Number of Flats</p>
+                          <p className="font-semibold mb-2">{property?.details?.no_of_flat}</p>
+                        </div>
+                      </div>
+                    )}
+                    {property?.details?.floor && (
+                      <div className="flex items-center space-x-3">
+                        <SiHomeadvisor className="text-[#367588] text-xl" />
+                        <div>
+                          <p className="text-gray-500 font-bold text-sm mb-0">Property in Floor</p>
+                          <p className="font-semibold mb-2">{property?.details?.floor}</p>
+                        </div>
+                      </div>
+                    )}
 
-                  <div className="flex items-center space-x-3">
-                    <RiCarouselView className="text-[#367588] text-xl" />
-                    <div>
-                      <p className="text-gray-500 font-bold text-sm mb-0">Facing</p>
-                      <p className="font-semibold mb-2">{property?.details?.facing.join(', ') ?? 'N/A'}</p>
-                    </div>
-                  </div>
-                  {property?.details?.built_up_area && (
                     <div className="flex items-center space-x-3">
-                      <BiArea className="text-[#367588] text-xl" />
+                      <RiCarouselView className="text-[#367588] text-xl" />
                       <div>
-                        <p className="text-gray-500 font-bold text-sm mb-0">Built-up Area</p>
-                        <p className="font-semibold mb-2">{property?.details?.built_up_area}</p>
+                        <p className="text-gray-500 font-bold text-sm mb-0">Facing</p>
+                        <p className="font-semibold mb-2">{property?.details?.facing.join(', ') ?? 'N/A'}</p>
                       </div>
                     </div>
-                  )}
-                  <div className="flex items-center space-x-3">
-                    <FaArrowsLeftRightToLine className="text-[#367588] text-xl" />
-                    <div>
-                      <p className="text-gray-500 font-bold text-sm mb-0">Carpet Area</p>
-                      <p className="font-semibold mb-2">{property?.details?.carpet_area} sq.ft.</p>
+                    {property?.details?.built_up_area && (
+                      <div className="flex items-center space-x-3">
+                        <BiArea className="text-[#367588] text-xl" />
+                        <div>
+                          <p className="text-gray-500 font-bold text-sm mb-0">Built-up Area</p>
+                          <p className="font-semibold mb-2">{property?.details?.built_up_area}</p>
+                        </div>
+                      </div>
+                    )}
+                    <div className="flex items-center space-x-3">
+                      <FaArrowsLeftRightToLine className="text-[#367588] text-xl" />
+                      <div>
+                        <p className="text-gray-500 font-bold text-sm mb-0">Carpet Area</p>
+                        <p className="font-semibold mb-2">{property?.details?.carpet_area} sq.ft.</p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <IoBed className="text-[#367588] text-xl" />
-                    <div>
-                      <p className="text-gray-500 font-bold text-sm mb-0">Bedrooms</p>
-                      {/* <p className="font-semibold mb-2">{property?.details?.bathrooms}</p> */}
-                      {property?.basic?.property_category_name !== 'Project Apartment' &&
-                        property?.basic?.property_category_name !== 'Project Flat' ? (
-                        <p className="font-semibold mb-2">{property?.details?.bedrooms ?? 0}</p>
-                      ) : (
+                    <div className="flex items-center space-x-3">
+                      <IoBed className="text-[#367588] text-xl" />
+                      <div>
+                        <p className="text-gray-500 font-bold text-sm mb-0">Bedrooms</p>
+                        {/* <p className="font-semibold mb-2">{property?.details?.bathrooms}</p> */}
+                        {property?.basic?.property_category_name !== 'Project Apartment' ? (
+                          <p className="font-semibold mb-2">{property?.details?.bedrooms ?? 0}</p>
+                        ) : (
+                          <p className="font-semibold mb-2">
+                            {Array.isArray(property?.bhk_configurations) && property.bhk_configurations.length > 0
+                              ? property.bhk_configurations
+                                .map((item) => item?.bedrooms)
+                                .filter((bedroom) => bedroom != null)
+                                .join(', ') || '0'
+                              : '0'}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <FaBath className="text-[#367588] text-xl" />
+                      <div>
+                        <p className="text-gray-500 font-bold text-sm mb-0">Bathrooms</p>
+                        {/* <p className="font-semibold mb-2">{property?.details?.bathrooms}</p> */}
+                        {property?.basic?.property_category_name !== 'Project Apartment' ? (
+                          <p className="font-semibold mb-2">{property?.details?.bathrooms ?? 0}</p>
+                        ) : (
+                          <p className="font-semibold mb-2">
+                            {Array.isArray(property?.bhk_configurations) && property.bhk_configurations.length > 0
+                              ? property.bhk_configurations
+                                .map((item) => item?.bathrooms)
+                                .filter((bathroom) => bathroom != null)
+                                .join(', ') || '0'
+                              : '0'}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <MdBalcony className="text-[#367588] text-xl" />
+                      <div>
+                        <p className="text-gray-500 font-bold text-sm mb-0">No. Of Balcony</p>
+                        {/* <p className="font-semibold mb-2">{property?.details?.balconies}</p> */}
+                        {property?.basic?.property_category_name !== 'Project Apartment' ? (
+                          <p className="font-semibold mb-2">{property?.details?.balconies ?? 0}</p>
+                        ) : (
+                          <p className="font-semibold mb-2">
+                            {Array.isArray(property?.bhk_configurations) && property.bhk_configurations.length > 0
+                              ? property.bhk_configurations
+                                .map((item) => item?.balconies)
+                                .filter((balcony) => balcony != null)
+                                .join(', ') || '0'
+                              : '0'}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <FaCar className="text-[#367588] text-xl" />
+                      <div>
+                        <p className="text-gray-500 font-bold text-sm mb-0">Parking</p>
+                        <p className="font-semibold mb-2">{property?.details?.covered_parking}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <MdOutlineMeetingRoom className="text-[#367588] text-xl" />
+                      <div>
+                        <p className="text-gray-500 font-bold text-sm mb-0">Other Rooms</p>
                         <p className="font-semibold mb-2">
-                          {property?.bhk_configurations?.map((bedroom) => bedroom.bedrooms).join(', ') || '0'}
+                          {property?.details?.other_rooms?.length > 0
+                            ? property.details.other_rooms.join(', ')
+                            : 'N/A'}
                         </p>
-                      )}
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <FaBath className="text-[#367588] text-xl" />
-                    <div>
-                      <p className="text-gray-500 font-bold text-sm mb-0">Bathrooms</p>
-                      {/* <p className="font-semibold mb-2">{property?.details?.bathrooms}</p> */}
-                      {property?.basic?.property_category_name !== 'Project Apartment' &&
-                        property?.basic?.property_category_name !== 'Project Flat' ? (
-                        <p className="font-semibold mb-2">{property?.details?.bathrooms ?? 0}</p>
-                      ) : (
-                        <p className="font-semibold mb-2">
-                          {property?.bhk_configurations?.map((bathroom) => bathroom.bathrooms).join(', ') || '0'}
-                        </p>
-                      )}
+                    <div className="flex items-center space-x-3">
+                      <FaKey className="text-[#367588] text-xl" />
+                      <div>
+                        <p className="text-gray-500 font-bold text-sm mb-0">Transaction Type</p>
+                        <p className="font-semibold mb-2">{property?.basic?.transaction_type}</p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <MdBalcony className="text-[#367588] text-xl" />
-                    <div>
-                      <p className="text-gray-500 font-bold text-sm mb-0">No. Of Balcony</p>
-                      {/* <p className="font-semibold mb-2">{property?.details?.balconies}</p> */}
-                      {property?.basic?.property_category_name !== 'Project Apartment' &&
-                        property?.basic?.property_category_name !== 'Project Flat' ? (
-                        <p className="font-semibold mb-2">{property?.details?.balconies ?? 0}</p>
-                      ) : (
-                        <p className="font-semibold mb-2">
-                          {property?.bhk_configurations?.map((balconie) => balconie.balconies).join(', ') || '0'}
-                        </p>
-                      )}
+                    <div className="flex items-center space-x-3">
+                      <FaEye className="text-[#367588] text-2xl" />
+                      <div>
+                        <p className="text-gray-500 font-bold text-sm mb-0">Property Overlooking</p>
+                        <p className="font-semibold mb-2">{property?.details?.overlooking.join(', ') ?? 'N/A'}</p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <FaCar className="text-[#367588] text-xl" />
-                    <div>
-                      <p className="text-gray-500 font-bold text-sm mb-0">Parking</p>
-                      <p className="font-semibold mb-2">{property?.details?.covered_parking}</p>
+                    <div className="flex items-center space-x-3">
+                      <BsHouseGearFill className="text-[#367588] text-xl" />
+                      <div>
+                        <p className="text-gray-500 font-bold text-sm mb-0">Maintainance Charge</p>
+                        <p className="font-semibold mb-2">₹ {property?.details?.maintenance_charge}</p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <MdOutlineMeetingRoom  className="text-[#367588] text-xl" />
-                    <div>
-                      <p className="text-gray-500 font-bold text-sm mb-0">Other Rooms</p>
-                      <p className="font-semibold mb-2">{property?.details?.other_rooms.join(', ')}</p>
+                    <div className="flex items-center space-x-3">
+                      <GiModernCity className="text-[#367588] text-xl" />
+                      <div>
+                        <p className="text-gray-500 font-bold text-sm mb-0">ROI</p>
+                        <p className="font-semibold mb-2">{property?.details?.rental_return}</p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <FaKey className="text-[#367588] text-xl" />
-                    <div>
-                      <p className="text-gray-500 font-bold text-sm mb-0">Transaction Type</p>
-                      <p className="font-semibold mb-2">{property?.basic?.transaction_type}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <FaEye className="text-[#367588] text-2xl" />
-                    <div>
-                      <p className="text-gray-500 font-bold text-sm mb-0">Property Overlooking</p>
-                      <p className="font-semibold mb-2">{property?.details?.overlooking.join(', ') ?? 'N/A'}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <BsHouseGearFill className="text-[#367588] text-xl" />
-                    <div>
-                      <p className="text-gray-500 font-bold text-sm mb-0">Maintainance Charge</p>
-                      <p className="font-semibold mb-2">₹ {property?.details?.maintenance_charge}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <GiModernCity className="text-[#367588] text-xl" />
-                    <div>
-                      <p className="text-gray-500 font-bold text-sm mb-0">ROI</p>
-                      <p className="font-semibold mb-2">{property?.details?.rental_return}</p>
-                    </div>
-                  </div>
-                  {/* <div className="flex items-center space-x-3">
+                    {/* <div className="flex items-center space-x-3">
                     <FaBalanceScale className="text-[#367588] text-xl" />
                     <div>
                       <p className="text-gray-500 font-bold text-sm mb-0">No. of Unit</p>
                       <p className="font-semibold mb-2">{property?.details?.num_of_units ?? 0}</p>
                     </div>
                   </div> */}
-                </div>
-              )
+                  </div>
+                )
             }
 
             {property?.details?.description && (
@@ -1564,8 +1577,8 @@ const PropertyDetails = ({ propertyId }) => {
                         key={tab}
                         onClick={() => setActiveTab(tab)}
                         className={`px-4 py-2 border-b-2 transition-colors duration-200 ${activeTab === tab
-                          ? "border-blue-600 text-blue-600 font-semibold"
-                          : "border-transparent text-gray-600"
+                            ? "border-blue-600 text-blue-600 font-semibold"
+                            : "border-transparent text-gray-600"
                           }`}
                       >
                         {tab}
@@ -1578,12 +1591,8 @@ const PropertyDetails = ({ propertyId }) => {
                     {activeTab && (
                       <>
                         {/* BHK Configuration Tab Content */}
-                        {property?.bhk_configurations
-                          ?.filter(
-                            (config) =>
-                              `${config.bhk_type}` ===
-                              activeTab
-                          )
+                        {bhkConfigurationsWithSuffix
+                          .filter((config) => config.tabName === activeTab)
                           .map((config) => (
                             <div key={config.id} className="mb-6">
                               <div className="p-4 bg-gray-50 rounded-lg">
@@ -1627,8 +1636,7 @@ const PropertyDetails = ({ propertyId }) => {
                                     rel="noopener noreferrer"
                                     className="text-blue-600 underline mt-2 block"
                                   >
-                                    View {config.bhk_type} Floor Plan (
-                                    {config.carpet_area} sqft)
+                                    View {config.bhk_type} Floor Plan ({config.carpet_area} sqft)
                                   </a>
                                 </>
                               )}
