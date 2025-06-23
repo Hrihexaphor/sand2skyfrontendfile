@@ -35,7 +35,7 @@ export default function Footer() {
                 <FaFacebookF className="text-white bg-gray-600 p-2 rounded-full text-3xl cursor-pointer" />
               </a>
               <a
-                href="#"
+                href="https://www.instagram.com/sand2sky/"
                 target="_blank"
                 rel="noopener noreferrer"
               >

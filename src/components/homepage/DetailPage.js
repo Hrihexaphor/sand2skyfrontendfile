@@ -36,7 +36,11 @@ import {
   FaRegCalendarAlt,
   FaBalanceScale,
   FaBuffer,
+  FaFacebook,
+  FaWhatsapp,
+  FaEnvelope
 } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 import { SiHomeadvisor, SiTicktick } from "react-icons/si";
 import { Star } from 'lucide-react';
 import { RiCarouselView } from "react-icons/ri";
@@ -584,13 +588,6 @@ const PropertyDetails = ({ propertyId }) => {
       });
   })();
 
-  // Prepare all tab names: BHK tabs + document tabs with proper suffix
-  // const allTabs = [
-  //   ...(property?.bhk_configurations?.map(
-  //     (config) => `${config.bhk_type}`
-  //   ) || []),
-  //   ...documentTabsWithSuffix.map((doc) => doc.tabName),
-  // ];
   const allTabs = [
     ...bhkConfigurationsWithSuffix.map(config => config.tabName),
     ...documentTabsWithSuffix.map(doc => doc.tabName)
@@ -623,6 +620,14 @@ const PropertyDetails = ({ propertyId }) => {
 
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
+  const currentURL = window.location.href;
+
+  const shareLinks = {
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentURL)}`,
+    whatsapp: `https://wa.me/?text=${encodeURIComponent(currentURL)}`,
+    twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(currentURL)}`,
+    email: `mailto:?subject=Check out this property&body=Have a look at this property: ${encodeURIComponent(currentURL)}`
+  };
 
   return (
     <>
@@ -947,9 +952,26 @@ const PropertyDetails = ({ propertyId }) => {
 
           {/* Project Details */}
           <div className="mt-8 bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-xl font-bold text-[#3C4142] mb-4">
-              Project Overview
-            </h2>
+            <div className="flex flex-wrap justify-between  mb-4">
+              <h2 className="text-xl font-bold text-[#3C4142]">
+                Project Overview
+              </h2>
+              <div className="flex gap-2 text-2xl">
+                <a href={shareLinks.facebook} target="_blank" rel="noopener noreferrer" className="bg-blue-600 text-white p-[5px] rounded-[5px]">
+                  <FaFacebook />
+                </a>
+                <a href={shareLinks.whatsapp} target="_blank" rel="noopener noreferrer" className="bg-green-500 text-white p-[5px] rounded-[5px]">
+                  <FaWhatsapp />
+                </a>
+                <a href={shareLinks.twitter} target="_blank" rel="noopener noreferrer" className="bg-dark text-white p-[5px] rounded-[5px]">
+                  <FaXTwitter />
+                </a>
+                <a href={shareLinks.email} className="bg-red-500 text-white p-[5px] rounded-[5px]">
+                  <FaEnvelope />
+                </a>
+              </div>
+            </div>
+
             {property?.basic?.property_category_name === "House/Villa" ?
               (
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-5">
@@ -1577,8 +1599,8 @@ const PropertyDetails = ({ propertyId }) => {
                         key={tab}
                         onClick={() => setActiveTab(tab)}
                         className={`px-4 py-2 border-b-2 transition-colors duration-200 ${activeTab === tab
-                            ? "border-blue-600 text-blue-600 font-semibold"
-                            : "border-transparent text-gray-600"
+                          ? "border-blue-600 text-blue-600 font-semibold"
+                          : "border-transparent text-gray-600"
                           }`}
                       >
                         {tab}
