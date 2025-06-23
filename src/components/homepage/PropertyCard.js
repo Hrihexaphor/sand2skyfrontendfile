@@ -19,7 +19,7 @@ const PropertyCard = ({ property, onViewDetails, onImgClick }) => {
     developer_name,
     category_name,
     subcategory_name,
-    built_up_area,
+    super_built_up_area,
     locality,
     city,
     is_featured,
@@ -44,7 +44,7 @@ const PropertyCard = ({ property, onViewDetails, onImgClick }) => {
         </div>
 
         <div className="p-4 cursor-pointer" onClick={() => onViewDetails && onViewDetails(id)}>
-          <h3 className="text-lg font-semibold text-[#3C4142] mb-3 mt-0">{project_name}</h3>
+          <h3 className="text-lg font-semibold text-[#3C4142] mb-3 mt-0 w-[255px] truncate whitespace-nowrap overflow-hidden">{project_name}</h3>
 
           <div className="flex flex-wrap justify-between mb-2">
             <div className="flex gap-2 items-center w-[50%] mb-2">
@@ -73,7 +73,7 @@ const PropertyCard = ({ property, onViewDetails, onImgClick }) => {
               <FaArrowsLeftRightToLine className="text-[17px] bg-[#367588] text-white h-[26px] w-[26px] rounded-full p-1" />
               <div>
                 <p className="text-[13px] text-[#3C4142] font-bold mb-0">SBA</p>
-                <p className="text-[13px] text-gray-600 mt-0 mb-0">{built_up_area} sq.ft.</p>
+                <p className="text-[13px] text-gray-600 mt-0 mb-0">{super_built_up_area} sq.ft.</p>
               </div>
             </div>
 

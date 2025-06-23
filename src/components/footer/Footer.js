@@ -135,12 +135,12 @@ export default function Footer() {
           <h3 className="text-xl font-semibold">Contact</h3>
           <p className="mt-2 mb-0 text-gray-300 flex items-center gap-2">
             <span><FaRegEnvelope /></span>
-            <a href="mailto:info@houssed.com" className="no-underline text-white">info@houssed.com</a>
+            <a href="mailto:info@houssed.com" className="no-underline text-white">tkswain_1981@yahoo.com </a>
           </p>
-          <p className="mt-0 mb-0 text-gray-300 flex items-center gap-2">
+          {/* <p className="mt-0 mb-0 text-gray-300 flex items-center gap-2">
             <span><FaRegEnvelope /></span>
-            <a href="mailto:info@houssed.com" className="no-underline text-white">info@houssed.com</a>
-          </p>
+            <a href="mailto:info@houssed.com" className="no-underline text-white">info@houssed.</a>
+          </p> */}
         </div>
       </div>
 

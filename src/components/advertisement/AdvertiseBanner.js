@@ -32,18 +32,6 @@ const AdBanner = ({ location }) => {
       .then((res) => {
         const now = new Date();
 
-        // const filteredAds = res.data.filter((ad) => {
-        //   const adLocation = ad.location?.toLowerCase();
-        //   const matchLocation = location?.toLowerCase();
-        //   const start = new Date(ad.start_date);
-        //   const end = new Date(ad.end_date);
-        //   const cityMatch = ad.cities?.some(
-        //     (c) => c.name?.trim().toLowerCase() === city.trim().toLowerCase()
-        //   );
-        //   const isActive = now >= start && now <= end;
-
-        //   return adLocation === matchLocation && cityMatch && isActive;
-        // });
         const filteredAds = res.data.filter((ad) => {
           const adLocation = ad.location?.toLowerCase();
           const matchLocation = location?.toLowerCase();

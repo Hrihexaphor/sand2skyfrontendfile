@@ -47,7 +47,7 @@ import { GiSofa } from "react-icons/gi";
 import { FaArrowsLeftRightToLine, FaUserGraduate } from "react-icons/fa6";
 import { GrStatusGood } from "react-icons/gr";
 import { GiModernCity, GiPoolTableCorner, GiHouse } from "react-icons/gi";
-import { MdArrowForwardIos, MdBalcony } from "react-icons/md";
+import { MdOutlineMeetingRoom , MdBalcony } from "react-icons/md";
 import { PiBuildingOfficeBold, PiHospital } from "react-icons/pi";
 import { GoGear } from "react-icons/go";
 import { LiaSchoolSolid } from "react-icons/lia";
@@ -529,14 +529,21 @@ const PropertyDetails = ({ propertyId }) => {
   const [maxPrice, setMaxPrice] = useState(null);
   const [minSBA, setMinSBA] = useState(null);
   const [maxSBA, setMaxSBA] = useState(null);
+  const [minCarpet, setMinCarpet] = useState(null);
+  const [maxCarpet, setMaxCarpet] = useState(null);
 
   useEffect(() => {
     if (property?.bhk_configurations?.length > 0) {
       const sbaValues = property.bhk_configurations.map(c => parseFloat(c.super_built_up_area));
+      const carpet = property.bhk_configurations.map(c => parseFloat(c.carpet_area));
       const min = Math.min(...sbaValues);
       const max = Math.max(...sbaValues);
       setMinSBA(min);
       setMaxSBA(max);
+      const minCar = Math.min(...carpet);
+      const maxCar = Math.max(...carpet);
+      setMinCarpet(minCar);
+      setMaxCarpet(maxCar);
 
       const pricePerSqft = parseFloat(property?.basic?.price_per_sqft || 0);
       setMinPrice(pricePerSqft * min);
@@ -558,7 +565,8 @@ const PropertyDetails = ({ propertyId }) => {
         const key = doc.type.toLowerCase();
         counts[key] = (counts[key] || 0) + 1;
         const suffix = counts[key] > 1 ? ` ${counts[key]}` : "";
-        return { ...doc, tabName: doc.type + suffix };
+        return { ...doc, tabName: `${doc.type}${suffix}` };
+        // return { ...doc, tabName: doc.type + suffix };
       });
   })();
 
@@ -863,8 +871,8 @@ const PropertyDetails = ({ propertyId }) => {
                   <div className="flex items-center flex-col md:flex-row justify-between bg-[#F4EFE5] p-3 mt-2">
                     <div>
                       <h4 className="text-lg font-bold">Posted By Dealer</h4>
-                      <p className="text-base font-semibold mb-0">Name : <span className="text-[#367588] text-sm">TK Swain</span></p>
-                      <p className="text-base font-semibold mb-0">Contact Details : <span className="text-[#367588] text-sm me-2">+91 8956231478</span><span className="text-[#367588] text-sm">|</span><span className="text-[#367588] text-sm ms-2">abc@gmail.com</span></p>
+                      <p className="text-base font-semibold mb-0">Name : <span className="text-[#367588] text-sm">Trupti Kanta Swain</span></p>
+                      <p className="text-base font-semibold mb-0">Contact Details : <span className="text-[#367588] text-sm me-2">+91 7077571010</span><span className="text-[#367588] text-sm">|</span><span className="text-[#367588] text-sm ms-2">tkswain_1981@yahoo.com</span></p>
                     </div>
                     <div className="sellerdtl-right">
                       <h4 className="text-lg font-bold">Posted By {formatDate(property?.details?.available_from)}</h4>
@@ -1040,6 +1048,149 @@ const PropertyDetails = ({ propertyId }) => {
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
+                    <MdOutlineMeetingRoom  className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Other Rooms</p>
+                      <p className="font-semibold mb-2">{property?.details?.other_rooms.join(', ')}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <FaKey className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Transaction Type</p>
+                      <p className="font-semibold mb-2">{property?.details?.transaction_types}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <FaEye className="text-[#367588] text-2xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Property Overlooking</p>
+                      <p className="font-semibold mb-2">{property?.details?.overlooking.join(', ') ?? 'N/A'}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <BsHouseGearFill className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Maintainance Charge</p>
+                      <p className="font-semibold mb-2">₹ {property?.details?.maintenance_charge}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <GiModernCity className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">ROI</p>
+                      <p className="font-semibold mb-2">{property?.details?.rental_return}</p>
+                    </div>
+                  </div>
+                </div>
+              ) : property?.basic?.property_category_name === "Project House/Villa" ? 
+              (
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-5">
+                  <div className="flex items-center space-x-3">
+                    <FaVectorSquare className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Project Area</p>
+                      <p className="font-semibold mb-2">{property?.details?.project_area} sq.ft.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <GiHouse className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">No. Of House/Villa</p>
+                      <p className="font-semibold mb-2">{property?.details?.no_of_house}</p>
+                    </div>
+                  </div>
+                  {property?.details?.total_floors && (
+                    <div className="flex items-center space-x-3">
+                      <HiMiniBuildingOffice2 className="text-[#367588] text-xl" />
+                      <div>
+                        <p className="text-gray-500 font-bold text-sm mb-0">Total Floors</p>
+                        <p className="font-semibold mb-2">{property?.details?.total_floors}</p>
+                      </div>
+                    </div>
+                  )}
+                  <div className="flex items-center space-x-3">
+                    <RiCarouselView className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Facing</p>
+                      <p className="font-semibold mb-2">{property?.details?.facing.join(', ') ?? 'N/A'}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <FaArrowsLeftRightToLine className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Plot Area</p>
+                      <p className="font-semibold mb-2">{`${Math.round(minCarpet)} - ${Math.round(maxCarpet)} sq.ft`}</p>
+                    </div>
+                  </div>
+                  {/* {property?.details?.super_built_up_area && (
+                    <div className="flex items-center space-x-3">
+                      <BiArea className="text-[#367588] text-xl" />
+                      <div>
+                        <p className="text-gray-500 font-bold text-sm mb-0">Super Built-up Area</p>
+                        <p className="font-semibold mb-2">{property?.details?.super_built_up_area} sq.ft.</p>
+                      </div>
+                    </div>
+                  )} */}
+                  {/* <div className="flex items-center space-x-3">
+                    <FaArrowsLeftRightToLine className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Plot Length</p>
+                      <p className="font-semibold mb-2">{property?.details?.plot_length} sq.ft.</p>
+                    </div>
+                  </div> */}
+                  {/* <div className="flex items-center space-x-3">
+                    <FaArrowsLeftRightToLine className="text-[#367588] text-xl rotate-90" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Plot Width</p>
+                      <p className="font-semibold mb-2">{property?.details?.plot_breadth} sq.ft.</p>
+                    </div>
+                  </div> */}
+                  <div className="flex items-center space-x-3">
+                    <IoBed className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Bedrooms</p>
+                      {/* <p className="font-semibold mb-2">{property?.details?.bathrooms}</p> */}
+                      <p className="font-semibold mb-2">
+                          {property?.bhk_configurations?.map((bedroom) => bedroom.bedrooms).join(', ') || '0'}
+                        </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <FaBath className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Bathrooms</p>
+                      {/* <p className="font-semibold mb-2">{property?.details?.bathrooms}</p> */}
+                     <p className="font-semibold mb-2">
+                          {property?.bhk_configurations?.map((bathroom) => bathroom.bathrooms).join(', ') || '0'}
+                        </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <MdBalcony className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Balcony</p>
+                      {/* <p className="font-semibold mb-2">{property?.details?.balconies}</p> */}
+                       <p className="font-semibold mb-2">
+                          {property?.bhk_configurations?.map((balconie) => balconie.balconies).join(', ') || '0'}
+                        </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <FaCar className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Parking</p>
+                      <p className="font-semibold mb-2">{property?.details?.covered_parking}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <MdOutlineMeetingRoom  className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Other Rooms</p>
+                      <p className="font-semibold mb-2">{property?.details?.other_rooms.join(', ')}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
                     <FaKey className="text-[#367588] text-xl" />
                     <div>
                       <p className="text-gray-500 font-bold text-sm mb-0">Transaction Type</p>
@@ -1190,6 +1341,13 @@ const PropertyDetails = ({ propertyId }) => {
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
+                    <MdOutlineMeetingRoom  className="text-[#367588] text-xl" />
+                    <div>
+                      <p className="text-gray-500 font-bold text-sm mb-0">Other Rooms</p>
+                      <p className="font-semibold mb-2">{property?.details?.other_rooms.join(', ')}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
                     <FaKey className="text-[#367588] text-xl" />
                     <div>
                       <p className="text-gray-500 font-bold text-sm mb-0">Transaction Type</p>
@@ -1217,13 +1375,13 @@ const PropertyDetails = ({ propertyId }) => {
                       <p className="font-semibold mb-2">{property?.details?.rental_return}</p>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-3">
+                  {/* <div className="flex items-center space-x-3">
                     <FaBalanceScale className="text-[#367588] text-xl" />
                     <div>
                       <p className="text-gray-500 font-bold text-sm mb-0">No. of Unit</p>
                       <p className="font-semibold mb-2">{property?.details?.num_of_units ?? 0}</p>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               )
             }
@@ -1432,7 +1590,7 @@ const PropertyDetails = ({ propertyId }) => {
                                 <h4 className="text-md font-semibold mb-2">
                                   {config.bhk_type} - {config.carpet_area} sqft
                                 </h4>
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                                <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm">
                                   <div>
                                     <span className="font-medium">Bedrooms:</span>{" "}
                                     {config.bedrooms}
@@ -1446,7 +1604,7 @@ const PropertyDetails = ({ propertyId }) => {
                                     {config.balconies}
                                   </div>
                                   <div>
-                                    <span className="font-medium">Super Built-up:</span>{" "}
+                                    <span className="font-medium">SBA:</span>{" "}
                                     {config.super_built_up_area} sqft
                                   </div>
                                   <div>
@@ -1484,7 +1642,7 @@ const PropertyDetails = ({ propertyId }) => {
                             <div key={doc.id} className="mb-6">
                               <img
                                 src={doc.file_url}
-                                alt={doc.type}
+                                alt={doc.tabName}
                                 className="w-full max-h-[500px] object-contain border rounded-lg"
                               />
                               <a
@@ -1493,7 +1651,7 @@ const PropertyDetails = ({ propertyId }) => {
                                 rel="noopener noreferrer"
                                 className="text-blue-600 underline mt-2 block"
                               >
-                                View {doc.type}
+                                View {doc.tabName}
                               </a>
                             </div>
                           ))}
