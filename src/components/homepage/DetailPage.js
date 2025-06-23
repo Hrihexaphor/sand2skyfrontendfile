@@ -626,7 +626,7 @@ const PropertyDetails = ({ propertyId }) => {
     facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentURL)}`,
     whatsapp: `https://wa.me/?text=${encodeURIComponent(currentURL)}`,
     twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(currentURL)}`,
-    email: `mailto:?subject=Check out this property&body=Have a look at this property: ${encodeURIComponent(currentURL)}`
+    // email: `mailto:?subject=Check out this property&body=Have a look at this property: ${encodeURIComponent(currentURL)}`
   };
 
   return (
@@ -655,10 +655,10 @@ const PropertyDetails = ({ propertyId }) => {
 
             {/* Property Info */}
             <div className="md:col-span-12 lg:col-span-4 bg-white p-6 rounded-lg shadow-lg">
-              <h2 className="lg:text-xl xl:text-2xl font-bold text-[#367588] mb-0">
+              <h2 className="lg:text-xl xl:text-2xl font-bold text-[#367588] mb-0 w-[356px] truncate whitespace-nowrap overflow-hidden" title={property?.details?.project_name}>
                 {property?.details?.project_name}
               </h2>
-              <h4 className="text-base font-bold text-gray-500 mb-0">
+              <h4 className="text-base font-bold text-gray-500 mb-0 w-[356px] truncate whitespace-nowrap overflow-hidden" title={property?.basic?.title}>
                 {property?.basic?.title}
               </h4>
               <div className="flex items-center space-x-2  dtl-location">
@@ -966,9 +966,9 @@ const PropertyDetails = ({ propertyId }) => {
                 <a href={shareLinks.twitter} target="_blank" rel="noopener noreferrer" className="bg-dark text-white p-[5px] rounded-[5px]">
                   <FaXTwitter />
                 </a>
-                <a href={shareLinks.email} className="bg-red-500 text-white p-[5px] rounded-[5px]">
+                {/* <a href={shareLinks.email} className="bg-red-500 text-white p-[5px] rounded-[5px]">
                   <FaEnvelope />
-                </a>
+                </a> */}
               </div>
             </div>
 
